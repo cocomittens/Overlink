@@ -1,0 +1,69 @@
+$primary-bg: #010101;
+$table-stripe: rgba(0, 255, 255, 0.1);
+$dark-blue: rgb(0, 0, 111);
+$mid-blue: rgb(0, 0, 162);
+$light-blue: #6190F5;
+body, .missions-container {
+  background: $primary-bg;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  font-family: 'Courier New', Courier, monospace;
+
+  h2 {
+    font-size: 1.25rem;
+    margin-bottom: 0.75rem;
+    color: #fff;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: separate;
+
+    thead {
+      tr {
+        background: linear-gradient(
+          45deg,
+          $mid-blue 0%,
+          $dark-blue 60%
+        )
+      }
+      th {
+        padding: 0.5rem;
+        text-align: left;
+        color: #fff;
+        margin-left: 1vw;
+      }
+    }
+
+    tbody {
+      tr {
+        &:nth-child(even) {
+          background: $table-stripe;
+        }
+      }
+      td {
+        padding: 0.5rem;
+        border-bottom: 1px solid darken($primary-bg, 20%);
+        color: #fff;
+      }
+    }
+  }
+}
+
+.description-container {
+  background: linear-gradient(
+    45deg,
+    $mid-blue 0%,
+    $dark-blue 60%,
+    $primary-bg 100%
+  );
+  border: 1px solid $light-blue;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  padding-left: 1vw;
+  padding-right: 2vw;
+  padding-bottom: 5vh;
+
+}

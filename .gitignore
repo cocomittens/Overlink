@@ -31,3 +31,4 @@ dist-ssr
 /frontend/dist
 
 .github
+.vscode
