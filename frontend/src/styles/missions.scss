@@ -3,6 +3,13 @@ $table-stripe: rgba(0, 255, 255, 0.1);
 $dark-blue: rgb(0, 0, 111);
 $mid-blue: rgb(0, 0, 162);
 $light-blue: #6190F5;
+
+body {
+  background: $primary-bg;
+  color: #fff;
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+
 .missions-container {
   background: $primary-bg;
   padding: 1rem;
