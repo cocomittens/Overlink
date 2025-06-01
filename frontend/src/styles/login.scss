@@ -4,6 +4,14 @@ $mid-teal: rgb(12, 135, 167);
 $dark-teal: rgb(3, 67, 88);
 
 .login-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+
+}
+
+.login-form {
     background: linear-gradient(
           45deg,
           $light-teal 0%,
@@ -14,10 +22,10 @@ $dark-teal: rgb(3, 67, 88);
     padding-left: 1vw;
     padding-right: 1vw;
     color: $dark-teal;
-    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
+    margin-bottom: 1vh;
     h2 {
         color: $dark-teal
     }
@@ -37,4 +45,16 @@ form {
     justify-content: space-between;
     margin-bottom: 1vh;
 }
-    
+
+.login-button {
+    border-radius: 0;
+    width: 40%;
+    background: linear-gradient(
+          45deg,
+          $light-teal 0%,
+          $mid-teal 60%
+        );
+    color: $dark-teal;
+    padding: 0.5rem;
+    font-weight: bold;
+}
