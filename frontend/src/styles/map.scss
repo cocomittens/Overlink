@@ -20,4 +20,14 @@
     &.active {
         background-color: rgba(0, 255, 0, 0.8);
     }
+
+    &.admin {
+        outline: 1px solid #fff;
+        outline-offset: 2px;
+    }
+
+    &.account {
+        outline: 1px dashed #fff;
+        outline-offset: 2px;
+    }
 }
