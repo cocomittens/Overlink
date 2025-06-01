@@ -16,4 +16,8 @@
     align-items: center;
     justify-content: center;
     cursor: pointer;
+
+    &.active {
+        background-color: rgba(0, 255, 0, 0.8);
+    }
 }
