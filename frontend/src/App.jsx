@@ -5,7 +5,7 @@ import Login from './scenes/Login.tsx'
 function App() {
 
   return (
-    <Login />
+    <Missions />
   )
 }
 
