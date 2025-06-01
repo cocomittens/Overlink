@@ -1,0 +1,40 @@
+$primary-bg: #010101;
+$light-teal: rgb(33, 178, 212);
+$mid-teal: rgb(12, 135, 167);
+$dark-teal: rgb(3, 67, 88);
+
+.login-container {
+    background: linear-gradient(
+          45deg,
+          $light-teal 0%,
+          $mid-teal 60%
+        );
+    padding-bottom: 3vh;
+    padding-top: 1vh;
+    padding-left: 1vw;
+    padding-right: 1vw;
+    color: $dark-teal;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    h2 {
+        color: $dark-teal
+    }
+    input {
+        background: $light-teal;
+        border: 1px solid $primary-bg;
+    }
+    
+}
+
+form {
+    width: 100%;
+}
+
+.form-group {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 1vh;
+}
+    
