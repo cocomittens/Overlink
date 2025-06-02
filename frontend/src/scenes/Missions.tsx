@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { missions_data } from "../mockData"
+import { missions_data } from "../mockData";
 import { Mission } from "../types/mission";
 import "../styles/missions.scss";
 import { MissionDescription } from "../components/MissionDescription";
 
-
 export default function Missions() {
+  const [missions, setMissions] = useState<Mission[]>([]);
+  const [mission, setMission] = useState<number | null>(null);
 
   return (
     <div className="missions-container">
@@ -19,7 +20,7 @@ export default function Missions() {
         </thead>
         <tbody>
           {missions_data.map((mission: Mission) => (
-            <tr key={mission.id}>
+            <tr key={mission.id} onClick={() => setMission(mission.id)}>
               <td>{new Date(mission.date).toLocaleDateString()}</td>
               <td>{mission.title}</td>
             </tr>
@@ -27,7 +28,9 @@ export default function Missions() {
         </tbody>
       </table>
       <div>
-        <MissionDescription mission={missions_data[0]} />
+        <MissionDescription
+          mission={mission ? missions_data[mission - 1] : null}
+        />
       </div>
     </div>
   );

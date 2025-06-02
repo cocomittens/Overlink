@@ -6,7 +6,7 @@ import Map from './scenes/Map.tsx'
 function App() {
 
   return (
-    <Map />
+    <Missions />
   )
 }
 
