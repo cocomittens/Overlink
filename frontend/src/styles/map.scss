@@ -7,6 +7,10 @@
     background-position: center;
 }
 
+.map-node-container {
+    position: relative;
+}
+
 .map-node {
     position: absolute;
     width: 10px;
@@ -30,4 +34,8 @@
         outline: 1px dashed #fff;
         outline-offset: 2px;
     }
+}
+
+.map-node-name {
+    position: absolute;
 }

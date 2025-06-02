@@ -4,6 +4,7 @@ import "../styles/map.scss";
 type MapNodeProps = {
   top: number;
   left: number;
+  name?: string;
   active?: boolean;
   admin?: boolean;
   account?: boolean;
@@ -11,6 +12,7 @@ type MapNodeProps = {
 export default function MapNode({
   top,
   left,
+  name = "",
   active = false,
   admin = false,
   account = false,
@@ -23,5 +25,12 @@ export default function MapNode({
   ]
     .filter(Boolean)
     .join(" ");
-  return <div className={className} style={{ top, left }} />;
+  return (
+    <div className="map-node-container">
+      <div className={className} style={{ top, left }}></div>
+      <span className="map-node-name" style={{ top: top - 8, left: left + 16 }}>
+        {name}
+      </span>
+    </div>
+  );
 }
