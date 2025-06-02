@@ -2,6 +2,10 @@ $primary-bg: #010101;
 $light-teal: rgb(33, 178, 212);
 $mid-teal: rgb(12, 135, 167);
 $dark-teal: rgb(3, 67, 88);
+$dark-blue: rgb(0, 0, 111);
+$mid-blue: rgb(0, 0, 162);
+$light-blue: #6190F5;
+
 
 .login-container {
     display: flex;
@@ -32,6 +36,7 @@ $dark-teal: rgb(3, 67, 88);
     input {
         background: $light-teal;
         border: 1px solid $primary-bg;
+        width: 70%;
     }
     
 }
@@ -57,4 +62,27 @@ form {
     color: $dark-teal;
     padding: 0.5rem;
     font-weight: bold;
+}
+
+.password-breaker-container {
+    margin-top: 5vh;
+    
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    span {
+        padding: 1vh 0;
+        padding-left: 1.8rem;    
+        border: 1px solid #fff;
+        letter-spacing: 1.8rem;
+    }
+    p {
+        padding: .3rem 0;
+        margin: 0;
+        background: linear-gradient(
+          45deg,
+          $mid-blue 0%,
+          $dark-blue 60%
+        )
+    }
 }
