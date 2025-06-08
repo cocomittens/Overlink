@@ -4,9 +4,10 @@ import { PasswordBreaker } from "../components/PasswordBreaker";
 
 export default function Login() {
   const [start, setStart] = useState(false);
+  const [username, setUsername] = useState("");
 
-  const handleProceed = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
+  const handleProceed = () => {
+    setUsername("admin");
     setStart(true);
   };
 
@@ -18,7 +19,14 @@ export default function Login() {
           <form>
             <div className="form-group">
               <label htmlFor="username">Name</label>
-              <input type="text" id="username" name="username" required />
+              <input
+                type="text"
+                id="username"
+                name="username"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                required
+              />
             </div>
             <div className="form-group">
               <label htmlFor="password">Code</label>
@@ -27,7 +35,7 @@ export default function Login() {
                 id="password"
                 name="password"
                 required
-                onClick={() => setStart(true)}
+                onClick={handleProceed}
               />
             </div>
           </form>

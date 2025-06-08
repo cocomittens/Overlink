@@ -8,6 +8,7 @@ interface Props {
 interface State {
   lettersGuessed: number;
   randomSuffix: string;
+  lastGuessedIndex: number | null;
 }
 
 export class PasswordBreaker extends React.Component<Props, State> {
@@ -15,7 +16,7 @@ export class PasswordBreaker extends React.Component<Props, State> {
 
   constructor(props: Props) {
     super(props);
-    this.state = { lettersGuessed: 0, randomSuffix: "" };
+    this.state = { lettersGuessed: 0, randomSuffix: "", lastGuessedIndex: null };
   }
 
   componentDidMount() {
@@ -47,7 +48,9 @@ export class PasswordBreaker extends React.Component<Props, State> {
     const { password } = this.props;
     if (!password) return;
     let letters = 0;
-    const speed = 500;
+    const speed = 2000;
+    this.setState({ lettersGuessed: 0, randomSuffix: this.randomString(password.length), lastGuessedIndex: null });
+
     // initialize and start random suffix updates
     this.setState({
       lettersGuessed: 0,
@@ -65,7 +68,7 @@ export class PasswordBreaker extends React.Component<Props, State> {
     while (letters < password.length) {
       await new Promise((res) => setTimeout(res, speed));
       letters++;
-      this.setState({ lettersGuessed: letters });
+      this.setState({ lettersGuessed: letters, lastGuessedIndex: letters - 1 });
     }
     if (this.randomInterval) clearInterval(this.randomInterval);
     this.setState({ randomSuffix: "" });
@@ -73,18 +76,27 @@ export class PasswordBreaker extends React.Component<Props, State> {
 
   render() {
     const { password } = this.props;
-    const { lettersGuessed, randomSuffix } = this.state;
-    const display = password
-      ? password.slice(0, lettersGuessed) + randomSuffix
+    const { lettersGuessed, randomSuffix, lastGuessedIndex } = this.state;
+
+    // build animated spans for revealed letters then random letters
+    const content = password
+      ? [
+          // guessed letters
+          ...Array.from({ length: lettersGuessed }).map((_, i) => (
+            <span key={`g${i}`} className={i === lastGuessedIndex ? 'animate' : ''}>
+              {password[i]}
+            </span>
+          )),
+          // random suffix letters
+          ...randomSuffix.split('').map((c, i) => <span key={`r${i}`}>{c}</span>)
+        ]
       : null;
 
     return (
       <div className="password-breaker-container">
         <p>Password Breaker</p>
         <span className="password-breaker-display">
-          {display?.split("").map((letter) => (
-            <span>{letter}</span>
-          ))}
+          {content && content.length > 0 ? content : "Select a target"}
         </span>
       </div>
     );
