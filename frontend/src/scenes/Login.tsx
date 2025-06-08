@@ -3,6 +3,13 @@ import "../styles/login.scss";
 import { PasswordBreaker } from "../components/PasswordBreaker";
 
 export default function Login() {
+  const [start, setStart] = useState(false);
+
+  const handleProceed = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    setStart(true);
+  };
+
   return (
     <>
       <div className="login-container">
@@ -15,15 +22,21 @@ export default function Login() {
             </div>
             <div className="form-group">
               <label htmlFor="password">Code</label>
-              <input type="password" id="password" name="password" required />
+              <input
+                type="password"
+                id="password"
+                name="password"
+                required
+                onClick={() => setStart(true)}
+              />
             </div>
           </form>
         </div>
-        <button type="submit" className="login-button">
+        <button type="submit" className="login-button" onClick={handleProceed}>
           Proceed
         </button>
       </div>
-      <PasswordBreaker password="rosebud" />
+      <PasswordBreaker password="rosebud" start={start} />
     </>
   );
 }
