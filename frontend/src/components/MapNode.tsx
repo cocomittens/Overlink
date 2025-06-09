@@ -8,6 +8,7 @@ type MapNodeProps = {
   active?: boolean;
   admin?: boolean;
   account?: boolean;
+  onClick?: () => void;
 };
 export default function MapNode({
   top,
@@ -16,6 +17,7 @@ export default function MapNode({
   active = false,
   admin = false,
   account = false,
+  onClick,
 }: MapNodeProps) {
   const className = [
     "map-node",
@@ -26,7 +28,7 @@ export default function MapNode({
     .filter(Boolean)
     .join(" ");
   return (
-    <div className="map-node-container">
+    <div className="map-node-container" onClick={onClick}>
       <div className={className} style={{ top, left }}></div>
       <span className="map-node-name" style={{ top: top - 8, left: left + 16 }}>
         {name}
