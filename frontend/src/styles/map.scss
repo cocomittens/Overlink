@@ -1,6 +1,7 @@
 .map-container {
     position: relative;
-    background-image: url('/Users/cocomittens/Documents/1337/frontend/src/assets/map-background.png');
+    /* Fixed the asset path to use a relative URL that Vite can resolve */
+    background-image: url('../assets/map-background.png');
     width: 80vw;
     height: 80vh;
     background-size: cover;

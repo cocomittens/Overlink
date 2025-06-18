@@ -4,23 +4,30 @@ import MapNode from "../components/MapNode";
 
 export default function Map() {
   const nodes = [
+    { id: "personal_gateway", top: 280, left: 190, name: "Gateway", admin: true },
     {
-      id: "internal",
-      top: 420,
-      left: 300,
-      name: "Internal Services",
+      id: "sample_internal",
+      top: 450,
+      left: 350,
+      name: "Sample Internal Services",
       account: true,
     },
     {
-      id: "bank",
+      id: "sample_bank",
       top: 200,
       left: 250,
-      name: "International Bank",
+      name: "Sample International Bank",
       active: true,
       admin: true,
     },
+    {
+      id: "sample_public_access",
+      top: 300,
+      left: 800,
+      name: "Sample Public Access Server",
+    }
   ];
-  const [chain, setChain] = useState<string[]>([]);
+  const [chain, setChain] = useState<string[]>(['personal_gateway']);
 
   const toggleNode = (id: string) => {
     setChain((prev) =>
@@ -30,7 +37,6 @@ export default function Map() {
 
   return (
     <div className="map-container">
-      {/* SVG overlay for connecting lines */}
       <svg
         className="map-lines"
         xmlns="http://www.w3.org/2000/svg"
