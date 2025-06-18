@@ -16,11 +16,9 @@ $light-blue: #6190F5;
 }
 
 .login-form {
-    background: linear-gradient(
-          45deg,
-          $light-teal 0%,
-          $mid-teal 60%
-        );
+    background: linear-gradient(45deg,
+            $light-teal 0%,
+            $mid-teal 60%);
     padding-bottom: 3vh;
     padding-top: 1vh;
     padding-left: 1vw;
@@ -30,15 +28,17 @@ $light-blue: #6190F5;
     flex-direction: column;
     align-items: flex-start;
     margin-bottom: 1vh;
+
     h2 {
         color: $dark-teal
     }
+
     input {
         background: $light-teal;
         border: 1px solid $primary-bg;
         width: 70%;
     }
-    
+
 }
 
 form {
@@ -54,11 +54,9 @@ form {
 .login-button {
     border-radius: 0;
     width: 40%;
-    background: linear-gradient(
-          45deg,
-          $light-teal 0%,
-          $mid-teal 60%
-        );
+    background: linear-gradient(45deg,
+            $light-teal 0%,
+            $mid-teal 60%);
     color: $dark-teal;
     padding: 0.5rem;
     font-weight: bold;
@@ -66,10 +64,10 @@ form {
 
 .password-breaker-container {
     margin-top: 5vh;
-    
     display: flex;
     flex-direction: column;
     justify-content: center;
+
     .password-breaker-display {
         padding: 1vh 0;
         border: 1px solid #fff;
@@ -78,24 +76,28 @@ form {
         align-items: center;
         justify-content: space-evenly;
     }
+
     p {
         padding: .3rem 0;
         margin: 0;
-        background: linear-gradient(
-          45deg,
-          $mid-blue 0%,
-          $dark-blue 60%
-        )
+        background: linear-gradient(45deg,
+                $mid-blue 0%,
+                $dark-blue 60%)
     }
 }
 
 // Fade-in animation for newly guessed letters
 @keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
 }
 
 .password-breaker-container .animate span {
-  display: inline-block;
-  animation: fadeIn 0.3s ease-in-out forwards;
+    display: inline-block;
+    animation: fadeIn 0.3s ease-in-out forwards;
 }
