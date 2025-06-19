@@ -4,6 +4,7 @@ import "../styles/login.scss";
 interface Props {
   password: string | null;
   start?: boolean;
+  onComplete?: () => void;
 }
 interface State {
   lettersGuessed: number;
@@ -45,7 +46,7 @@ export class PasswordBreaker extends React.Component<Props, State> {
   }
 
   private async startGuessing() {
-    const { password } = this.props;
+    const { password, onComplete } = this.props;
     if (!password) return;
     let letters = 0;
     const speed = 2000;
@@ -72,6 +73,10 @@ export class PasswordBreaker extends React.Component<Props, State> {
     }
     if (this.randomInterval) clearInterval(this.randomInterval);
     this.setState({ randomSuffix: "" });
+    // Notify parent that guessing is complete
+    if (onComplete) {
+      onComplete();
+    }
   }
 
   render() {
@@ -81,15 +86,15 @@ export class PasswordBreaker extends React.Component<Props, State> {
     // build animated spans for revealed letters then random letters
     const content = password
       ? [
-          // guessed letters
-          ...Array.from({ length: lettersGuessed }).map((_, i) => (
-            <span key={`g${i}`} className={i === lastGuessedIndex ? 'animate' : ''}>
-              {password[i]}
-            </span>
-          )),
-          // random suffix letters
-          ...randomSuffix.split('').map((c, i) => <span key={`r${i}`}>{c}</span>)
-        ]
+        // guessed letters
+        ...Array.from({ length: lettersGuessed }).map((_, i) => (
+          <span key={`g${i}`} className={i === lastGuessedIndex ? 'animate' : ''}>
+            {password[i]}
+          </span>
+        )),
+        // random suffix letters
+        ...randomSuffix.split('').map((c, i) => <span key={`r${i}`}>{c}</span>)
+      ]
       : null;
 
     return (

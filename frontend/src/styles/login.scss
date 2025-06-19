@@ -6,6 +6,9 @@ $dark-blue: rgb(0, 0, 111);
 $mid-blue: rgb(0, 0, 162);
 $light-blue: #6190F5;
 
+$dark-gray: #333;
+$mid-gray: #666;
+
 
 .login-container {
     display: flex;
@@ -63,6 +66,13 @@ form {
     color: $dark-teal;
     padding: 0.5rem;
     font-weight: bold;
+
+    &.disabled {
+        background: linear-gradient(45deg,
+                $mid-gray 0%,
+                $dark-gray 60%);
+        color: #fff;
+    }
 }
 
 .password-breaker-container {

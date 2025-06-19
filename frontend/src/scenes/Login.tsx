@@ -3,25 +3,41 @@ import "../styles/login.scss";
 import { PasswordBreaker } from "../components/PasswordBreaker";
 import { useAtom } from "jotai";
 import { currentNodeAtom, nodesAtom } from "../store";
+import { useNavigate } from "react-router-dom";
 
 export default function Login() {
   const [start, setStart] = useState(false);
   const [username, setUsername] = useState("");
+  const [passwordMask, setPasswordMask] = useState("");
   const currentNode = useAtom(currentNodeAtom)[0];
   const nodes = useAtom(nodesAtom)[0];
   const [currentNodeData, setCurrentNodeData] = useState<typeof nodes[0] | undefined>(undefined);
+  // Track completion of password guessing
+  const [isGuessed, setIsGuessed] = useState(false);
 
+  const navigate = useNavigate();
   useEffect(() => {
-    console.log(currentNode);
     const data = nodes.find((node) => node.id === currentNode);
     setCurrentNodeData(data);
-    console.log(data)
   }, [nodes, currentNode]);
 
-  const handleProceed = () => {
+  const initializeBreaker = () => {
     setUsername("admin");
     setStart(true);
   };
+
+  const handleComplete = () => {
+    setIsGuessed(true);
+    setPasswordMask(
+      currentNodeData?.password ? "*".repeat(currentNodeData.password.length) : ""
+    );
+  };
+
+  const handleProceed = () => {
+    if (isGuessed) {
+      navigate("/terminal");
+    }
+  }
 
   return (
     <>
@@ -44,20 +60,26 @@ export default function Login() {
             <div className="form-group">
               <label htmlFor="password">Code</label>
               <input
-                type="password"
+                type="text"
                 id="password"
                 name="password"
                 required
-                onClick={handleProceed}
+                onClick={initializeBreaker}
+                value={passwordMask}
+                readOnly
               />
             </div>
           </form>
         </div>
-        <button type="submit" className="login-button" onClick={handleProceed}>
+        <button type="submit" className={`login-button ${!isGuessed && 'disabled'}`} onClick={handleProceed}>
           Proceed
         </button>
       </div>
-      <PasswordBreaker password={currentNodeData?.password || null} start={start} />
+      <PasswordBreaker
+        password={currentNodeData?.password || null}
+        start={start}
+        onComplete={handleComplete}
+      />
     </>
   );
 }
