@@ -3,6 +3,7 @@ import { useAtom } from "jotai";
 import { chainAtom, currentNodeAtom } from "../store";
 import "../styles/map.scss";
 import MapNode from "../components/MapNode";
+import { useNavigate } from 'react-router-dom';
 
 export default function Map() {
   const nodes = [
@@ -31,6 +32,7 @@ export default function Map() {
   ];
   const [chain, setChain] = useAtom(chainAtom);
   const [currentNode, setCurrentNode] = useAtom(currentNodeAtom);
+  const navigate = useNavigate();
 
   const toggleNode = (id: string) => {
     setChain((prev) =>
@@ -43,8 +45,14 @@ export default function Map() {
       setCurrentNode(null);
     } else {
       setCurrentNode(chain[chain.length - 1]);
+      navigate('/login');
     }
   }
+
+  const handleCancel = () => {
+    setChain(['personal_gateway']);
+    navigate('/');
+  };
 
   return (
     <div>
@@ -91,7 +99,7 @@ export default function Map() {
         ))}
       </div>
       <div className="button-container">
-        <button className="button">Cancel</button>
+        <button className="button" onClick={handleCancel}>Cancel</button>
         <button className="button" onClick={handleConnect}>{currentNode ? "Disconnect" : "Connect"}</button>
       </div>
     </div>
