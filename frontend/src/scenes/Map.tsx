@@ -1,6 +1,6 @@
 import React from "react";
 import { useAtom } from "jotai";
-import { chainAtom } from "../store";
+import { chainAtom, currentNodeAtom } from "../store";
 import "../styles/map.scss";
 import MapNode from "../components/MapNode";
 
@@ -30,12 +30,21 @@ export default function Map() {
     }
   ];
   const [chain, setChain] = useAtom(chainAtom);
+  const [currentNode, setCurrentNode] = useAtom(currentNodeAtom);
 
   const toggleNode = (id: string) => {
     setChain((prev) =>
       prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]
     );
   };
+
+  const handleConnect = () => {
+    if (currentNode) {
+      setCurrentNode(null);
+    } else {
+      setCurrentNode(chain[chain.length - 1]);
+    }
+  }
 
   return (
     <div>
@@ -83,7 +92,7 @@ export default function Map() {
       </div>
       <div className="button-container">
         <button className="button">Cancel</button>
-        <button className="button">Connect</button>
+        <button className="button" onClick={handleConnect}>{currentNode ? "Disconnect" : "Connect"}</button>
       </div>
     </div>
   );
