@@ -5,6 +5,7 @@ import Map from './scenes/Map.tsx'
 import Home from './scenes/Home.tsx'
 import Terminal from './scenes/Terminal.tsx'
 import NavBar from './components/NavBar'
+import FileList from './scenes/FileList.tsx'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 
 function App() {
@@ -18,6 +19,7 @@ function App() {
         <Route path="/map" element={<Map />} />
         <Route path="/missions" element={<Missions />} />
         <Route path="/terminal" element={<Terminal />} />
+        <Route path="/files" element={<FileList />} />
       </Routes>
     </Router>
   )

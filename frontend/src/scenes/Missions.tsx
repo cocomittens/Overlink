@@ -5,7 +5,6 @@ import "../styles/missions.scss";
 import { MissionDescription } from "../components/MissionDescription";
 
 export default function Missions() {
-  const [missions, setMissions] = useState<Mission[]>([]);
   const [mission, setMission] = useState<number | null>(null);
 
   return (

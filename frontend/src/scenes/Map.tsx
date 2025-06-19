@@ -6,7 +6,6 @@ import MapNode from "../components/MapNode";
 import { useNavigate } from 'react-router-dom';
 
 export default function Map() {
-  // Retrieve nodes from Jotai store
   const [nodes] = useAtom(nodesAtom);
   const [chain, setChain] = useAtom(chainAtom);
   const [currentNode, setCurrentNode] = useAtom(currentNodeAtom);
