@@ -13,6 +13,9 @@ $light-blue: #6190F5;
     align-items: flex-end;
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
 
+    h2 {
+        align-self: center;
+    }
 }
 
 .login-form {

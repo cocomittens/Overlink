@@ -1,35 +1,13 @@
 import React from "react";
 import { useAtom } from "jotai";
-import { chainAtom, currentNodeAtom } from "../store";
+import { chainAtom, currentNodeAtom, nodesAtom } from "../store";
 import "../styles/map.scss";
 import MapNode from "../components/MapNode";
 import { useNavigate } from 'react-router-dom';
 
 export default function Map() {
-  const nodes = [
-    { id: "personal_gateway", top: 280, left: 190, name: "Gateway", admin: true },
-    {
-      id: "sample_internal",
-      top: 450,
-      left: 350,
-      name: "Sample Internal Services",
-      account: true,
-    },
-    {
-      id: "sample_bank",
-      top: 200,
-      left: 250,
-      name: "Sample International Bank",
-      active: true,
-      admin: true,
-    },
-    {
-      id: "sample_public_access",
-      top: 300,
-      left: 800,
-      name: "Sample Public Access Server",
-    }
-  ];
+  // Retrieve nodes from Jotai store
+  const [nodes] = useAtom(nodesAtom);
   const [chain, setChain] = useAtom(chainAtom);
   const [currentNode, setCurrentNode] = useAtom(currentNodeAtom);
   const navigate = useNavigate();
@@ -41,11 +19,20 @@ export default function Map() {
   };
 
   const handleConnect = () => {
+    if (chain.length < 2) {
+      return;
+    }
     if (currentNode) {
       setCurrentNode(null);
     } else {
       setCurrentNode(chain[chain.length - 1]);
-      navigate('/login');
+      const nodeObj = nodes.find(n => n.id === chain[chain.length - 1]);
+      if (nodeObj?.password) {
+        navigate('/login');
+      } else {
+        navigate('/terminal');
+      }
+
     }
   }
 

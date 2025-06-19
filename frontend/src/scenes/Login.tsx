@@ -1,10 +1,22 @@
 import React, { useEffect, useState } from "react";
 import "../styles/login.scss";
 import { PasswordBreaker } from "../components/PasswordBreaker";
+import { useAtom } from "jotai";
+import { currentNodeAtom, nodesAtom } from "../store";
 
 export default function Login() {
   const [start, setStart] = useState(false);
   const [username, setUsername] = useState("");
+  const currentNode = useAtom(currentNodeAtom)[0];
+  const nodes = useAtom(nodesAtom)[0];
+  const [currentNodeData, setCurrentNodeData] = useState<typeof nodes[0] | undefined>(undefined);
+
+  useEffect(() => {
+    console.log(currentNode);
+    const data = nodes.find((node) => node.id === currentNode);
+    setCurrentNodeData(data);
+    console.log(data)
+  }, [nodes, currentNode]);
 
   const handleProceed = () => {
     setUsername("admin");
@@ -14,6 +26,7 @@ export default function Login() {
   return (
     <>
       <div className="login-container">
+        <h2>{currentNode}</h2>
         <div className="login-form">
           <h2>User Authorization Required</h2>
           <form>
@@ -44,7 +57,7 @@ export default function Login() {
           Proceed
         </button>
       </div>
-      <PasswordBreaker password="rosebud" start={start} />
+      <PasswordBreaker password={currentNodeData?.password || null} start={start} />
     </>
   );
 }
