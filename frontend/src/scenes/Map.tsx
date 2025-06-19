@@ -1,4 +1,6 @@
-import React, { useState } from "react";
+import React from "react";
+import { useAtom } from "jotai";
+import { chainAtom } from "../store";
 import "../styles/map.scss";
 import MapNode from "../components/MapNode";
 
@@ -27,7 +29,7 @@ export default function Map() {
       name: "Sample Public Access Server",
     }
   ];
-  const [chain, setChain] = useState<string[]>(['personal_gateway']);
+  const [chain, setChain] = useAtom(chainAtom);
 
   const toggleNode = (id: string) => {
     setChain((prev) =>
