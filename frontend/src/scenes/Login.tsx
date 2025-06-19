@@ -12,7 +12,6 @@ export default function Login() {
   const currentNode = useAtom(currentNodeAtom)[0];
   const nodes = useAtom(nodesAtom)[0];
   const [currentNodeData, setCurrentNodeData] = useState<typeof nodes[0] | undefined>(undefined);
-  // Track completion of password guessing
   const [isGuessed, setIsGuessed] = useState(false);
 
   const navigate = useNavigate();
