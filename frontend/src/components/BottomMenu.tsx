@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import "../styles/bottomMenu.scss";
 import { useAtom } from "jotai";
 import { softwareAtom, currentSoftwareAtom } from "../store";
+import TraceTracker from "./TraceTracker";
 
 const SoftwareList = () => {
     const [software] = useAtom(softwareAtom);
@@ -23,6 +24,7 @@ const SoftwareList = () => {
 
 const BottomMenu: React.FC = () => {
     const [showSoftware, setShowSoftware] = useState(false);
+    const [currentSoftware, setCurrentSoftware] = useAtom(currentSoftwareAtom);
 
     return (
         <div className="bottom-menu">
@@ -30,6 +32,7 @@ const BottomMenu: React.FC = () => {
             <ul>
                 <li className="software-icon" onClick={() => setShowSoftware(!showSoftware)}></li>
             </ul>
+            {currentSoftware.has('trace_tracker') && (<TraceTracker />)}
         </div >
     );
 };

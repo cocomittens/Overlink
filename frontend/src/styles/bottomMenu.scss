@@ -41,3 +41,16 @@ $light-blue: #6190F5;
         }
     }
 }
+
+.trace-tracker {
+    position: fixed;
+    bottom: -.2rem;
+    right: 0;
+    color: #fff;
+
+    text-align: center;
+
+    h3 {
+        margin: 0;
+    }
+}
