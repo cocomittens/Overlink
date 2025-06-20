@@ -3,9 +3,24 @@ import { missions_data } from "../mockData";
 import { Mission } from "../types/mission";
 import "../styles/missions.scss";
 import { MissionDescription } from "../components/MissionDescription";
+import { useAtom } from "jotai";
+import { missionsAtom, currentMissionsAtom, ratingAtom } from "../store";
 
 export default function Missions() {
   const [mission, setMission] = useState<number | null>(null);
+  const [missions, setMissions] = useAtom(missionsAtom);
+  const [currentMissions, setCurrentMissions] = useAtom(currentMissionsAtom);
+  const [rating] = useAtom(ratingAtom);
+
+  const selectedMission = missions.find((m) => m.id === mission) || null;
+
+  const handleAccept = (id: number) => {
+    const mission = missions.find((m) => m.id === id);
+    if (mission) {
+      setCurrentMissions((prev) => [...prev, mission]);
+      setMissions((prev) => prev.filter((m) => m.id !== id));
+    }
+  };
 
   return (
     <div className="missions-container">
@@ -18,7 +33,7 @@ export default function Missions() {
           </tr>
         </thead>
         <tbody>
-          {missions_data.map((mission: Mission) => (
+          {missions.map((mission: Mission) => (
             <tr key={mission.id} onClick={() => setMission(mission.id)}>
               <td>{new Date(mission.date).toLocaleDateString()}</td>
               <td>{mission.title}</td>
@@ -31,6 +46,14 @@ export default function Missions() {
           mission={mission ? missions_data[mission - 1] : null}
         />
       </div>
+      <button
+        type="submit"
+        className={`${selectedMission && rating > selectedMission.minRating ? 'disabled' : ''}`}
+        onClick={() => selectedMission && handleAccept(selectedMission.id)}
+        disabled={!selectedMission || rating > selectedMission.minRating}
+      >
+        Proceed
+      </button>
     </div>
   );
 }

@@ -1,4 +1,35 @@
 import { atom } from 'jotai';
+import { Mission } from "../types/mission";
+
+export const missionsAtom = atom<Mission[]>([
+    {
+        id: 1,
+        title: "Falsify a social security document",
+        date: "2023-10-01",
+        payment: 5300,
+        difficulty: 4,
+        minRating: 12,
+    },
+    {
+        id: 2,
+        title: "Find and destroy crucial data on a mainframe",
+        date: "2023-10-02",
+        payment: 1700,
+        difficulty: 2,
+        minRating: 14,
+    },
+    {
+        id: 3,
+        title: "Break into a rival computer system and sabotage files",
+        date: "2023-10-03",
+        payment: 1600,
+        difficulty: 2,
+        minRating: 15,
+    },
+]);
+
+export const currentMissionsAtom = atom<Mission[]>([]);
+
 
 export const chainAtom = atom<string[]>(['personal_gateway']);
 export const currentNodeAtom = atom<string | null>('sample_internal');
@@ -24,3 +55,4 @@ export const dataAtom = atom([
 export const directoryAtom = atom<{ id: string, name: string, data: { name: string, data: string[] }[] }>({ id: "", name: "", data: [] });
 
 export const moneyAtom = atom(1000);
+export const ratingAtom = atom(13);
