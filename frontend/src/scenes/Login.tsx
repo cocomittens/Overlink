@@ -9,8 +9,8 @@ export default function Login() {
   const [start, setStart] = useState(false);
   const [username, setUsername] = useState("");
   const [passwordMask, setPasswordMask] = useState("");
-  const currentNode = useAtom(currentNodeAtom)[0];
-  const nodes = useAtom(nodesAtom)[0];
+  const [currentNode] = useAtom(currentNodeAtom);
+  const [nodes] = useAtom(nodesAtom);
   const [currentNodeData, setCurrentNodeData] = useState<typeof nodes[0] | undefined>(undefined);
   const [isGuessed, setIsGuessed] = useState(false);
 

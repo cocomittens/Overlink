@@ -1,8 +1,8 @@
 import React from "react";
 import { useAtom } from "jotai";
-import "../styles/terminal.scss";
+import "../styles/home.scss";
 
-export default function Terminal() {
+export default function Home() {
     return (
         <div className="home">
             Welcome to the game.

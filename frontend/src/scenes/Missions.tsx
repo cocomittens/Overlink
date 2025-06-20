@@ -52,7 +52,7 @@ export default function Missions() {
         onClick={() => selectedMission && handleAccept(selectedMission.id)}
         disabled={!selectedMission || rating > selectedMission.minRating}
       >
-        Proceed
+        Accept
       </button>
     </div>
   );

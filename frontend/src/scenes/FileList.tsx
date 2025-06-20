@@ -5,7 +5,6 @@ import { directoryAtom } from "../store";
 
 export default function FileList() {
     const [directory] = useAtom(directoryAtom);
-    console.log(directory.data)
     return (
         <div className="files-container">
             <h2>{directory.name}</h2>
