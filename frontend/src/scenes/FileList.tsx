@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import "../styles/missions.scss";
+import "../styles/terminal.scss";
 import { useAtom } from "jotai";
 import { directoryAtom } from "../store";
 
@@ -8,25 +8,28 @@ export default function FileList() {
     console.log(directory.data)
     return (
         <div className="files-container">
-            <h2>Available Files</h2>
+            <h2>{directory.name}</h2>
             <table>
                 <thead>
                     <tr>
-                        {directory.data?.map((file, index) => (
+                        {directory.data?.map((col, index) => (
                             <th key={index}>
-                                {file.name}
+                                {col.name}
                             </th>
                         ))}
                     </tr>
                 </thead>
                 <tbody>
-                    {directory.data?.map((file, index) => (
-                        <tr key={index} style={{ display: "flex", flexDirection: "column" }}>
-                            {file.data?.map((item, idx) => (
-                                <td key={idx}>{item}</td>
-                            ))}
-                        </tr>
-                    ))}
+                    {directory.data && directory.data.length > 0 &&
+                        Array.from({ length: directory.data[0].data.length }).map(
+                            (_, rowIndex) => (
+                                <tr key={rowIndex}>
+                                    {directory.data.map((col, colIndex) => (
+                                        <td key={colIndex}>{col.data[rowIndex]}</td>
+                                    ))}
+                                </tr>
+                            )
+                        )}
                 </tbody>
             </table>
         </div>

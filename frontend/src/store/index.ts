@@ -16,7 +16,7 @@ export const dataAtom = atom([
         name: "Sample Internal Services",
         directory: [
             { id: "file_server", name: "File Server", data: [{ name: 'Filename', data: ['sample_data_334', 'sample_data_1337', 'sample_data_42'] }] },
-            { id: "view_logs", name: "View Logs", data: [{ name: 'Action', data: ['log_2023_10_01', 'log_2023_10_02', 'log_2023_10_03'] }] },
+            { id: "view_logs", name: "View Logs", data: [{ name: 'Date', data: ['2023-10-01', '2023-10-02', '2023-10-03'] }, { name: 'Action', data: ['log_2023_10_01', 'log_2023_10_02', 'log_2023_10_03'] }] },
         ]
     }
 ]);
