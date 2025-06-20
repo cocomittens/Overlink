@@ -18,24 +18,29 @@ export default function Map() {
   };
 
   const handleConnect = () => {
-    if (chain.length < 2) {
+    console.log('handleConnect clicked', { chain, currentNode });
+    // Toggle connection: disconnect if already connected
+    if (currentNode) {
+      console.log('disconnecting', currentNode);
+      setCurrentNode(null);
+      navigate('/map'); // go back to map on disconnect
       return;
     }
-    if (currentNode) {
-      setCurrentNode(null);
+    // Connect to the last selected node
+    const targetId = chain[chain.length - 1];
+    if (!targetId) return;
+    console.log('connecting', targetId);
+    setCurrentNode(targetId);
+    const nodeObj = nodes.find((n) => n.id === targetId);
+    if (nodeObj?.password) {
+      navigate('/login');
     } else {
-      setCurrentNode(chain[chain.length - 1]);
-      const nodeObj = nodes.find(n => n.id === chain[chain.length - 1]);
-      if (nodeObj?.password) {
-        navigate('/login');
-      } else {
-        navigate('/terminal');
-      }
-
+      navigate('/terminal');
     }
-  }
+  };
 
   const handleCancel = () => {
+    console.log('handleCancel clicked');
     setChain(['personal_gateway']);
     navigate('/');
   };
@@ -85,8 +90,8 @@ export default function Map() {
         ))}
       </div>
       <div className="button-container">
-        <button className="button" onClick={handleCancel}>Cancel</button>
-        <button className="button" onClick={handleConnect}>{currentNode ? "Disconnect" : "Connect"}</button>
+        <button type="button" className="button" onClick={handleCancel}>Cancel</button>
+        <button type="button" className="button" onClick={handleConnect}>{currentNode ? "Disconnect" : "Connect"}</button>
       </div>
     </div>
   );

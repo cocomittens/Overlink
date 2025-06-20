@@ -69,4 +69,14 @@ $light-blue: #6190F5;
     font-weight: bold;
     margin: 1vh;
     margin-right: 0;
+    pointer-events: auto;
+}
+
+.button-container {
+    display: flex;
+    justify-content: center;
+
+    button {
+        z-index: 10;
+    }
 }

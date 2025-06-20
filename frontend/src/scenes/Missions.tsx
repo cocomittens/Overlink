@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { missions_data } from "../mockData";
 import { Mission } from "../types/mission";
 import "../styles/missions.scss";
 import { MissionDescription } from "../components/MissionDescription";
@@ -43,7 +42,7 @@ export default function Missions() {
       </table>
       <div>
         <MissionDescription
-          mission={mission ? missions_data[mission - 1] : null}
+          mission={mission ? missions[mission - 1] : null}
         />
       </div>
       <button

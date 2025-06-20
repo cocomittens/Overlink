@@ -1,0 +1,43 @@
+$dark-blue: rgb(0, 0, 111);
+$mid-blue: rgb(0, 0, 162);
+$light-blue: #6190F5;
+
+.bottom-menu {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+
+    ul {
+        list-style: none;
+    }
+}
+
+.software-icon {
+    width: 80px;
+    height: 80px;
+    background: linear-gradient(45deg,
+            $mid-blue 0%,
+            $light-blue 60%);
+
+    &:hover {
+        cursor: pointer;
+    }
+}
+
+.software-list {
+    position: absolute;
+    top: -75px;
+
+    li {
+        background: linear-gradient(45deg,
+                $mid-blue 0%,
+                $dark-blue 60%);
+        padding: .2rem 1rem;
+        margin: 0.2rem 0;
+
+        &:hover {
+            cursor: pointer;
+        }
+    }
+}

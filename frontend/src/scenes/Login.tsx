@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import "../styles/login.scss";
 import { PasswordBreaker } from "../components/PasswordBreaker";
 import { useAtom } from "jotai";
-import { currentNodeAtom, nodesAtom } from "../store";
+import { currentNodeAtom, nodesAtom, currentSoftwareAtom } from "../store";
 import { useNavigate } from "react-router-dom";
 
 export default function Login() {

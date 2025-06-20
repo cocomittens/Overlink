@@ -30,9 +30,8 @@ export const missionsAtom = atom<Mission[]>([
 
 export const currentMissionsAtom = atom<Mission[]>([]);
 
-
 export const chainAtom = atom<string[]>(['personal_gateway']);
-export const currentNodeAtom = atom<string | null>('sample_internal');
+export const currentNodeAtom = atom<string | null>(null);
 
 export const nodesAtom = atom([
     { id: "personal_gateway", top: 280, left: 190, name: "Gateway", admin: true },
@@ -56,3 +55,10 @@ export const directoryAtom = atom<{ id: string, name: string, data: { name: stri
 
 export const moneyAtom = atom(1000);
 export const ratingAtom = atom(13);
+
+export const softwareAtom = atom([
+    { id: "trace_tracker", name: "Trace Tracker", version: 2 },
+    { id: "password_breaker", name: "Password Breaker", version: 1 }
+]);
+
+export const currentSoftwareAtom = atom<Set<string>>(new Set<string>());

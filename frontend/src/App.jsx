@@ -6,6 +6,7 @@ import Home from './scenes/Home.tsx'
 import Terminal from './scenes/Terminal.tsx'
 import NavBar from './components/NavBar'
 import FileList from './scenes/FileList.tsx'
+import BottomMenu from './components/BottomMenu.tsx'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 
 function App() {
@@ -21,6 +22,7 @@ function App() {
         <Route path="/terminal" element={<Terminal />} />
         <Route path="/files" element={<FileList />} />
       </Routes>
+      <BottomMenu />
     </Router>
   )
 }
