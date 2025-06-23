@@ -12,15 +12,16 @@ To start the frontend,
 
 ## Gameplay
 ### Map
-The map 
+The map displays 
 <img width="1067" alt="image" src="https://github.com/user-attachments/assets/7dbb71b2-2793-4a19-8d2a-2a79f4c90163" />
 
 ### Login
+Upon connecting to a
 <img width="390" alt="image" src="https://github.com/user-attachments/assets/3fbf6e6b-b0c4-4870-ac27-66db83a304fd" />
 <img width="390" src="https://github.com/user-attachments/assets/bf514776-e7a2-4ead-83a1-7b54249b88cd" />
 
 ### Missions
-The missions menu contains the jobs available for you to accept. The more missions you successfully complete, the higher your skill rating will be. 
+The missions menu contains a list of all available jobs for you to do. The more missions you successfully complete, the higher your skill rating will be. Higher paying missions require a higher skill level, but are more complex with a higher risk of detection.
 <img width="706" alt="image" src="https://github.com/user-attachments/assets/e83d6b45-8e37-425d-8978-b23801d19df6" />
 
 ## Planned Features
