@@ -16,7 +16,6 @@ To start the frontend,
 
 The missions menu can be accessed in the top navigation menu. It contains a list of all available jobs for you to do. The more missions you successfully complete, the higher your skill rating will be. Higher paying missions require a higher skill level, but are more complex with a higher risk of detection.
 
-
 ### Map
 <img width="1067" alt="image" src="https://github.com/user-attachments/assets/7dbb71b2-2793-4a19-8d2a-2a79f4c90163" />
 
@@ -31,8 +30,18 @@ Upon connecting to an endpoint that you do not yet have access to, you will be p
 
 Use the Password Breaker (and additional software for more complex systems) to obtain credentials and gain access to the system. Click on the `Code` input field to start the Password Breaker.
 
+### Terminal
+<img width="343" alt="image" src="https://github.com/user-attachments/assets/5202e880-d694-4307-8bee-f017ba3d7892" />
+
+Once a connection is established, you will be presented with a list of folders that currently exist on that device. Click on a folder name to see the files that it contains.
+
+<img width="546" alt="image" src="https://github.com/user-attachments/assets/e67d47b3-e0e0-46d9-beeb-94cb05935016" />
+
+You will then be able to view and interact with (copy, delete, etc) the files in the folder you selected. 
+
 ## Planned Features
 Some of the upcoming features currently in development include (but aren't limited to):
 * Tutorial mission to illustrate gameplay for first time users
 * More missions and mission types
 * Store to upgrade and purchase new software
+* Continue to fix bugs, address edge cases, and polish existing game mechanics
