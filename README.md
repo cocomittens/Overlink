@@ -29,7 +29,7 @@ Upon connecting to an endpoint that you do not yet have access to, you will be p
 
 <img width="390" src="https://github.com/user-attachments/assets/bf514776-e7a2-4ead-83a1-7b54249b88cd" />
 
-Use the Password Breaker (and additional software for more complex systems) to obtain credentials and gain access to the system. Click on the "Code" input field to start the Password Breaker.
+Use the Password Breaker (and additional software for more complex systems) to obtain credentials and gain access to the system. Click on the `Code` input field to start the Password Breaker.
 
 ## Planned Features
 Some of the upcoming features currently in development include (but aren't limited to):
