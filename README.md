@@ -13,7 +13,7 @@ To start the frontend,
 ## Gameplay
 ### Missions
 The missions menu can be accessed in the top navigation menu. It contains a list of all available jobs for you to do. The more missions you successfully complete, the higher your skill rating will be. Higher paying missions require a higher skill level, but are more complex with a higher risk of detection.
-<img width="706" alt="image" src="https://github.com/user-attachments/assets/e83d6b45-8e37-425d-8978-b23801d19df6" />
+<img width="817" alt="image" src="https://github.com/user-attachments/assets/1bc8dff0-8b2e-4924-ba86-19f78dbc2603" />
 
 ### Map
 The map can also be accessed in the navigation menu. It displays all known devices available for you to connect to. Nodes with a dashed border are devices you have access to at least one account on, while a solid border indicates admin access. Green nodes represent devices that are involved in a mission you are currently on. Route your connection through more nodes in order to delay detection - but make sure to clear your logs!
