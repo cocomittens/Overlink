@@ -1,7 +1,7 @@
 # What is Overlink?
 Overlink is a web-based cybersecurity simulation game where players infiltrate networks, bypass security systems, and complete strategic hacking missions. It is currently in a very early stage of development, with updates and new features added frequently.
 
-## Instructions
+## Running the Game
 To start the backend,
   * Navigate to the `backend` folder
   * Type `npm run dev`
