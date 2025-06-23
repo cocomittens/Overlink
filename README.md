@@ -25,7 +25,7 @@ The map can also be accessed in the navigation menu. It displays all known devic
 ### Login
 <img width="390" alt="image" src="https://github.com/user-attachments/assets/3fbf6e6b-b0c4-4870-ac27-66db83a304fd" />
 
-Upon connecting to an endpoint that you do not yet have access to, you will be presented with a login screen. 
+Upon connecting to an endpoint that you do not yet have access to, you will be presented with a login screen. You will need to find the correct username and password in order to access the system.
 
 <img width="390" src="https://github.com/user-attachments/assets/bf514776-e7a2-4ead-83a1-7b54249b88cd" />
 
