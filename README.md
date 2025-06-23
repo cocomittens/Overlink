@@ -12,6 +12,7 @@ To start the frontend,
 
 ## Gameplay
 ### Map
+The map 
 <img width="1067" alt="image" src="https://github.com/user-attachments/assets/7dbb71b2-2793-4a19-8d2a-2a79f4c90163" />
 
 ### Login
@@ -19,4 +20,11 @@ To start the frontend,
 <img width="390" src="https://github.com/user-attachments/assets/bf514776-e7a2-4ead-83a1-7b54249b88cd" />
 
 ### Missions
+The missions menu contains the jobs available for you to accept. The more missions you successfully complete, the higher your skill rating will be. 
 <img width="706" alt="image" src="https://github.com/user-attachments/assets/e83d6b45-8e37-425d-8978-b23801d19df6" />
+
+## Planned Features
+Some of the upcoming features currently in development include (but aren't limited to):
+* Tutorial mission to illustrate gameplay for first time users
+* More missions and mission types
+* Store to upgrade and purchase new software
