@@ -75,14 +75,18 @@ export default function Login() {
           Proceed
         </button>
       </div>
-      {
+      {/* {
         currentSoftware.has("password_breaker") && <PasswordBreaker
           password={currentNodeData?.password || null}
           start={start}
           onComplete={handleComplete}
         />
-      }
-
+      } */}
+      <PasswordBreaker
+        password={currentNodeData?.password || null}
+        start={start}
+        onComplete={handleComplete}
+      />
     </>
   );
 }
