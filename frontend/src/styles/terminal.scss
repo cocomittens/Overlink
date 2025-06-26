@@ -1,51 +1,54 @@
- @import './_variables.scss';
- $table-stripe: rgba(40, 40, 40, .5);
+$primary-bg: #010101;
+$table-stripe: rgba(40, 40, 40, .5);
+$dark-blue: rgb(0, 0, 111);
+$mid-blue: rgb(0, 0, 162);
+$light-blue: #6190F5;
 
 
- a {
-     cursor: pointer;
-     font-size: 1.2rem;
-     color: #fff;
+a {
+    cursor: pointer;
+    font-size: 1.2rem;
+    color: #fff;
 
-     &:hover {
-         color: $light-blue;
-     }
- }
+    &:hover {
+        color: $light-blue;
+    }
+}
 
- table {
-     width: 100%;
-     border-collapse: separate;
+table {
+    width: 100%;
+    border-collapse: separate;
 
-     thead {
-         tr {
-             background: linear-gradient(45deg,
-                     $mid-blue 0%,
-                     $dark-blue 60%)
-         }
+    thead {
+        tr {
+            background: linear-gradient(45deg,
+                    $mid-blue 0%,
+                    $dark-blue 60%)
+        }
 
-         th {
-             padding: 0.5rem;
-             text-align: left;
-             color: #fff;
-             margin-left: 1vw;
-         }
-     }
+        th {
+            padding: 0.5rem;
+            text-align: left;
+            color: #fff;
+            margin-left: 1vw;
+        }
+    }
 
-     tbody {
-         tr {
-             &:nth-child(even) {
-                 background: $table-stripe;
-             }
+    tbody {
+        tr {
+            &:nth-child(even) {
+                background: $table-stripe;
+            }
 
-             &:hover {
-                 cursor: pointer;
-             }
-         }
+            &:hover {
+                cursor: pointer;
+            }
+        }
 
-         td {
-             padding: 0.5rem;
-             border-bottom: 1px solid darken($primary-bg, 20%);
-             color: #fff;
-         }
-     }
- }
+        td {
+            padding: 0.5rem;
+            border-bottom: 1px solid darken($primary-bg, 20%);
+            color: #fff;
+        }
+    }
+}

@@ -1,14 +1,16 @@
-@import './_variables.scss';
+$dark-blue: rgb(0, 0, 111);
+$mid-blue: rgb(0, 0, 162);
+$light-blue: #6190F5;
 
 .bottom-menu {
-    position: absolute;
+    position: fixed;
     bottom: .8rem;
     left: 0;
     width: 100%;
+
     display: flex;
     align-items: flex-end;
     justify-content: space-between;
-
 
     ul {
         list-style: none;
@@ -55,7 +57,7 @@
 .trace-tracker {
     position: fixed;
     bottom: 0;
-    right: .2rem;
+    right: 0;
     color: #fff;
     width: 8vw;
 

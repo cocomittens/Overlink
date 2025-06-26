@@ -13,7 +13,6 @@ export default function Login() {
   const [nodes] = useAtom(nodesAtom);
   const [currentNodeData, setCurrentNodeData] = useState<typeof nodes[0] | undefined>(undefined);
   const [isGuessed, setIsGuessed] = useState(false);
-  const [currentSoftware] = useAtom(currentSoftwareAtom);
 
   const navigate = useNavigate();
   useEffect(() => {
@@ -75,13 +74,6 @@ export default function Login() {
           Proceed
         </button>
       </div>
-      {/* {
-        currentSoftware.has("password_breaker") && <PasswordBreaker
-          password={currentNodeData?.password || null}
-          start={start}
-          onComplete={handleComplete}
-        />
-      } */}
       <PasswordBreaker
         password={currentNodeData?.password || null}
         start={start}

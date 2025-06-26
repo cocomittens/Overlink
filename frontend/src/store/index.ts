@@ -34,10 +34,10 @@ export const chainAtom = atom<string[]>(['personal_gateway']);
 export const currentNodeAtom = atom<string | null>(null);
 
 export const nodesAtom = atom([
-    { id: "personal_gateway", top: 40, left: 15, name: "Gateway", admin: true },
-    { id: "sample_internal", top: 70, left: 30, name: "Sample Internal Services", account: true, password: "pass123" },
-    { id: "sample_bank", top: 32, left: 27, name: "Sample International Bank", active: true, admin: true, password: "rosebud" },
-    { id: "sample_public_access", top: 30, left: 60, name: "Sample Public Access Server" }
+    { id: "personal_gateway", top: 280, left: 190, name: "Gateway", admin: true },
+    { id: "sample_internal", top: 500, left: 350, name: "Sample Internal Services", account: true, password: "pass123" },
+    { id: "sample_bank", top: 200, left: 250, name: "Sample International Bank", active: true, admin: true, password: "rosebud" },
+    { id: "sample_public_access", top: 300, left: 800, name: "Sample Public Access Server" }
 ]);
 
 export const dataAtom = atom([
@@ -46,7 +46,7 @@ export const dataAtom = atom([
         name: "Sample Internal Services",
         directory: [
             { id: "file_server", name: "File Server", data: [{ name: 'Filename', data: ['sample_data_334', 'sample_data_1337', 'sample_data_42'] }] },
-            { id: "view_logs", name: "View Logs", data: [{ name: 'Date', data: ['2023-10-01', '2023-10-02', '2023-10-03'] }, { name: 'Action', data: ['Connection from 127.0.0.1 was closed', 'File sample_data_42 was accessed by 127.0.0.1', 'Connection from 127.0.0.1 was established'] }] },
+            { id: "view_logs", name: "View Logs", data: [{ name: 'Date', data: ['2023-10-01', '2023-10-02', '2023-10-03'] }, { name: 'Action', data: ['log_2023_10_01', 'log_2023_10_02', 'log_2023_10_03'] }] },
         ]
     }
 ]);
