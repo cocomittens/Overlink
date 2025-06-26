@@ -10,6 +10,7 @@ type MapNodeProps = {
   account?: boolean;
   onClick?: () => void;
 };
+
 export default function MapNode({
   top,
   left,
@@ -27,10 +28,24 @@ export default function MapNode({
   ]
     .filter(Boolean)
     .join(" ");
+
   return (
     <div className="map-node-container" onClick={onClick}>
-      <div className={className} style={{ top, left }}></div>
-      <span className="map-node-name" style={{ top: top - 8, left: left + 16 }}>
+      <div
+        className={className}
+        style={{
+          top: `${top}%`,
+          left: `${left}%`,
+          transform: 'translate(-50%, -50%)'
+        }}
+      />
+      <span
+        className="map-node-name"
+        style={{
+          top: `${top}%`,
+          left: `calc(${left}% + 12px)`,
+        }}
+      >
         {name}
       </span>
     </div>

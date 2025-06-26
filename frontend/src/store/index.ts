@@ -34,10 +34,10 @@ export const chainAtom = atom<string[]>(['personal_gateway']);
 export const currentNodeAtom = atom<string | null>(null);
 
 export const nodesAtom = atom([
-    { id: "personal_gateway", top: 220, left: 150, name: "Gateway", admin: true },
-    { id: "sample_internal", top: 400, left: 300, name: "Sample Internal Services", account: true, password: "pass123" },
-    { id: "sample_bank", top: 200, left: 250, name: "Sample International Bank", active: true, admin: true, password: "rosebud" },
-    { id: "sample_public_access", top: 250, left: 600, name: "Sample Public Access Server" }
+    { id: "personal_gateway", top: 40, left: 15, name: "Gateway", admin: true },
+    { id: "sample_internal", top: 70, left: 30, name: "Sample Internal Services", account: true, password: "pass123" },
+    { id: "sample_bank", top: 32, left: 27, name: "Sample International Bank", active: true, admin: true, password: "rosebud" },
+    { id: "sample_public_access", top: 30, left: 60, name: "Sample Public Access Server" }
 ]);
 
 export const dataAtom = atom([

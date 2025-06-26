@@ -40,38 +40,37 @@ export default function Map() {
   };
 
   const handleCancel = () => {
-    console.log('handleCancel clicked');
     setChain(['personal_gateway']);
     navigate('/');
   };
 
   return (
-    <div>
+    <div className="map-page">
       <div className="map-container">
         <svg
           className="map-lines"
           xmlns="http://www.w3.org/2000/svg"
           width="100%"
           height="100%"
+          viewBox="0 0 100 100"
+          preserveAspectRatio="none"
         >
           {chain.map((id, i) => {
             const nextId = chain[i + 1];
             if (!nextId) return null;
             const from = nodes.find((n) => n.id === id)!;
             const to = nodes.find((n) => n.id === nextId)!;
-            const x1 = from.left + 5;
-            const y1 = from.top + 5;
-            const x2 = to.left + 5;
-            const y2 = to.top + 5;
             return (
               <line
                 key={`${id}-${nextId}`}
-                x1={x1}
-                y1={y1}
-                x2={x2}
-                y2={y2}
+                x1={from.left}
+                y1={from.top}
+                x2={to.left}
+                y2={to.top}
                 stroke="#fff"
-                strokeWidth={2}
+                strokeWidth={0.3}
+                strokeDasharray="1,1"
+                opacity={0.8}
               />
             );
           })}
