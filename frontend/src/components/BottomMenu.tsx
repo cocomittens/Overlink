@@ -32,10 +32,10 @@ const BottomMenu: React.FC = () => {
             <ul>
                 <li className="software-icon" onClick={() => setShowSoftware(!showSoftware)}></li>
             </ul>
-            {/* <ul>
+            <ul>
                 <li className="message-icon"></li>
             </ul>
-            {currentSoftware.has('trace_tracker') && (<TraceTracker />)} */}
+            {currentSoftware.has('trace_tracker') && (<TraceTracker />)}
         </div >
     );
 };

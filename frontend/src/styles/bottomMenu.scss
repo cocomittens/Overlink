@@ -2,7 +2,7 @@
 
 .bottom-menu {
     position: absolute;
-    bottom: 0;
+    bottom: .8rem;
     left: 0;
     width: 100%;
     display: flex;
@@ -54,11 +54,16 @@
 
 .trace-tracker {
     position: fixed;
-    bottom: .2rem;
-    right: .4rem;
+    bottom: 0;
+    right: .2rem;
     color: #fff;
+    width: 8vw;
 
     text-align: center;
+
+    background: linear-gradient(45deg,
+            $mid-blue 0%,
+            $dark-blue 60%);
 
     h3 {
         margin: 0;
