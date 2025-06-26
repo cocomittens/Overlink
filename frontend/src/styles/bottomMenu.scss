@@ -1,6 +1,4 @@
-$dark-blue: rgb(0, 0, 111);
-$mid-blue: rgb(0, 0, 162);
-$light-blue: #6190F5;
+@import './_variables.scss';
 
 .bottom-menu {
     position: fixed;

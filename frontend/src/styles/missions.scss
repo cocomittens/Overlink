@@ -1,13 +1,6 @@
-$primary-bg: #010101;
+@import './_variables.scss';
+
 $table-stripe: rgba(40, 40, 40, .5);
-$dark-blue: rgb(0, 0, 111);
-$mid-blue: rgb(0, 0, 162);
-$light-blue: #6190F5;
-
-$dark-gray: #333;
-$mid-gray: #666;
-
-
 
 body {
   background: $primary-bg;

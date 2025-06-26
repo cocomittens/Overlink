@@ -15,9 +15,6 @@ const NavBar: React.FC = () => {
         <li>
           <Link to="/missions">Missions</Link>
         </li>
-        <li>
-          <Link to="/terminal">Terminal</Link>
-        </li>
         <li className="money">
           <span>${money}</span>
         </li>

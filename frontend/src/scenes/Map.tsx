@@ -23,7 +23,7 @@ export default function Map() {
     if (currentNode) {
       console.log('disconnecting', currentNode);
       setCurrentNode(null);
-      navigate('/map'); // go back to map on disconnect
+      navigate('/map');
       return;
     }
     // Connect to the last selected node
