@@ -58,12 +58,19 @@
     right: 0;
     color: #fff;
     width: 8vw;
-
-    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 0.5rem;
 
     background: linear-gradient(45deg,
             $mid-blue 0%,
             $dark-blue 60%);
+
+    span:first-child {
+        flex: 1;
+        text-align: center;
+    }
 
     h3 {
         margin: 0;
