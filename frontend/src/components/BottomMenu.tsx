@@ -24,7 +24,8 @@ const SoftwareList = () => {
 
 const BottomMenu: React.FC = () => {
     const [showSoftware, setShowSoftware] = useState(false);
-    const [currentSoftware, setCurrentSoftware] = useAtom(currentSoftwareAtom);
+    const [currentSoftware] = useAtom(currentSoftwareAtom);
+    console.log(currentSoftware.has('trace_tracker'))
 
     return (
         <div className="bottom-menu">
