@@ -62,3 +62,7 @@ export const softwareAtom = atom([
 ]);
 
 export const currentSoftwareAtom = atom<Set<string>>(new Set<string>());
+
+export const traceAtom = atom<number>(0);
+
+export const traceTimeAtom = atom<number>(0);
