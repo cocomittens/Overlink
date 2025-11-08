@@ -1,83 +1,76 @@
-@import './_variables.scss';
+@import "./_variables.scss";
 
 .bottom-menu {
-    position: fixed;
-    bottom: .8rem;
-    left: 0;
-    width: 100%;
+  position: fixed;
+  bottom: 0.8rem;
+  left: 0;
+  width: 100%;
 
-    display: flex;
-    align-items: flex-end;
-    justify-content: space-between;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
 
-    ul {
-        list-style: none;
-    }
+  ul {
+    list-style: none;
+  }
 }
 
 .software-icon {
-    width: 80px;
-    height: 80px;
-    background: linear-gradient(45deg,
-            $mid-blue 0%,
-            $light-blue 60%);
+  width: 80px;
+  height: 80px;
+  background: linear-gradient(45deg, $mid-blue 0%, $light-blue 60%);
 
-    &:hover {
-        cursor: pointer;
-    }
+  &:hover {
+    cursor: pointer;
+  }
 }
 
 .software-list {
-    position: absolute;
-    top: -75px;
+  position: absolute;
+  top: -75px;
 
-    li {
-        background: linear-gradient(45deg,
-                $mid-blue 0%,
-                $dark-blue 60%);
-        padding: .2rem 1rem;
-        margin: 0.2rem 0;
+  li {
+    background: linear-gradient(45deg, $mid-blue 0%, $dark-blue 60%);
+    padding: 0.2rem 1rem;
+    margin: 0.2rem 0;
 
-        &:hover {
-            cursor: pointer;
-        }
+    &:hover {
+      cursor: pointer;
     }
+  }
 }
 
 .messages {
-    display: flex;
-    gap: 8px;
+  display: flex;
+  gap: 8px;
+  margin-right: 8px;
 }
 
 .message-icon {
-    width: 40px;
-    height: 40px;
-    background: linear-gradient(45deg,
-            $mid-blue 0%,
-            $light-blue 60%);
+  width: 40px;
+  height: 40px;
+  background: linear-gradient(45deg, $mid-blue 0%, $light-blue 60%);
 }
 
 .trace-tracker {
-    position: fixed;
-    bottom: 0;
-    right: 0;
-    color: #fff;
-    width: 8vw;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 0.5rem;
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  color: #fff;
+  width: 8vw;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 0.5rem;
 
-    background: linear-gradient(45deg,
-            $mid-blue 0%,
-            $dark-blue 60%);
+  background: linear-gradient(45deg, $mid-blue 0%, $dark-blue 60%);
 
-    span:first-child {
-        flex: 1;
-        text-align: center;
-    }
+  span:first-child {
+    flex: 1;
+    text-align: center;
+  }
 
-    h3 {
-        margin: 0;
-    }
+  h3 {
+    margin: 0;
+  }
 }

@@ -1,9 +1,11 @@
+import "../styles/map.scss";
+
+import { chainAtom, currentNodeAtom, nodesAtom } from "../store";
+
+import MapNode from "../components/MapNode";
 import React from "react";
 import { useAtom } from "jotai";
-import { chainAtom, currentNodeAtom, nodesAtom } from "../store";
-import "../styles/map.scss";
-import MapNode from "../components/MapNode";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 
 export default function Map() {
   const [nodes] = useAtom(nodesAtom);
@@ -18,31 +20,31 @@ export default function Map() {
   };
 
   const handleConnect = () => {
-    console.log('handleConnect clicked', { chain, currentNode });
+    console.log("handleConnect clicked", { chain, currentNode });
     // Toggle connection: disconnect if already connected
     if (currentNode) {
-      console.log('disconnecting', currentNode);
+      console.log("disconnecting", currentNode);
       setCurrentNode(null);
-      navigate('/map');
+      navigate("/map");
       return;
     }
     // Connect to the last selected node
     const targetId = chain[chain.length - 1];
     if (!targetId) return;
-    console.log('connecting', targetId);
+    console.log("connecting", targetId);
     setCurrentNode(targetId);
     const nodeObj = nodes.find((n) => n.id === targetId);
     if (nodeObj?.password) {
-      navigate('/login');
+      navigate("/login");
     } else {
-      navigate('/terminal');
+      navigate("/terminal");
     }
   };
 
   const handleCancel = () => {
-    console.log('handleCancel clicked');
-    setChain(['personal_gateway']);
-    navigate('/');
+    console.log("handleCancel clicked");
+    setChain(["personal_gateway"]);
+    navigate("/");
   };
 
   return (
@@ -91,8 +93,12 @@ export default function Map() {
         ))}
       </div>
       <div className="button-container">
-        <button type="button" className="button" onClick={handleCancel}>Cancel</button>
-        <button type="button" className="button" onClick={handleConnect}>{currentNode ? "Disconnect" : "Connect"}</button>
+        <button type="button" className="button" onClick={handleCancel}>
+          Cancel
+        </button>
+        <button type="button" className="button" onClick={handleConnect}>
+          {currentNode ? "Disconnect" : "Connect"}
+        </button>
       </div>
     </div>
   );

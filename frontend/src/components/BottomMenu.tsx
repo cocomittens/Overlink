@@ -1,13 +1,16 @@
-import React, { useState } from "react";
 import "../styles/bottomMenu.scss";
-import { useAtom, useAtomValue } from "jotai";
-import { loadable } from "jotai/utils";
+
+import React, { useState } from "react";
 import {
-  softwareAtom,
-  currentSoftwareAtom,
   currentMissionsAtom,
+  currentSoftwareAtom,
+  softwareAtom,
 } from "../store";
+import { useAtom, useAtomValue } from "jotai";
+
+import { MissionDetails } from "./MissionDetails";
 import TraceTracker from "./TraceTracker";
+import { loadable } from "jotai/utils";
 
 const SoftwareList = () => {
   const [software] = useAtom(softwareAtom);
@@ -31,27 +34,35 @@ const SoftwareList = () => {
 
 const BottomMenu: React.FC = () => {
   const [showSoftware, setShowSoftware] = useState(false);
+  const [selectedMission, setSelectedMission] = useState(null);
   const [currentSoftware] = useAtom(currentSoftwareAtom);
   const currentMissionsLoadable = useAtomValue(loadable(currentMissionsAtom));
-  
-  const currentMissions = currentMissionsLoadable.state === 'hasData' ? currentMissionsLoadable.data : [];
+
+  const currentMissions =
+    currentMissionsLoadable.state === "hasData"
+      ? currentMissionsLoadable.data
+      : [];
 
   return (
-    <div className="bottom-menu">
-      {showSoftware && <SoftwareList />}
-      <ul>
-        <li
-          className="software-icon"
-          onClick={() => setShowSoftware(!showSoftware)}
-        ></li>
-      </ul>
-      <ul className="messages">
-        {currentMissions.map((mission) => {
-          return <li key={mission.id} className="message-icon"></li>;
-        })}
-      </ul>
-      {currentSoftware.has("trace_tracker") && <TraceTracker />}
-    </div>
+    <>
+      <MissionDetails mission={selectedMission} />
+      <div className="bottom-menu">
+        {showSoftware && <SoftwareList />}
+        <ul>
+          <li
+            className="software-icon"
+            onClick={() => setShowSoftware(!showSoftware)}
+          ></li>
+        </ul>
+
+        <ul className="messages">
+          {currentMissions.map((mission) => {
+            return <li key={mission.id} className="message-icon"></li>;
+          })}
+        </ul>
+        {currentSoftware.has("trace_tracker") && <TraceTracker />}
+      </div>
+    </>
   );
 };
 
