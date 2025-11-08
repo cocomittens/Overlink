@@ -5,6 +5,11 @@ export const getMissions = async () => {
     return response.json();
 };
 
+export const getUserMissions = async (userId: number) => {
+    const response = await fetch(`${API_BASE}/users/${userId}/missions`);
+    return response.json();
+};
+
 export const acceptMission = async (userId: number, missionId: number) => {
     const response = await fetch(`${API_BASE}/users/${userId}/missions/${missionId}/accept`, {
         method: 'POST'

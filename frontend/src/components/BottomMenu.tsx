@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import "../styles/bottomMenu.scss";
-import { useAtom } from "jotai";
+import { useAtom, useAtomValue } from "jotai";
+import { loadable } from "jotai/utils";
 import {
   softwareAtom,
   currentSoftwareAtom,
@@ -31,7 +32,9 @@ const SoftwareList = () => {
 const BottomMenu: React.FC = () => {
   const [showSoftware, setShowSoftware] = useState(false);
   const [currentSoftware] = useAtom(currentSoftwareAtom);
-  const [currentMissions] = useAtom(currentMissionsAtom);
+  const currentMissionsLoadable = useAtomValue(loadable(currentMissionsAtom));
+  
+  const currentMissions = currentMissionsLoadable.state === 'hasData' ? currentMissionsLoadable.data : [];
 
   return (
     <div className="bottom-menu">

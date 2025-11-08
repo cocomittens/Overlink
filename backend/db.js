@@ -74,6 +74,25 @@ function initDatabase() {
         console.log('Demo user created: username="demo", password="demo123"');
     }
 
+    // Add initial missions if they don't exist
+    const missions = [
+        { id: 1, title: "Falsify a social security document", date: "2023-10-01", payment: 5300, difficulty: 4, minRating: 12 },
+        { id: 2, title: "Find and destroy crucial data on a mainframe", date: "2023-10-02", payment: 1700, difficulty: 2, minRating: 14 },
+        { id: 3, title: "Break into a rival computer system and sabotage files", date: "2023-10-03", payment: 1600, difficulty: 2, minRating: 15 },
+    ];
+
+    missions.forEach(mission => {
+        const existingMission = db.prepare('SELECT id FROM missions WHERE id = ?').get(mission.id);
+        if (!existingMission) {
+            const stmt = db.prepare(`
+                INSERT INTO missions (id, title, date, payment, difficulty, minRating)
+                VALUES (?, ?, ?, ?, ?, ?)
+            `);
+            stmt.run(mission.id, mission.title, mission.date, mission.payment, mission.difficulty, mission.minRating);
+            console.log(`Mission added: "${mission.title}"`);
+        }
+    });
+
     console.log('Database initialized successfully');
 }
 

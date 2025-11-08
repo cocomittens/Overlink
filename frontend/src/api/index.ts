@@ -1,5 +1,5 @@
 import { login } from './auth';
-import { getMissions, acceptMission, completeMission } from './missions';
+import { getMissions, getUserMissions, acceptMission, completeMission } from './missions';
 import { getMapNodes } from './map';
 
-export { login, getMissions, acceptMission, completeMission, getMapNodes };
+export { login, getMissions, getUserMissions, acceptMission, completeMission, getMapNodes };
