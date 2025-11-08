@@ -13,7 +13,7 @@ const db = new Database(dbPath);
 db.pragma("foreign_keys = ON");
 
 function initDatabase() {
-  db.exec("DROP TABLE IF EXISTS missions;");
+  // db.exec("DROP TABLE IF EXISTS missions;");
 
   db.exec(`
     CREATE TABLE missions (
