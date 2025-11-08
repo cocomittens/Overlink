@@ -10,3 +10,8 @@ logs/
 
 # Build output
 dist/
+
+# Database
+data/
+*.db
+*.db-journal
