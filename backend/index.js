@@ -34,6 +34,57 @@ app.post('/api/missions', (req, res) => {
   }
 });
 
+app.post('/api/users/:userId/missions/:missionId/accept', (req, res) => {
+  try {
+    const { userId, missionId } = req.params;
+    const stmt = db.prepare(`
+      INSERT INTO user_missions (user_id, mission_id)
+      VALUES (?, ?)
+    `);
+    stmt.run(userId, missionId);
+    res.json({ message: 'Mission accepted successfully' });
+  } catch (error) {
+    console.error('Error accepting mission:', error);
+    res.status(500).json({ error: 'Failed to accept mission' });
+  }
+});
+
+app.get('/api/users/:userId/missions', (req, res) => {
+  try {
+    const { userId } = req.params;
+    const missions = db.prepare(`
+      SELECT m.*, um.status, um.accepted_at, um.completed_at
+      FROM missions m
+      INNER JOIN user_missions um ON m.id = um.mission_id
+      WHERE um.user_id = ?
+      ORDER BY um.accepted_at DESC
+    `).all(userId);
+    res.json(missions);
+  } catch (error) {
+    console.error('Error fetching user missions:', error);
+    res.status(500).json({ error: 'Failed to fetch user missions' });
+  }
+});
+
+app.post('/api/users/:userId/missions/:missionId/complete', (req, res) => {
+  try {
+    const { userId, missionId } = req.params;
+    const stmt = db.prepare(`
+      UPDATE user_missions
+      SET status = 'completed', completed_at = CURRENT_TIMESTAMP
+      WHERE user_id = ? AND mission_id = ?
+    `);
+    const result = stmt.run(userId, missionId);
+    if (result.changes === 0) {
+      return res.status(404).json({ error: 'Mission not found' });
+    }
+    res.json({ message: 'Mission completed successfully' });
+  } catch (error) {
+    console.error('Error completing mission:', error);
+    res.status(500).json({ error: 'Failed to complete mission' });
+  }
+});
+
 app.get('/api/nodes', (req, res) => {
   try {
     const nodes = db.prepare('SELECT * FROM nodes').all();

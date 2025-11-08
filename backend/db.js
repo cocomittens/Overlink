@@ -49,6 +49,20 @@ function initDatabase() {
     )
   `);
 
+    db.exec(`
+    CREATE TABLE IF NOT EXISTS user_missions (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      user_id INTEGER NOT NULL,
+      mission_id INTEGER NOT NULL,
+      status TEXT DEFAULT 'accepted',
+      accepted_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+      completed_at DATETIME,
+      FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+      FOREIGN KEY (mission_id) REFERENCES missions(id) ON DELETE CASCADE,
+      UNIQUE(user_id, mission_id)
+    )
+  `);
+
     console.log('Database initialized successfully');
 }
 
