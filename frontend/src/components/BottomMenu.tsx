@@ -34,7 +34,7 @@ const SoftwareList = () => {
 
 const BottomMenu: React.FC = () => {
   const [showSoftware, setShowSoftware] = useState(false);
-  const [selectedMission, setSelectedMission] = useState(null);
+  const [selectedMission, setSelectedMission] = useState<number | null>(null);
   const [currentSoftware] = useAtom(currentSoftwareAtom);
   const currentMissionsLoadable = useAtomValue(loadable(currentMissionsAtom));
 
@@ -43,9 +43,17 @@ const BottomMenu: React.FC = () => {
       ? currentMissionsLoadable.data
       : [];
 
+  const setMission = (id: number) => {
+    if (selectedMission === id) {
+      setSelectedMission(null);
+    } else {
+      setSelectedMission(id);
+    }
+  };
+
   return (
     <>
-      <MissionDetails mission={selectedMission} />
+      <MissionDetails missionId={selectedMission} />
       <div className="bottom-menu">
         {showSoftware && <SoftwareList />}
         <ul>
@@ -57,7 +65,13 @@ const BottomMenu: React.FC = () => {
 
         <ul className="messages">
           {currentMissions.map((mission) => {
-            return <li key={mission.id} className="message-icon"></li>;
+            return (
+              <li
+                key={mission.id}
+                onClick={() => setMission(mission.id)}
+                className="message-icon"
+              ></li>
+            );
           })}
         </ul>
         {currentSoftware.has("trace_tracker") && <TraceTracker />}

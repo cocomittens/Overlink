@@ -1,7 +1,8 @@
+import "../styles/message.scss";
+
+import { Mission } from "../types/mission";
 import React from "react";
 import { useAtom } from "jotai";
-import { Mission } from "../types/mission";
-import "../styles/message.scss";
 
 export default function Message({
   selectedMission,

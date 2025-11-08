@@ -16,7 +16,7 @@ function initDatabase() {
   // db.exec("DROP TABLE IF EXISTS missions;");
 
   db.exec(`
-    CREATE TABLE missions (
+    CREATE TABLE IF NOT EXISTS missions (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       title TEXT NOT NULL,
       description TEXT NOT NULL,
