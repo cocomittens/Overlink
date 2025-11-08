@@ -63,6 +63,17 @@ function initDatabase() {
     )
   `);
 
+    // Add demo user for now until auth is implemented
+    const existingUser = db.prepare('SELECT id FROM users WHERE username = ?').get('demo');
+    if (!existingUser) {
+        const stmt = db.prepare(`
+            INSERT INTO users (username, password, money, rating)
+            VALUES (?, ?, ?, ?)
+        `);
+        stmt.run('demo', 'demo123', 1000, 13);
+        console.log('Demo user created: username="demo", password="demo123"');
+    }
+
     console.log('Database initialized successfully');
 }
 

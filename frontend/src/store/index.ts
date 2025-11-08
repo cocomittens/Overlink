@@ -66,3 +66,5 @@ export const currentSoftwareAtom = atom<Set<string>>(new Set<string>());
 export const traceAtom = atom<number>(0);
 
 export const traceTimeAtom = atom<number>(0);
+
+export const userAtom = atom<{ id: number; username: string; money: number; rating: number } | null>(null);

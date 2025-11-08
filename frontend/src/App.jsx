@@ -8,9 +8,9 @@ import NavBar from './components/NavBar'
 import FileList from './scenes/FileList.tsx'
 import BottomMenu from './components/BottomMenu.tsx'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
-
+import useAutoLogin from './util/useAutoLogin.ts'
 function App() {
-
+  useAutoLogin();
   return (
     <Router>
       <NavBar />
