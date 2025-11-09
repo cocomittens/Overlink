@@ -1,11 +1,10 @@
 import "../styles/missions.scss";
 
-import React from "react";
-
 import { Mission } from "../types/mission";
-import { useAtomValue } from "jotai";
-import { loadable } from "jotai/utils";
+import React from "react";
 import { currentMissionsAtom } from "../store";
+import { loadable } from "jotai/utils";
+import { useAtomValue } from "jotai";
 
 export function MissionDetails({ missionId }: { missionId: number | null }) {
   const currentMissionsLoadable = useAtomValue(loadable(currentMissionsAtom));
@@ -29,16 +28,24 @@ export function MissionDetails({ missionId }: { missionId: number | null }) {
     <div className="details-container">
       {mission ? (
         <>
-          <h1>{mission.title}</h1>
-          <div>
-            <strong>Employer:</strong> {mission.employer}
+          <div className="mission-info">
+            <div className="header">Mission</div>
+            <div className="small-field">{mission.title}</div>
+            <div className="small-field">
+              <strong>Employer:</strong> {mission.employer}
+            </div>
+            <div className="small-field">
+              <strong>Payment:</strong> {mission.payment} credits
+            </div>
+            <div className="large-field">
+              <strong>Description:</strong>
+              <div>{mission.description}</div>
+            </div>
           </div>
-          <div>
-            <strong>Payment:</strong> {mission.payment} credits
-          </div>
-          <div>
-            <strong>Description:</strong>
-            <div>{mission.description}</div>
+          <div className="action-buttons">
+            <div className="button">Close</div>
+            <div className="button">Reply</div>
+            <div className="button">Abandon</div>
           </div>
         </>
       ) : (

@@ -92,10 +92,52 @@ button {
 }
 
 .details-container {
-  background-color: $dark-blue;
+  background-color: $mid-blue;
   height: 600px;
   width: 400px;
   position: fixed;
   top: 100px;
   right: 8px;
+  .mission-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    height: 92%;
+    column-gap: 8px;
+  }
+
+  .header {
+    text-align: center;
+    font-weight: bold;
+  }
+  .small-field {
+    background-color: $dark-blue;
+    padding: 1% 0;
+    width: 100%;
+  }
+  .large-field {
+    background-color: $dark-blue;
+    min-height: 70%;
+    overflow: auto;
+    padding: 1% 0;
+  }
+  .action-buttons {
+    position: absolute;
+    left: -2%;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    height: 8%;
+    align-items: center;
+
+    .button {
+      background-color: $dark-blue;
+      flex: 1 1 33.3333%;
+      text-align: center;
+      height: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  }
 }
