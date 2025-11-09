@@ -60,7 +60,9 @@ const BottomMenu: React.FC = () => {
           <li
             className="software-icon"
             onClick={() => setShowSoftware(!showSoftware)}
-          ></li>
+          >
+            <span className="material-symbols-outlined">widgets</span>
+          </li>
         </ul>
 
         <ul className="messages">
@@ -70,7 +72,9 @@ const BottomMenu: React.FC = () => {
                 key={mission.id}
                 onClick={() => setMission(mission.id)}
                 className="message-icon"
-              ></li>
+              >
+                <span className="material-symbols-outlined">mail</span>
+              </li>
             );
           })}
         </ul>
