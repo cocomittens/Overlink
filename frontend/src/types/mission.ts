@@ -5,4 +5,6 @@ export type Mission = {
   payment: number;
   difficulty: number;
   minRating: number;
+  employer: string;
+  description: string;
 };
