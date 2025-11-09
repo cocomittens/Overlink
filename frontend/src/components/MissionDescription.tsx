@@ -1,6 +1,8 @@
-import React, { useEffect, useState } from "react";
-import { Mission } from "../types/mission";
 import "../styles/missions.scss";
+
+import React, { useEffect, useState } from "react";
+
+import { Mission } from "../types/mission";
 import { agentRatings } from "../util/agentRatings";
 
 export function MissionDescription({ mission }: { mission: Mission | null }) {

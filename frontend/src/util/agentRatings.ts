@@ -1,4 +1,4 @@
-export const agentRatings = {
+export const agentRatings: Record<number, string> = {
   1:  'TERMINAL',
   2:  'Techno‑mage',
   3:  'Veteran',

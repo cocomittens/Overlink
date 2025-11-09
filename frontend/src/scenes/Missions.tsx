@@ -1,11 +1,19 @@
-import React, { useState } from "react";
-import { Mission } from "../types/mission";
 import "../styles/missions.scss";
-import { MissionDescription } from "../components/MissionDescription";
+
+import React, { useState } from "react";
+import {
+  currentMissionsAtom,
+  missionsAtom,
+  ratingAtom,
+  refreshMissionsAtom,
+  userAtom,
+} from "../store";
 import { useAtom, useAtomValue, useSetAtom } from "jotai";
-import { loadable } from "jotai/utils";
-import { missionsAtom, currentMissionsAtom, ratingAtom, userAtom, refreshMissionsAtom } from "../store";
+
+import { Mission } from "../types/mission";
+import { MissionDescription } from "../components/MissionDescription";
 import { acceptMission } from "../api";
+import { loadable } from "jotai/utils";
 
 export default function Missions() {
   const [mission, setMission] = useState<number | null>(null);
@@ -15,8 +23,8 @@ export default function Missions() {
   const [rating] = useAtom(ratingAtom);
   const refreshMissions = useSetAtom(refreshMissionsAtom);
 
-  const missions = missionsLoadable.state === 'hasData' ? missionsLoadable.data : [];
-  const currentMissions = currentMissionsLoadable.state === 'hasData' ? currentMissionsLoadable.data : [];
+  const missions =
+    missionsLoadable.state === "hasData" ? missionsLoadable.data : [];
 
   const selectedMission = missions.find((m) => m.id === mission) || null;
 
@@ -28,16 +36,22 @@ export default function Missions() {
         // Refresh missions to update the lists
         refreshMissions();
       } catch (error) {
-        console.error('Failed to accept mission:', error);
+        console.error("Failed to accept mission:", error);
       }
     }
   };
 
-  if (missionsLoadable.state === 'loading' || currentMissionsLoadable.state === 'loading') {
+  if (
+    missionsLoadable.state === "loading" ||
+    currentMissionsLoadable.state === "loading"
+  ) {
     return <div className="missions-container">Loading missions...</div>;
   }
 
-  if (missionsLoadable.state === 'hasError' || currentMissionsLoadable.state === 'hasError') {
+  if (
+    missionsLoadable.state === "hasError" ||
+    currentMissionsLoadable.state === "hasError"
+  ) {
     return <div className="missions-container">Error loading missions</div>;
   }
 
@@ -61,13 +75,15 @@ export default function Missions() {
         </tbody>
       </table>
       <div>
-        <MissionDescription
-          mission={selectedMission}
-        />
+        <MissionDescription mission={selectedMission} />
       </div>
       <button
         type="submit"
-        className={`${selectedMission && rating > selectedMission.minRating ? 'disabled' : ''}`}
+        className={`${
+          selectedMission && rating > selectedMission.minRating
+            ? "disabled"
+            : ""
+        }`}
         onClick={() => selectedMission && handleAccept(selectedMission.id)}
         disabled={!selectedMission || rating > selectedMission.minRating}
       >
