@@ -44,10 +44,10 @@ table {
             }
         }
 
-            td {
-                padding: 0.5rem;
-                border-bottom: 1px solid color.darken(vars.$primary-bg, 20%);
-                color: #fff;
-            }
+        td {
+            padding: 0.5rem;
+            border-bottom: 1px solid color.adjust(vars.$primary-bg, $lightness: -20%);
+            color: #fff;
         }
+    }
 }
