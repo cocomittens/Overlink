@@ -1,10 +1,4 @@
-@import './_variables.scss';
-
-$primary-bg: #010101;
-$table-stripe: rgba(40, 40, 40, .5);
-$dark-blue: rgb(0, 0, 111);
-$mid-blue: rgb(0, 0, 162);
-$light-blue: #6190F5;
+@use "./variables" as vars;
 
 
 .map-container {
@@ -64,8 +58,8 @@ $light-blue: #6190F5;
     border-radius: 0;
     width: 20%;
     background: linear-gradient(45deg,
-            $mid-blue 0%,
-            $dark-blue 60%);
+            vars.$mid-blue 0%,
+            vars.$dark-blue 60%);
     color: #fff;
     padding: 0.5rem;
     font-weight: bold;

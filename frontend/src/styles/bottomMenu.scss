@@ -1,4 +1,4 @@
-@import "./_variables.scss";
+@use "./variables" as vars;
 
 .bottom-menu {
   position: fixed;
@@ -18,7 +18,7 @@
 .software-icon {
   width: 80px;
   height: 80px;
-  background: linear-gradient(45deg, $mid-blue 0%, $light-blue 60%);
+  background: linear-gradient(45deg, vars.$mid-blue 0%, vars.$light-blue 60%);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -35,7 +35,7 @@
   top: -75px;
 
   li {
-    background: linear-gradient(45deg, $mid-blue 0%, $dark-blue 60%);
+    background: linear-gradient(45deg, vars.$mid-blue 0%, vars.$dark-blue 60%);
     padding: 0.2rem 1rem;
     margin: 0.2rem 0;
 
@@ -82,7 +82,7 @@
   justify-content: space-between;
   padding: 0 0.5rem;
 
-  background: linear-gradient(45deg, $mid-blue 0%, $dark-blue 60%);
+  background: linear-gradient(45deg, vars.$mid-blue 0%, vars.$dark-blue 60%);
 
   span:first-child {
     flex: 1;

@@ -1,15 +1,16 @@
-@import "./_variables.scss";
+@use "./variables" as vars;
+@use "sass:color";
 
 $table-stripe: rgba(40, 40, 40, 0.5);
 
 body {
-  background: $primary-bg;
+  background: vars.$primary-bg;
   color: #fff;
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
 .missions-container {
-  background: $primary-bg;
+  background: vars.$primary-bg;
   padding: 1rem;
   border-radius: 0.5rem;
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
@@ -27,7 +28,7 @@ body {
 
     thead {
       tr {
-        background: linear-gradient(45deg, $mid-blue 0%, $dark-blue 60%);
+        background: linear-gradient(45deg, vars.$mid-blue 0%, vars.$dark-blue 60%);
       }
 
       th {
@@ -51,7 +52,7 @@ body {
 
       td {
         padding: 0.5rem;
-        border-bottom: 1px solid darken($primary-bg, 20%);
+        border-bottom: 1px solid color.darken(vars.$primary-bg, 20%);
         color: #fff;
       }
     }
@@ -62,13 +63,13 @@ button {
   margin-top: 1vh;
   border-radius: 0;
   width: 40%;
-  background: linear-gradient(45deg, $mid-blue 0%, $dark-blue 60%);
+  background: linear-gradient(45deg, vars.$mid-blue 0%, vars.$dark-blue 60%);
   color: #fff;
   padding: 0.5rem;
   font-weight: bold;
 
   &.disabled {
-    background: linear-gradient(45deg, $mid-gray 0%, $dark-gray 60%);
+    background: linear-gradient(45deg, vars.$mid-gray 0%, vars.$dark-gray 60%);
     color: #fff;
   }
 }
@@ -76,11 +77,11 @@ button {
 .description-container {
   background: linear-gradient(
     45deg,
-    $mid-blue 0%,
-    $dark-blue 60%,
-    $primary-bg 100%
+    vars.$mid-blue 0%,
+    vars.$dark-blue 60%,
+    vars.$primary-bg 100%
   );
-  border: 1px solid $light-blue;
+  border: 1px solid vars.$light-blue;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -92,7 +93,7 @@ button {
 }
 
 .details-container {
-  background-color: $mid-blue;
+  background-color: vars.$mid-blue;
   height: 600px;
   width: 400px;
   position: fixed;
@@ -111,12 +112,12 @@ button {
     font-weight: bold;
   }
   .small-field {
-    background-color: $dark-blue;
+    background-color: vars.$dark-blue;
     padding: 1% 0;
     width: 100%;
   }
   .large-field {
-    background-color: $dark-blue;
+    background-color: vars.$dark-blue;
     min-height: 70%;
     overflow: auto;
     padding: 1% 0;
@@ -131,7 +132,7 @@ button {
     align-items: center;
 
     .button {
-      background-color: $dark-blue;
+      background-color: vars.$dark-blue;
       flex: 1 1 33.3333%;
       text-align: center;
       height: 50%;

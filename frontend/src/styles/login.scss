@@ -1,15 +1,4 @@
-@import './_variables.scss';
-
-$primary-bg: #010101;
-$light-teal: rgb(33, 178, 212);
-$mid-teal: rgb(12, 135, 167);
-$dark-teal: rgb(3, 67, 88);
-$dark-blue: rgb(0, 0, 111);
-$mid-blue: rgb(0, 0, 162);
-$light-blue: #6190F5;
-
-$dark-gray: #333;
-$mid-gray: #666;
+@use "./variables" as vars;
 
 .login-page {
     display: flex;
@@ -61,31 +50,31 @@ $mid-gray: #666;
 
     &:hover,
     &.active {
-        color: $light-blue;
+        color: vars.$light-blue;
     }
 }
 
 .login-form {
     background: linear-gradient(45deg,
-            $light-teal 0%,
-            $mid-teal 60%);
+            vars.$light-teal 0%,
+            vars.$mid-teal 60%);
     padding-bottom: 3vh;
     padding-top: 1vh;
     padding-left: 1vw;
     padding-right: 1vw;
-    color: $dark-teal;
+    color: vars.$dark-teal;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     margin-bottom: 1vh;
 
     h2 {
-        color: $dark-teal
+        color: vars.$dark-teal
     }
 
     input {
-        background: $light-teal;
-        border: 1px solid $primary-bg;
+        background: vars.$light-teal;
+        border: 1px solid vars.$primary-bg;
         width: 70%;
     }
 
@@ -105,16 +94,16 @@ form {
     border-radius: 0;
     width: 40%;
     background: linear-gradient(45deg,
-            $light-teal 0%,
-            $mid-teal 60%);
-    color: $dark-teal;
+            vars.$light-teal 0%,
+            vars.$mid-teal 60%);
+    color: vars.$dark-teal;
     padding: 0.5rem;
     font-weight: bold;
 
     &.disabled {
         background: linear-gradient(45deg,
-                $mid-gray 0%,
-                $dark-gray 60%);
+                vars.$mid-gray 0%,
+                vars.$dark-gray 60%);
         color: #fff;
     }
 }
@@ -138,8 +127,8 @@ form {
         padding: .3rem 0;
         margin: 0;
         background: linear-gradient(45deg,
-                $mid-blue 0%,
-                $dark-blue 60%)
+                vars.$mid-blue 0%,
+                vars.$dark-blue 60%)
     }
 }
 

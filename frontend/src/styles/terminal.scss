@@ -1,10 +1,7 @@
-@import './_variables.scss';
+@use "./variables" as vars;
+@use "sass:color";
 
-$primary-bg: #010101;
 $table-stripe: rgba(40, 40, 40, .5);
-$dark-blue: rgb(0, 0, 111);
-$mid-blue: rgb(0, 0, 162);
-$light-blue: #6190F5;
 
 
 a {
@@ -13,7 +10,7 @@ a {
     color: #fff;
 
     &:hover {
-        color: $light-blue;
+        color: vars.$light-blue;
     }
 }
 
@@ -24,8 +21,8 @@ table {
     thead {
         tr {
             background: linear-gradient(45deg,
-                    $mid-blue 0%,
-                    $dark-blue 60%)
+                    vars.$mid-blue 0%,
+                    vars.$dark-blue 60%)
         }
 
         th {
@@ -47,10 +44,10 @@ table {
             }
         }
 
-        td {
-            padding: 0.5rem;
-            border-bottom: 1px solid darken($primary-bg, 20%);
-            color: #fff;
+            td {
+                padding: 0.5rem;
+                border-bottom: 1px solid color.darken(vars.$primary-bg, 20%);
+                color: #fff;
+            }
         }
-    }
 }
