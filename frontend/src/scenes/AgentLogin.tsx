@@ -7,11 +7,13 @@ export default function AgentLogin() {
   const savedUsers: SavedUser[] = [{ username: "demo", password: "demo" }];
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [passwordMask, setPasswordMask] = useState("");
   const [selectedUser, setSelectedUser] = useState<string | null>(null);
 
   const handleUserSelect = (user: SavedUser) => {
     setUsername(user.username);
     setPassword(user.password);
+    setPasswordMask("*".repeat(user.password.length));
     setSelectedUser(user.username);
   };
 
@@ -43,7 +45,7 @@ export default function AgentLogin() {
                 type="text"
                 id="password"
                 name="password"
-                value={password}
+                value={passwordMask}
                 readOnly
                 required
               />
