@@ -5,7 +5,9 @@ import {
   BrowserRouter as Router,
   Routes,
   useLocation,
+  Navigate,
 } from "react-router-dom";
+import { useAtom } from "jotai";
 
 import AgentLogin from "./scenes/AgentLogin.tsx";
 import BottomMenu from "./components/BottomMenu.tsx";
@@ -16,10 +18,9 @@ import Map from "./scenes/Map.tsx";
 import Missions from "./scenes/Missions.tsx";
 import NavBar from "./components/NavBar";
 import Terminal from "./scenes/Terminal.tsx";
-import useAutoLogin from "./util/useAutoLogin.ts";
+import { userAtom } from "./store";
 
 function App() {
-  useAutoLogin();
   return (
     <Router>
       <AppContent />
@@ -29,18 +30,21 @@ function App() {
 
 function AppContent() {
   const location = useLocation();
+  const [user] = useAtom(userAtom);
   const hideBottomMenu = location.pathname === "/agentLogin";
+  const withUser = (element) =>
+    user ? element : <Navigate to="/agentLogin" replace />;
 
   return (
     <>
       <NavBar />
       <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/map" element={<Map />} />
-        <Route path="/missions" element={<Missions />} />
-        <Route path="/terminal" element={<Terminal />} />
-        <Route path="/files" element={<FileList />} />
+        <Route path="/" element={withUser(<Home />)} />
+        <Route path="/login" element={withUser(<Login />)} />
+        <Route path="/map" element={withUser(<Map />)} />
+        <Route path="/missions" element={withUser(<Missions />)} />
+        <Route path="/terminal" element={withUser(<Terminal />)} />
+        <Route path="/files" element={withUser(<FileList />)} />
         <Route path="/agentLogin" element={<AgentLogin />} />
       </Routes>
       {!hideBottomMenu && <BottomMenu />}
