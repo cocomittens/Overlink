@@ -1,18 +1,41 @@
 import "../styles/login.scss";
 
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
+import SavedUserList, { SavedUser } from "../components/SavedUserList";
 
 export default function AgentLogin() {
+  const savedUsers: SavedUser[] = [{ username: "demo", password: "demo" }];
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [selectedUser, setSelectedUser] = useState<string | null>(null);
+
+  const handleUserSelect = (user: SavedUser) => {
+    setUsername(user.username);
+    setPassword(user.password);
+    setSelectedUser(user.username);
+  };
+
   return (
-    <>
+    <div className="login-page">
+      <SavedUserList
+        users={savedUsers}
+        onSelect={handleUserSelect}
+        selectedUsername={selectedUser}
+      />
       <div className="login-container">
-        <h2>Agent Login</h2>
         <div className="login-form">
           <h2>User Authorization Required</h2>
           <form>
             <div className="form-group">
               <label htmlFor="username">Name</label>
-              <input type="text" id="username" name="username" required />
+              <input
+                type="text"
+                id="username"
+                name="username"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                required
+              />
             </div>
             <div className="form-group">
               <label htmlFor="password">Code</label>
@@ -20,8 +43,9 @@ export default function AgentLogin() {
                 type="text"
                 id="password"
                 name="password"
-                required
+                value={password}
                 readOnly
+                required
               />
             </div>
           </form>
@@ -30,6 +54,6 @@ export default function AgentLogin() {
           Proceed
         </button>
       </div>
-    </>
+    </div>
   );
 }
