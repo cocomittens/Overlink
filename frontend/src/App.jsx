@@ -1,6 +1,11 @@
 import "./App.css";
 
-import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
+import {
+  Route,
+  BrowserRouter as Router,
+  Routes,
+  useLocation,
+} from "react-router-dom";
 
 import AgentLogin from "./scenes/AgentLogin.tsx";
 import BottomMenu from "./components/BottomMenu.tsx";
@@ -17,6 +22,17 @@ function App() {
   useAutoLogin();
   return (
     <Router>
+      <AppContent />
+    </Router>
+  );
+}
+
+function AppContent() {
+  const location = useLocation();
+  const hideBottomMenu = location.pathname === "/agentLogin";
+
+  return (
+    <>
       <NavBar />
       <Routes>
         <Route path="/" element={<Home />} />
@@ -27,8 +43,8 @@ function App() {
         <Route path="/files" element={<FileList />} />
         <Route path="/agentLogin" element={<AgentLogin />} />
       </Routes>
-      <BottomMenu />
-    </Router>
+      {!hideBottomMenu && <BottomMenu />}
+    </>
   );
 }
 
