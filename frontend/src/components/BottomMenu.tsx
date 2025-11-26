@@ -12,6 +12,7 @@ import { useAtom, useAtomValue, useSetAtom } from "jotai";
 
 import { MissionDetails } from "./MissionDetails";
 import TraceTracker from "./TraceTracker";
+import { HardDrive } from "./HardDrive";
 import { loadable } from "jotai/utils";
 import { abandonMission } from "../api";
 import { useEffect, useRef } from "react";
@@ -39,6 +40,7 @@ const SoftwareList = () => {
 const BottomMenu: React.FC = () => {
   const [showSoftware, setShowSoftware] = useState(false);
   const [selectedMission, setSelectedMission] = useState<number | null>(null);
+  const [showHardDrive, setShowHardDrive] = useState(false);
   const [currentSoftware] = useAtom(currentSoftwareAtom);
   const [user] = useAtom(userAtom);
   const currentMissionsLoadable = useAtomValue(loadable(currentMissionsAtom));
@@ -90,6 +92,7 @@ const BottomMenu: React.FC = () => {
         onClose={() => setSelectedMission(null)}
         onAbandon={handleAbandon}
       />
+      {showHardDrive && <HardDrive onClose={() => setShowHardDrive(false)} />}
       <div className="bottom-menu">
         {showSoftware && <SoftwareList />}
         <ul className="left-icons">
@@ -99,7 +102,10 @@ const BottomMenu: React.FC = () => {
           >
             <span className="material-symbols-outlined">widgets</span>
           </li>
-          <li className="message-icon hard-drive">
+          <li
+            className="message-icon hard-drive"
+            onClick={() => setShowHardDrive((prev) => !prev)}
+          >
             <span className="material-symbols-outlined">hard_drive</span>
           </li>
           <li className="message-icon hard-drive">
