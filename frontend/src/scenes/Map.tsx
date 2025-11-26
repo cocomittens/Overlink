@@ -3,7 +3,7 @@ import "../styles/map.scss";
 import { chainAtom, currentNodeAtom, nodesAtom } from "../store";
 
 import MapNode from "../components/MapNode";
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import { useAtom } from "jotai";
 import { useNavigate } from "react-router-dom";
 
@@ -11,9 +11,22 @@ export default function Map() {
   const [nodes] = useAtom(nodesAtom);
   const [chain, setChain] = useAtom(chainAtom);
   const [currentNode, setCurrentNode] = useAtom(currentNodeAtom);
+  const clickSoundRef = useRef<HTMLAudioElement | null>(null);
   const navigate = useNavigate();
 
+  useEffect(() => {
+    clickSoundRef.current =
+      typeof Audio !== "undefined" ? new Audio("/soundEffects/map_node_select.mp3") : null;
+    if (clickSoundRef.current) {
+      clickSoundRef.current.volume = 0.6;
+    }
+  }, []);
+
   const toggleNode = (id: string) => {
+    if (clickSoundRef.current) {
+      clickSoundRef.current.currentTime = 0;
+      clickSoundRef.current.play().catch(() => {});
+    }
     setChain((prev) =>
       prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]
     );
