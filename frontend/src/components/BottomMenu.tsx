@@ -14,6 +14,7 @@ import { MissionDetails } from "./MissionDetails";
 import TraceTracker from "./TraceTracker";
 import { loadable } from "jotai/utils";
 import { abandonMission } from "../api";
+import { useEffect, useRef } from "react";
 
 const SoftwareList = () => {
   const [software] = useAtom(softwareAtom);
@@ -42,6 +43,15 @@ const BottomMenu: React.FC = () => {
   const [user] = useAtom(userAtom);
   const currentMissionsLoadable = useAtomValue(loadable(currentMissionsAtom));
   const refreshMissions = useSetAtom(refreshMissionsAtom);
+  const abandonSoundRef = useRef<HTMLAudioElement | null>(null);
+
+  useEffect(() => {
+    abandonSoundRef.current =
+      typeof Audio !== "undefined" ? new Audio("/soundEffects/cancel.wav") : null;
+    if (abandonSoundRef.current) {
+      abandonSoundRef.current.volume = 0.6;
+    }
+  }, []);
 
   const currentMissions =
     currentMissionsLoadable.state === "hasData"
@@ -60,6 +70,10 @@ const BottomMenu: React.FC = () => {
     if (!user) return;
     try {
       await abandonMission(user.id, missionId);
+      if (abandonSoundRef.current) {
+        abandonSoundRef.current.currentTime = 0;
+        abandonSoundRef.current.play().catch(() => {});
+      }
       setSelectedMission(null);
       refreshMissions();
     } catch (err) {

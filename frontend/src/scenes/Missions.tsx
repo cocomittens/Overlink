@@ -1,6 +1,6 @@
 import "../styles/missions.scss";
 
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   currentMissionsAtom,
   missionsAtom,
@@ -17,11 +17,19 @@ import { loadable } from "jotai/utils";
 
 export default function Missions() {
   const [mission, setMission] = useState<number | null>(null);
+  const acceptSoundRef = useRef<HTMLAudioElement | null>(null);
   const user = useAtomValue(userAtom);
   const missionsLoadable = useAtomValue(loadable(missionsAtom));
   const currentMissionsLoadable = useAtomValue(loadable(currentMissionsAtom));
   const [rating] = useAtom(ratingAtom);
   const refreshMissions = useSetAtom(refreshMissionsAtom);
+
+  useEffect(() => {
+    acceptSoundRef.current = typeof Audio !== "undefined" ? new Audio("/soundEffects/accept.mp3") : null;
+    if (acceptSoundRef.current) {
+      acceptSoundRef.current.volume = 0.6;
+    }
+  }, []);
 
   const missions =
     missionsLoadable.state === "hasData" ? missionsLoadable.data : [];
@@ -33,6 +41,10 @@ export default function Missions() {
     if (mission && user) {
       try {
         await acceptMission(user.id, mission.id);
+        if (acceptSoundRef.current) {
+          acceptSoundRef.current.currentTime = 0;
+          acceptSoundRef.current.play().catch(() => {});
+        }
         // Refresh missions to update the lists
         refreshMissions();
       } catch (error) {
