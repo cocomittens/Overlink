@@ -1,26 +1,27 @@
 import React, { useEffect, useRef, useState } from "react";
 
+const TRACKS = [
+  "/audio/bg1.mp3",
+  "/audio/bg2.mp3",
+  "/audio/bg3.mp3",
+  "/audio/bg4.mp3",
+  "/audio/bg5.mp3",
+  "/audio/bg6.mp3",
+  "/audio/bg7.mp3",
+];
+
 export function BackgroundMusic() {
-  const tracks = [
-    "/audio/bg1.mp3",
-    "/audio/bg2.mp3",
-    "/audio/bg3.mp3",
-    "/audio/bg4.mp3",
-    "/audio/bg5.mp3",
-    "/audio/bg6.mp3",
-    "/audio/bg7.mp3",
-  ];
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const [paused, setPaused] = useState(false);
   const [trackIndex, setTrackIndex] = useState(0);
 
   useEffect(() => {
-    const audio = new Audio(tracks[0]);
+    const audio = new Audio(TRACKS[0]);
     audio.volume = 0.35;
     audioRef.current = audio;
 
     const handleEnded = () => {
-      setTrackIndex((prev) => (prev + 1) % tracks.length);
+      setTrackIndex((prev) => (prev + 1) % TRACKS.length);
     };
     audio.addEventListener("ended", handleEnded);
 
@@ -43,13 +44,13 @@ export function BackgroundMusic() {
   useEffect(() => {
     const audio = audioRef.current;
     if (!audio) return;
-    audio.src = tracks[trackIndex];
+    audio.src = TRACKS[trackIndex];
     audio.currentTime = 0;
     audio
       .play()
       .then(() => setPaused(false))
       .catch(() => setPaused(true));
-  }, [trackIndex, tracks]);
+  }, [trackIndex]);
 
   const toggle = () => {
     const audio = audioRef.current;
@@ -64,7 +65,7 @@ export function BackgroundMusic() {
   };
 
   const nextTrack = () => {
-    setTrackIndex((prev) => (prev + 1) % tracks.length);
+    setTrackIndex((prev) => (prev + 1) % TRACKS.length);
   };
 
   return (
