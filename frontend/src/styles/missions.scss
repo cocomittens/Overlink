@@ -28,7 +28,7 @@ body {
 
     thead {
       tr {
-        background: linear-gradient(45deg, vars.$mid-blue 0%, vars.$dark-blue 60%);
+        background: linear-gradient(45deg, vars.$violet-mid 0%, vars.$violet-dark 60%);
       }
 
       th {
@@ -63,7 +63,7 @@ button {
   margin-top: 1vh;
   border-radius: 0;
   width: 40%;
-  background: linear-gradient(45deg, vars.$mid-blue 0%, vars.$dark-blue 60%);
+  background: linear-gradient(45deg, vars.$violet-light 0%, vars.$violet-mid 60%);
   color: #fff;
   padding: 0.5rem;
   font-weight: bold;
@@ -77,11 +77,10 @@ button {
 .description-container {
   background: linear-gradient(
     45deg,
-    vars.$mid-blue 0%,
-    vars.$dark-blue 60%,
-    vars.$primary-bg 100%
+    vars.$violet-mid 0%,
+    vars.$violet-dark 60%
   );
-  border: 1px solid vars.$light-blue;
+  border: 1px solid vars.$violet-light;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -93,7 +92,7 @@ button {
 }
 
 .details-container {
-  background-color: vars.$mid-blue;
+  background-color: vars.$violet-mid;
   height: 600px;
   width: 400px;
   position: fixed;
@@ -114,12 +113,12 @@ button {
     font-weight: bold;
   }
   .small-field {
-    background-color: vars.$dark-blue;
+    background-color: vars.$violet-dark;
     padding: 1% 0;
     width: 100%;
   }
   .large-field {
-    background-color: vars.$dark-blue;
+    background-color: vars.$violet-dark;
     min-height: 70%;
     overflow: auto;
     padding: 1% 0;
@@ -137,7 +136,10 @@ button {
     height: 10%; 
 
     .mission-action {
-      background-color: vars.$dark-blue;
+      &:hover {
+        background-color: vars.$violet-light;
+      }
+      background-color: vars.$violet-dark;
       flex: 1 1 0;
       max-width: 33%;
       text-align: center;

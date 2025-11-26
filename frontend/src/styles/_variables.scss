@@ -1,3 +1,5 @@
+@use "sass:color";
+
 $primary-bg: #010101;
 
 // Blue palette
@@ -13,3 +15,24 @@ $dark-teal: rgb(3, 67, 88);
 // Grayscale
 $dark-gray: #333;
 $mid-gray: #666;
+
+// Neon gradient palettes (light/mid/dark for quick gradients)
+$pink-mid: #e93ca6;
+$pink-light: color.adjust($pink-mid, $lightness: 12%);
+$pink-dark: color.adjust($pink-mid, $lightness: -12%);
+
+$purple-mid: #a646d9;
+$purple-light: color.adjust($purple-mid, $lightness: 12%);
+$purple-dark: color.adjust($purple-mid, $lightness: -12%);
+
+$violet-mid: #5946e3;
+$violet-light: color.adjust($violet-mid, $lightness: 12%);
+$violet-dark: color.adjust($violet-mid, $lightness: -12%);
+
+$aqua-mid: #12a9d7;
+$aqua-light: color.adjust($aqua-mid, $lightness: 12%);
+$aqua-dark: color.adjust($aqua-mid, $lightness: -12%);
+
+$cyan-mid: #12d9d8;
+$cyan-light: color.adjust($cyan-mid, $lightness: 12%);
+$cyan-dark: color.adjust($cyan-mid, $lightness: -12%);

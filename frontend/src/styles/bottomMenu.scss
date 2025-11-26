@@ -18,7 +18,7 @@
 .software-icon {
   width: 80px;
   height: 80px;
-  background: linear-gradient(45deg, vars.$mid-blue 0%, vars.$light-blue 60%);
+  background: linear-gradient(45deg, vars.$cyan-mid 0%, vars.$cyan-dark 60%);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -35,7 +35,7 @@
   top: -75px;
 
   li {
-    background: linear-gradient(45deg, vars.$mid-blue 0%, vars.$dark-blue 60%);
+    background: linear-gradient(45deg, vars.$violet-mid 0%, vars.$violet-dark 60%);
     padding: 0.2rem 1rem;
     margin: 0.2rem 0;
 
@@ -54,7 +54,7 @@
 .message-icon {
   width: 40px;
   height: 40px;
-  background: linear-gradient(45deg, vars.$mid-blue 0%, vars.$light-blue 60%);
+  background: linear-gradient(45deg, vars.$cyan-mid 0%, vars.$cyan-dark 60%);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -86,7 +86,7 @@
   justify-content: space-between;
   padding: 0 0.5rem;
 
-  background: linear-gradient(45deg, vars.$mid-blue 0%, vars.$dark-blue 60%);
+  background: linear-gradient(45deg, vars.$violet-mid 0%, vars.$violet-dark 60%);
 
   span:first-child {
     flex: 1;
