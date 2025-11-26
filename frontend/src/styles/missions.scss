@@ -97,8 +97,9 @@ button {
   height: 600px;
   width: 400px;
   position: fixed;
-  top: 100px;
-  right: 8px;
+  right: 16px;
+  bottom: 90px;
+  max-height: 70vh;
   .mission-info {
     display: flex;
     flex-direction: column;
