@@ -93,7 +93,7 @@ button {
 }
 
 .details-container {
-  background-color: vars.$mid-blue;
+  background-color: vars.$violet-mid;
   height: 600px;
   width: 400px;
   position: fixed;
@@ -114,12 +114,12 @@ button {
     font-weight: bold;
   }
   .small-field {
-    background-color: vars.$dark-blue;
+    background-color: vars.$violet-dark;
     padding: 1% 0;
     width: 100%;
   }
   .large-field {
-    background-color: vars.$dark-blue;
+    background-color: vars.$violet-dark;
     min-height: 70%;
     overflow: auto;
     padding: 1% 0;
@@ -137,7 +137,10 @@ button {
     height: 10%; 
 
     .mission-action {
-      background-color: vars.$dark-blue;
+      &:hover {
+        background-color: vars.$violet-light;
+      }
+      background-color: vars.$violet-dark;
       flex: 1 1 0;
       max-width: 33%;
       text-align: center;
