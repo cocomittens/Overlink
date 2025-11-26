@@ -47,7 +47,9 @@ const BottomMenu: React.FC = () => {
 
   useEffect(() => {
     abandonSoundRef.current =
-      typeof Audio !== "undefined" ? new Audio("/soundEffects/cancel.wav") : null;
+      typeof Audio !== "undefined"
+        ? new Audio("/soundEffects/cancel.wav")
+        : null;
     if (abandonSoundRef.current) {
       abandonSoundRef.current.volume = 0.6;
     }
@@ -90,12 +92,18 @@ const BottomMenu: React.FC = () => {
       />
       <div className="bottom-menu">
         {showSoftware && <SoftwareList />}
-        <ul>
+        <ul className="left-icons">
           <li
             className="software-icon"
             onClick={() => setShowSoftware(!showSoftware)}
           >
             <span className="material-symbols-outlined">widgets</span>
+          </li>
+          <li className="message-icon hard-drive">
+            <span className="material-symbols-outlined">hard_drive</span>
+          </li>
+          <li className="message-icon hard-drive">
+            <span className="material-symbols-outlined">shop</span>
           </li>
         </ul>
 
