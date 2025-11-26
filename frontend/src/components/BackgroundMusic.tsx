@@ -8,6 +8,16 @@ const TRACKS = [
   "/audio/bg5.mp3",
   "/audio/bg6.mp3",
   "/audio/bg7.mp3",
+  "/audio/bg8.mp3",
+  "/audio/bg9.mp3",
+  "/audio/bg10.mp3",
+  "/audio/bg11.mp3",
+  "/audio/bg12.mp3",
+  "/audio/bg13.mp3",
+  "/audio/bg14.mp3",
+  "/audio/bg15.mp3",
+  "/audio/bg16.mp3",
+  "/audio/bg17.mp3",
 ];
 
 export function BackgroundMusic() {
