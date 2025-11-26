@@ -64,6 +64,12 @@
     }
   }
 
+  .music-controls {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+
   .money {
     color: #fff;
     font-weight: bold;
