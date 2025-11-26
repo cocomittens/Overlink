@@ -127,7 +127,7 @@ export class PasswordBreaker extends React.Component<Props, State> {
 
     return (
       <div className="password-breaker-container">
-        <p>Password Breaker</p>
+        <p>Password Cracker</p>
         <span className="password-breaker-display">
           {content && content.length > 0 ? content : "Select a target"}
         </span>

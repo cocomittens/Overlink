@@ -58,8 +58,8 @@ export const moneyAtom = atom(1000);
 export const ratingAtom = atom(13);
 
 export const softwareAtom = atom([
-    { id: "trace_tracker", name: "Trace Tracker", version: 2 },
-    { id: "password_breaker", name: "Password Breaker", version: 1 }
+    { id: "trace_tracker", name: "Trace Monitor", version: 2 },
+    { id: "password_breaker", name: "Password Cracker", version: 1 }
 ]);
 
 export const currentSoftwareAtom = atom<Set<string>>(new Set<string>());
