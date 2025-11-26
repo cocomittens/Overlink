@@ -13,10 +13,12 @@ const TRACKS = [
 export function BackgroundMusic() {
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const [paused, setPaused] = useState(false);
-  const [trackIndex, setTrackIndex] = useState(0);
+  const [trackIndex, setTrackIndex] = useState(
+    () => Math.floor(Math.random() * TRACKS.length)
+  );
 
   useEffect(() => {
-    const audio = new Audio(TRACKS[0]);
+    const audio = new Audio(TRACKS[trackIndex]);
     audio.volume = 0.35;
     audioRef.current = audio;
 
