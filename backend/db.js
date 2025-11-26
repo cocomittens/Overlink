@@ -94,13 +94,33 @@ function initDatabase() {
     console.log('Demo user created: username="demo", password="demo123"');
   }
 
+  const nodes = [
+    { id: "personal_gateway", top: 280, left: 190, name: "Gateway", admin: 1, account: 0, active: 0, password: null },
+    { id: "internal_1", top: 500, left: 350, name: "Nordsec Internal Services", admin: 0, account: 1, active: 0, password: "pass123" },
+    { id: "public_access_1", top: 300, left: 800, name: "SilentWave Public Access Server", admin: 0, account: 0, active: 0, password: null },
+    { id: "internal_2", top: 420, left: 420, name: "SilentWave Internal Services", admin: 0, account: 0, active: 0, password: "catslol" },
+    { id: "bank_1", top: 200, left: 250, name: "Helix Finance Group", admin: 1, account: 0, active: 1, password: "rosebud" },
+  ];
+
+  nodes.forEach((node) => {
+    const existingNode = db.prepare("SELECT id FROM nodes WHERE id = ?").get(node.id);
+    if (!existingNode) {
+      const stmt = db.prepare(`
+        INSERT INTO nodes (id, top, left, name, admin, account, active, password)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+      `);
+      stmt.run(node.id, node.top, node.left, node.name, node.admin, node.account, node.active, node.password);
+      console.log(`Node added: "${node.name}"`);
+    }
+  });
+
   // Add initial missions if they don't exist
   const missions = [
     {
       id: 1,
       title: "Extract credentials from a low-security intranet node",
       description:
-        "A small firm needs access to an employee portal they locked themselves out of. Break into their intranet server, run a password-breaker on the ‘auth.txt’ file, and return the recovered credentials.",
+        "A small firm needs access to an employee portal they locked themselves out of. Break into their intranet server, run a password-breaker on the 'auth.txt' file, and return the recovered credentials.",
       employer: "NordSec Consultants",
       date: "2023-10-01",
       payment: 900,
@@ -111,7 +131,7 @@ function initDatabase() {
       id: 2,
       title: "Purge access logs from a regional data relay",
       description:
-        "A client was caught snooping where they shouldn’t have been. Remotely access the relay node, locate ‘connection.log’, and delete all entries from the last 24 hours. Cover your tracks and avoid triggering the trace.",
+        "A client was caught snooping where they shouldn't have been. Remotely access the relay node, locate 'connection.log', and delete all entries from the last 24 hours. Cover your tracks and avoid triggering the trace.",
       employer: "SilentWave Analytics",
       date: "2023-10-02",
       payment: 1400,
@@ -122,7 +142,7 @@ function initDatabase() {
       id: 3,
       title: "Recover a corrupted report from a corporate fileserver",
       description:
-        "A corrupted financial report is stuck behind basic security. Break into the fileserver, navigate to /reports/q3/, and copy ‘ledger-final.dat’ to your workspace. Expect mild intrusion countermeasures.",
+        "A corrupted financial report is stuck behind basic security. Break into the fileserver, navigate to /reports/q3/, and copy 'ledger-final.dat' to your workspace. Expect mild intrusion countermeasures.",
       employer: "Helix Finance Group",
       date: "2023-10-03",
       payment: 1800,

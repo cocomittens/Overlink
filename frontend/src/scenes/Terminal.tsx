@@ -3,11 +3,14 @@ import { useAtom } from "jotai";
 import { currentNodeAtom, dataAtom, directoryAtom } from "../store";
 import "../styles/terminal.scss";
 import { useNavigate } from "react-router-dom";
+import { loadable } from "jotai/utils";
+import { useAtomValue } from "jotai";
 
 export default function Terminal() {
     const [currentNode] = useAtom(currentNodeAtom);
-    const [data] = useAtom(dataAtom);
-    const currData = data.find((node) => node.id === currentNode);
+    const dataLoadable = useAtomValue(loadable(dataAtom));
+    const data = dataLoadable.state === "hasData" ? dataLoadable.data : [];
+    const currData = data.find((node: any) => node.id === currentNode);
     const [directory, setDirectory] = useAtom(directoryAtom);
     const navigate = useNavigate();
 

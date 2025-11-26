@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors');
 require('dotenv').config();
 const db = require('./db');
+const mapData = require('./mapData');
 
 const app = express();
 const port = process.env.PORT || 5000;
@@ -104,6 +105,10 @@ app.get('/api/nodes', (req, res) => {
     console.error('Error fetching nodes:', error);
     res.status(500).json({ error: 'Failed to fetch nodes' });
   }
+});
+
+app.get('/api/data', (req, res) => {
+  res.json(mapData);
 });
 
 app.post('/api/login', (req, res) => {

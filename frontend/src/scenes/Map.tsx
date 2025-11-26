@@ -6,9 +6,10 @@ import MapNode from "../components/MapNode";
 import React, { useEffect, useRef } from "react";
 import { useAtom } from "jotai";
 import { useNavigate } from "react-router-dom";
+import { getMapNodes } from "../api";
 
 export default function Map() {
-  const [nodes] = useAtom(nodesAtom);
+  const [nodes, setNodes] = useAtom(nodesAtom);
   const [chain, setChain] = useAtom(chainAtom);
   const [currentNode, setCurrentNode] = useAtom(currentNodeAtom);
   const clickSoundRef = useRef<HTMLAudioElement | null>(null);
@@ -21,6 +22,12 @@ export default function Map() {
       clickSoundRef.current.volume = 0.6;
     }
   }, []);
+
+  useEffect(() => {
+    getMapNodes()
+      .then((data) => setNodes(data || []))
+      .catch((err) => console.error("Failed to load map nodes", err));
+  }, [setNodes]);
 
   const toggleNode = (id: string) => {
     if (clickSoundRef.current) {
