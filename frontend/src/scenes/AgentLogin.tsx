@@ -1,6 +1,6 @@
 import "../styles/login.scss";
 
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import SavedUserList, { SavedUser } from "../components/SavedUserList";
 import { useAtom } from "jotai";
 import { userAtom } from "../store";
@@ -10,6 +10,7 @@ import { useNavigate } from "react-router-dom";
 export default function AgentLogin() {
   const savedUsers: SavedUser[] = [{ username: "demo", password: "demo123" }];
   const [user, setUser] = useAtom(userAtom);
+  const successSoundRef = useRef<HTMLAudioElement | null>(null);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [passwordMask, setPasswordMask] = useState("");
@@ -17,6 +18,14 @@ export default function AgentLogin() {
   const [error, setError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    successSoundRef.current =
+      typeof Audio !== "undefined" ? new Audio("/soundEffects/login_success.mp3") : null;
+    if (successSoundRef.current) {
+      successSoundRef.current.volume = 0.6;
+    }
+  }, []);
 
   const handleUserSelect = (user: SavedUser) => {
     setUsername(user.username);
@@ -43,6 +52,10 @@ export default function AgentLogin() {
       if (data?.success) {
         setUser(data.user);
         localStorage.setItem("user", JSON.stringify(data.user));
+        if (successSoundRef.current) {
+          successSoundRef.current.currentTime = 0;
+          successSoundRef.current.play().catch(() => {});
+        }
         navigate("/terminal");
       } else {
         setError(data?.message || data?.error || "Login failed");

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import "../styles/login.scss";
 import { PasswordBreaker } from "../components/PasswordBreaker";
 import { useAtom } from "jotai";
@@ -13,12 +13,21 @@ export default function Login() {
   const [nodes] = useAtom(nodesAtom);
   const [currentNodeData, setCurrentNodeData] = useState<typeof nodes[0] | undefined>(undefined);
   const [isGuessed, setIsGuessed] = useState(false);
+  const successSoundRef = useRef<HTMLAudioElement | null>(null);
 
   const navigate = useNavigate();
   useEffect(() => {
     const data = nodes.find((node) => node.id === currentNode);
     setCurrentNodeData(data);
   }, [nodes, currentNode]);
+
+  useEffect(() => {
+    successSoundRef.current =
+      typeof Audio !== "undefined" ? new Audio("/soundEffects/login_success.mp3") : null;
+    if (successSoundRef.current) {
+      successSoundRef.current.volume = 0.6;
+    }
+  }, []);
 
   const initializeBreaker = () => {
     setUsername("admin");
@@ -34,6 +43,10 @@ export default function Login() {
 
   const handleProceed = () => {
     if (isGuessed) {
+      if (successSoundRef.current) {
+        successSoundRef.current.currentTime = 0;
+        successSoundRef.current.play().catch(() => {});
+      }
       navigate("/terminal");
     }
   }
