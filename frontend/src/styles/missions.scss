@@ -100,11 +100,12 @@ button {
   right: 16px;
   bottom: 90px;
   max-height: 70vh;
+  z-index: 10;
   .mission-info {
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;
-    height: 92%;
+    height: 90%;
     column-gap: 8px;
   }
 
@@ -125,21 +126,29 @@ button {
   }
   .action-buttons {
     position: absolute;
-    left: -2%;
+    left: 0;
     right: 0;
     bottom: 0;
     display: flex;
-    height: 8%;
     align-items: center;
+    justify-content: space-between;
+    padding: 0 12px;
+    gap: 12px;
+    height: 10%; 
 
-    .button {
+    .mission-action {
       background-color: vars.$dark-blue;
-      flex: 1 1 33.3333%;
+      flex: 1 1 0;
+      max-width: 33%;
       text-align: center;
-      height: 50%;
+      height: 80%;
       display: flex;
       align-items: center;
       justify-content: center;
+      color: #fff;
+      font-weight: bold;
+      cursor: pointer;
+      padding: 0;
     }
   }
 }

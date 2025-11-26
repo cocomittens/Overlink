@@ -53,7 +53,10 @@ const BottomMenu: React.FC = () => {
 
   return (
     <>
-      <MissionDetails missionId={selectedMission} />
+      <MissionDetails
+        missionId={selectedMission}
+        onClose={() => setSelectedMission(null)}
+      />
       <div className="bottom-menu">
         {showSoftware && <SoftwareList />}
         <ul>

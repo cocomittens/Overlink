@@ -6,7 +6,13 @@ import { currentMissionsAtom } from "../store";
 import { loadable } from "jotai/utils";
 import { useAtomValue } from "jotai";
 
-export function MissionDetails({ missionId }: { missionId: number | null }) {
+export function MissionDetails({
+  missionId,
+  onClose,
+}: {
+  missionId: number | null;
+  onClose: () => void;
+}) {
   const currentMissionsLoadable = useAtomValue(loadable(currentMissionsAtom));
   const currentMissions: Mission[] =
     currentMissionsLoadable.state === "hasData"
@@ -23,6 +29,11 @@ export function MissionDetails({ missionId }: { missionId: number | null }) {
   }
 
   if (missionId === null) return null;
+
+  const handleClose = (e: React.MouseEvent | React.KeyboardEvent) => {
+    e.stopPropagation();
+    onClose();
+  };
 
   return (
     <div className="details-container">
@@ -43,9 +54,26 @@ export function MissionDetails({ missionId }: { missionId: number | null }) {
             </div>
           </div>
           <div className="action-buttons">
-            <div className="button">Close</div>
-            <div className="button">Reply</div>
-            <div className="button">Abandon</div>
+            <div
+              className="mission-action"
+              onClick={handleClose}
+              role="button"
+              tabIndex={0}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " ") {
+                  e.preventDefault();
+                  handleClose(e);
+                }
+              }}
+            >
+              <span>Close</span>
+            </div>
+            <div className="mission-action">
+              <span>Reply</span>
+            </div>
+            <div className="mission-action">
+              <span>Abandon</span>
+            </div>
           </div>
         </>
       ) : (
