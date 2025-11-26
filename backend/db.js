@@ -19,7 +19,9 @@ function initDatabase() {
     const info = db.prepare(`PRAGMA table_info(${table})`).all();
     const hasColumn = info.some((col) => col.name === column);
     if (!hasColumn) {
-      db.prepare(`ALTER TABLE ${table} ADD COLUMN ${column} ${definition}`).run();
+      db.prepare(
+        `ALTER TABLE ${table} ADD COLUMN ${column} ${definition}`
+      ).run();
       console.log(`Added column ${column} to ${table}`);
     }
   };
@@ -96,32 +98,35 @@ function initDatabase() {
   const missions = [
     {
       id: 1,
-      title: "Falsify a social security document",
-      description: "Test decription 1",
-      employer: "Test company 1",
+      title: "Extract credentials from a low-security intranet node",
+      description:
+        "A small firm needs access to an employee portal they locked themselves out of. Break into their intranet server, run a password-breaker on the ‘auth.txt’ file, and return the recovered credentials.",
+      employer: "NordSec Consultants",
       date: "2023-10-01",
-      payment: 5300,
-      difficulty: 4,
+      payment: 900,
+      difficulty: 1,
       minRating: 12,
     },
     {
       id: 2,
-      title: "Find and destroy crucial data on a mainframe",
+      title: "Purge access logs from a regional data relay",
+      description:
+        "A client was caught snooping where they shouldn’t have been. Remotely access the relay node, locate ‘connection.log’, and delete all entries from the last 24 hours. Cover your tracks and avoid triggering the trace.",
+      employer: "SilentWave Analytics",
       date: "2023-10-02",
-      employer: "Test company 2",
-      description: "Test decription 2",
-      payment: 1700,
+      payment: 1400,
       difficulty: 2,
       minRating: 14,
     },
     {
       id: 3,
-      title: "Break into a rival computer system and sabotage files",
-      description: "Test decription 3",
-      employer: "Test company 3",
+      title: "Recover a corrupted report from a corporate fileserver",
+      description:
+        "A corrupted financial report is stuck behind basic security. Break into the fileserver, navigate to /reports/q3/, and copy ‘ledger-final.dat’ to your workspace. Expect mild intrusion countermeasures.",
+      employer: "Helix Finance Group",
       date: "2023-10-03",
-      payment: 1600,
-      difficulty: 2,
+      payment: 1800,
+      difficulty: 3,
       minRating: 15,
     },
   ];
