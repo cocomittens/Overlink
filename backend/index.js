@@ -53,7 +53,18 @@ app.get('/api/users/:userId/missions', (req, res) => {
   try {
     const { userId } = req.params;
     const missions = db.prepare(`
-      SELECT m.*, um.status, um.accepted_at, um.completed_at
+      SELECT 
+        m.id,
+        m.title,
+        m.description,
+        m.employer,
+        m.date,
+        m.payment,
+        m.difficulty,
+        m.minRating,
+        um.status,
+        um.accepted_at,
+        um.completed_at
       FROM missions m
       INNER JOIN user_missions um ON m.id = um.mission_id
       WHERE um.user_id = ?

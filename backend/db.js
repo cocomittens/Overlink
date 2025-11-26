@@ -15,6 +15,15 @@ db.pragma("foreign_keys = ON");
 function initDatabase() {
   // db.exec("DROP TABLE IF EXISTS missions;");
 
+  const ensureColumn = (table, column, definition) => {
+    const info = db.prepare(`PRAGMA table_info(${table})`).all();
+    const hasColumn = info.some((col) => col.name === column);
+    if (!hasColumn) {
+      db.prepare(`ALTER TABLE ${table} ADD COLUMN ${column} ${definition}`).run();
+      console.log(`Added column ${column} to ${table}`);
+    }
+  };
+
   db.exec(`
     CREATE TABLE IF NOT EXISTS missions (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -28,6 +37,9 @@ function initDatabase() {
       createdAt DATETIME DEFAULT CURRENT_TIMESTAMP
     )
   `);
+
+  ensureColumn("missions", "description", "TEXT");
+  ensureColumn("missions", "employer", "TEXT");
 
   db.exec(`
     CREATE TABLE IF NOT EXISTS users (
@@ -134,6 +146,12 @@ function initDatabase() {
         mission.employer
       );
       console.log(`Mission added: "${mission.title}"`);
+    } else {
+      db.prepare(
+        `UPDATE missions 
+         SET description = COALESCE(description, ?), employer = COALESCE(employer, ?) 
+         WHERE id = ?`
+      ).run(mission.description, mission.employer, mission.id);
     }
   });
 
