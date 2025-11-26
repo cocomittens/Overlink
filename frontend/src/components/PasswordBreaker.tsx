@@ -14,10 +14,22 @@ interface State {
 
 export class PasswordBreaker extends React.Component<Props, State> {
   private randomInterval?: ReturnType<typeof setInterval>;
+  private beepAudio?: HTMLAudioElement;
 
   constructor(props: Props) {
     super(props);
-    this.state = { lettersGuessed: 0, randomSuffix: "", lastGuessedIndex: null };
+    this.state = {
+      lettersGuessed: 0,
+      randomSuffix: "",
+      lastGuessedIndex: null,
+    };
+    this.beepAudio =
+      typeof Audio !== "undefined"
+        ? new Audio("/soundEffects/dreamy-beep.wav")
+        : undefined;
+    if (this.beepAudio) {
+      this.beepAudio.volume = 0.4;
+    }
   }
 
   componentDidMount() {
@@ -50,7 +62,11 @@ export class PasswordBreaker extends React.Component<Props, State> {
     if (!password) return;
     let letters = 0;
     const speed = 2000;
-    this.setState({ lettersGuessed: 0, randomSuffix: this.randomString(password.length), lastGuessedIndex: null });
+    this.setState({
+      lettersGuessed: 0,
+      randomSuffix: this.randomString(password.length),
+      lastGuessedIndex: null,
+    });
 
     // initialize and start random suffix updates
     this.setState({
@@ -70,6 +86,13 @@ export class PasswordBreaker extends React.Component<Props, State> {
       await new Promise((res) => setTimeout(res, speed));
       letters++;
       this.setState({ lettersGuessed: letters, lastGuessedIndex: letters - 1 });
+      if (this.beepAudio) {
+        // Restart the sound to ensure it plays on each guess
+        this.beepAudio.currentTime = 0;
+        this.beepAudio.play().catch(() => {
+          /* ignore autoplay restrictions */
+        });
+      }
     }
     if (this.randomInterval) clearInterval(this.randomInterval);
     this.setState({ randomSuffix: "" });
@@ -86,15 +109,20 @@ export class PasswordBreaker extends React.Component<Props, State> {
     // build animated spans for revealed letters then random letters
     const content = password
       ? [
-        // guessed letters
-        ...Array.from({ length: lettersGuessed }).map((_, i) => (
-          <span key={`g${i}`} className={i === lastGuessedIndex ? 'animate' : ''}>
-            {password[i]}
-          </span>
-        )),
-        // random suffix letters
-        ...randomSuffix.split('').map((c, i) => <span key={`r${i}`}>{c}</span>)
-      ]
+          // guessed letters
+          ...Array.from({ length: lettersGuessed }).map((_, i) => (
+            <span
+              key={`g${i}`}
+              className={i === lastGuessedIndex ? "animate" : ""}
+            >
+              {password[i]}
+            </span>
+          )),
+          // random suffix letters
+          ...randomSuffix
+            .split("")
+            .map((c, i) => <span key={`r${i}`}>{c}</span>),
+        ]
       : null;
 
     return (
