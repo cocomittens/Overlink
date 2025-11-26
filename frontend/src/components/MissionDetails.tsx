@@ -9,9 +9,11 @@ import { useAtomValue } from "jotai";
 export function MissionDetails({
   missionId,
   onClose,
+  onAbandon,
 }: {
   missionId: number | null;
   onClose: () => void;
+  onAbandon: (missionId: number) => void;
 }) {
   const currentMissionsLoadable = useAtomValue(loadable(currentMissionsAtom));
   const currentMissions: Mission[] =
@@ -33,6 +35,13 @@ export function MissionDetails({
   const handleClose = (e: React.MouseEvent | React.KeyboardEvent) => {
     e.stopPropagation();
     onClose();
+  };
+
+  const handleAbandon = (e: React.MouseEvent | React.KeyboardEvent) => {
+    e.stopPropagation();
+    if (missionId !== null) {
+      onAbandon(missionId);
+    }
   };
 
   return (
@@ -72,7 +81,19 @@ export function MissionDetails({
               <span>Reply</span>
             </div>
             <div className="mission-action">
-              <span>Abandon</span>
+              <span
+                role="button"
+                tabIndex={0}
+                onClick={handleAbandon}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" || e.key === " ") {
+                    e.preventDefault();
+                    handleAbandon(e);
+                  }
+                }}
+              >
+                Abandon
+              </span>
             </div>
           </div>
         </>
