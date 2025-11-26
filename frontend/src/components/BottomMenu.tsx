@@ -4,13 +4,16 @@ import React, { useState } from "react";
 import {
   currentMissionsAtom,
   currentSoftwareAtom,
+  refreshMissionsAtom,
+  userAtom,
   softwareAtom,
 } from "../store";
-import { useAtom, useAtomValue } from "jotai";
+import { useAtom, useAtomValue, useSetAtom } from "jotai";
 
 import { MissionDetails } from "./MissionDetails";
 import TraceTracker from "./TraceTracker";
 import { loadable } from "jotai/utils";
+import { abandonMission } from "../api";
 
 const SoftwareList = () => {
   const [software] = useAtom(softwareAtom);
@@ -36,7 +39,9 @@ const BottomMenu: React.FC = () => {
   const [showSoftware, setShowSoftware] = useState(false);
   const [selectedMission, setSelectedMission] = useState<number | null>(null);
   const [currentSoftware] = useAtom(currentSoftwareAtom);
+  const [user] = useAtom(userAtom);
   const currentMissionsLoadable = useAtomValue(loadable(currentMissionsAtom));
+  const refreshMissions = useSetAtom(refreshMissionsAtom);
 
   const currentMissions =
     currentMissionsLoadable.state === "hasData"
@@ -51,11 +56,23 @@ const BottomMenu: React.FC = () => {
     }
   };
 
+  const handleAbandon = async (missionId: number) => {
+    if (!user) return;
+    try {
+      await abandonMission(user.id, missionId);
+      setSelectedMission(null);
+      refreshMissions();
+    } catch (err) {
+      console.error("Failed to abandon mission", err);
+    }
+  };
+
   return (
     <>
       <MissionDetails
         missionId={selectedMission}
         onClose={() => setSelectedMission(null)}
+        onAbandon={handleAbandon}
       />
       <div className="bottom-menu">
         {showSoftware && <SoftwareList />}

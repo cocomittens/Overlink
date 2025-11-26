@@ -23,3 +23,10 @@ export const completeMission = async (userId: number, missionId: number) => {
     });
     return response.json();
 };
+
+export const abandonMission = async (userId: number, missionId: number) => {
+    const response = await fetch(`${API_BASE}/users/${userId}/missions/${missionId}/abandon`, {
+        method: 'DELETE'
+    });
+    return response.json();
+};

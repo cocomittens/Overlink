@@ -111,6 +111,24 @@ app.post('/api/login', (req, res) => {
   }
 });
 
+app.delete('/api/users/:userId/missions/:missionId/abandon', (req, res) => {
+  try {
+    const { userId, missionId } = req.params;
+    const stmt = db.prepare(`
+      DELETE FROM user_missions
+      WHERE user_id = ? AND mission_id = ?
+    `);
+    const result = stmt.run(userId, missionId);
+    if (result.changes === 0) {
+      return res.status(404).json({ error: 'Mission not found for this user' });
+    }
+    res.json({ message: 'Mission abandoned successfully' });
+  } catch (error) {
+    console.error('Error abandoning mission:', error);
+    res.status(500).json({ error: 'Failed to abandon mission' });
+  }
+});
+
 app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', message: 'Server is running' });
 });
