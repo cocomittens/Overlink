@@ -55,25 +55,23 @@
 }
 
 .login-form {
-    background: linear-gradient(45deg,
-            vars.$light-teal 0%,
-            vars.$mid-teal 60%);
+    background: linear-gradient(45deg, vars.$violet-mid 0%, vars.$violet-dark 60%);
     padding-bottom: 3vh;
     padding-top: 1vh;
     padding-left: 1vw;
     padding-right: 1vw;
-    color: vars.$dark-teal;
+    color: #fff;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     margin-bottom: 1vh;
 
     h2 {
-        color: vars.$dark-teal
+        color: #fff
     }
 
     input {
-        background: vars.$light-teal;
+        background: vars.$violet-light;
         border: 1px solid vars.$primary-bg;
         width: 70%;
     }
@@ -93,10 +91,8 @@ form {
 .login-button {
     border-radius: 0;
     width: 40%;
-    background: linear-gradient(45deg,
-            vars.$light-teal 0%,
-            vars.$mid-teal 60%);
-    color: vars.$dark-teal;
+    background: linear-gradient(45deg, vars.$violet-mid 0%, vars.$violet-dark 60%);
+    color: #fff;
     padding: 0.5rem;
     font-weight: bold;
 
@@ -109,7 +105,7 @@ form {
 }
 
 .login-error {
-    color: #ff6b6b;
+    color: vars.$pink-mid;
     margin: 0.5rem 0;
 }
 
@@ -131,9 +127,7 @@ form {
     p {
         padding: .3rem 0;
         margin: 0;
-        background: linear-gradient(45deg,
-                vars.$mid-blue 0%,
-                vars.$dark-blue 60%)
+        background: linear-gradient(45deg, vars.$violet-mid 0%, vars.$violet-dark 60%);
     }
 }
 

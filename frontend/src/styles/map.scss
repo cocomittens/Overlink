@@ -25,7 +25,7 @@
     cursor: pointer;
 
     &.active {
-        background-color: rgba(0, 255, 0, 0.8);
+        background-color: vars.$pink-mid;
     }
 
     &.admin {
@@ -57,9 +57,7 @@
 .button {
     border-radius: 0;
     width: 20%;
-    background: linear-gradient(45deg,
-            vars.$mid-blue 0%,
-            vars.$dark-blue 60%);
+    background: linear-gradient(45deg, vars.$violet-mid 0%, vars.$violet-dark 60%);
     color: #fff;
     padding: 0.5rem;
     font-weight: bold;
