@@ -8,6 +8,7 @@ import {
   Navigate,
 } from "react-router-dom";
 import { useAtom } from "jotai";
+import { useEffect, useState } from "react";
 
 import AgentLogin from "./scenes/AgentLogin.tsx";
 import BottomMenu from "./components/BottomMenu.tsx";
@@ -30,10 +31,27 @@ function App() {
 
 function AppContent() {
   const location = useLocation();
-  const [user] = useAtom(userAtom);
+  const [user, setUser] = useAtom(userAtom);
+  const [hydrated, setHydrated] = useState(false);
   const hideBottomMenu = location.pathname === "/agentLogin";
-  const withUser = (element) =>
-    user ? element : <Navigate to="/agentLogin" replace />;
+  const withUser = (element) => {
+    if (!hydrated && !user) return null;
+    return user ? element : <Navigate to="/agentLogin" replace />;
+  };
+
+  useEffect(() => {
+    if (!user) {
+      const stored = localStorage.getItem("user");
+      if (stored) {
+        try {
+          setUser(JSON.parse(stored));
+        } catch {
+          localStorage.removeItem("user");
+        }
+      }
+    }
+    setHydrated(true);
+  }, [user, setUser]);
 
   return (
     <>

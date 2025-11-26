@@ -7,7 +7,7 @@ export const userAtom = atom<{ id: number; username: string; money: number; rati
 const missionsRefreshAtom = atom(0);
 
 const allMissionsAtom = atom<Promise<Mission[]>>(async (get) => {
-    get(missionsRefreshAtom); // Subscribe to refresh trigger
+    get(missionsRefreshAtom);
     return await getMissions();
 });
 

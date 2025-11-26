@@ -8,7 +8,7 @@ import { login as apiLogin } from "../api";
 import { useNavigate } from "react-router-dom";
 
 export default function AgentLogin() {
-  const savedUsers: SavedUser[] = [{ username: "demo", password: "demo" }];
+  const savedUsers: SavedUser[] = [{ username: "demo", password: "demo123" }];
   const [user, setUser] = useAtom(userAtom);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -42,9 +42,10 @@ export default function AgentLogin() {
       const data = await apiLogin(username, password);
       if (data?.success) {
         setUser(data.user);
+        localStorage.setItem("user", JSON.stringify(data.user));
         navigate("/terminal");
       } else {
-        setError(data?.message || "Login failed");
+        setError(data?.message || data?.error || "Login failed");
       }
     } catch (e) {
       setError("Login failed");
