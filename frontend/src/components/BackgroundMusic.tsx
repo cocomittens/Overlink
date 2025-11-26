@@ -65,7 +65,7 @@ export function BackgroundMusic() {
   };
 
   const nextTrack = () => {
-    setTrackIndex((prev) => (prev + 1) % tracks.length);
+    setTrackIndex((prev) => (prev + 1) % TRACKS.length);
   };
 
   return (
