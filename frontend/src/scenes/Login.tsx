@@ -54,7 +54,7 @@ export default function Login() {
   return (
     <>
       <div className="login-container">
-        <h2>{currentNode}</h2>
+        <h2>{currentNodeData?.name || currentNode}</h2>
         <div className="login-form">
           <h2>User Authorization Required</h2>
           <form>
