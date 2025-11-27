@@ -117,7 +117,7 @@ app.post('/api/login', (req, res) => {
     const user = db.prepare('SELECT * FROM users WHERE username = ? AND password = ?').get(username, password);
 
     if (user) {
-      res.json({ success: true, user: { id: user.id, username: user.username, money: user.money, rating: user.rating } });
+      res.json({ success: true, user: { id: user.id, username: user.username, money: user.money, rating: user.rating, xp: user.xp } });
     } else {
       res.status(401).json({ success: false, error: 'Invalid credentials' });
     }

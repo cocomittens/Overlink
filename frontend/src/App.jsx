@@ -1,13 +1,12 @@
 import "./App.css";
 
 import {
+  Navigate,
   Route,
   BrowserRouter as Router,
   Routes,
   useLocation,
-  Navigate,
 } from "react-router-dom";
-import { useAtom } from "jotai";
 import { useEffect, useState } from "react";
 
 import AgentLogin from "./scenes/AgentLogin.tsx";
@@ -19,6 +18,7 @@ import Map from "./scenes/Map.tsx";
 import Missions from "./scenes/Missions.tsx";
 import NavBar from "./components/NavBar";
 import Terminal from "./scenes/Terminal.tsx";
+import { useAtom } from "jotai";
 import { userAtom } from "./store";
 
 function App() {
@@ -44,7 +44,13 @@ function AppContent() {
       const stored = localStorage.getItem("user");
       if (stored) {
         try {
-          setUser(JSON.parse(stored));
+          const parsed = JSON.parse(stored);
+          const hydratedUser = {
+            ...parsed,
+            xp: parsed.xp,
+          };
+          setUser(hydratedUser);
+          localStorage.setItem("user", JSON.stringify(hydratedUser));
         } catch {
           localStorage.removeItem("user");
         }

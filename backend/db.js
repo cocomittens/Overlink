@@ -50,9 +50,11 @@ function initDatabase() {
       password TEXT NOT NULL,
       money INTEGER DEFAULT 1000,
       rating INTEGER DEFAULT 13,
+      xp INTEGER DEFAULT 0,
       createdAt DATETIME DEFAULT CURRENT_TIMESTAMP
     )
   `);
+  ensureColumn("users", "xp", "INTEGER DEFAULT 0");
 
   db.exec(`
     CREATE TABLE IF NOT EXISTS nodes (
@@ -87,11 +89,13 @@ function initDatabase() {
     .get("demo");
   if (!existingUser) {
     const stmt = db.prepare(`
-            INSERT INTO users (username, password, money, rating)
-            VALUES (?, ?, ?, ?)
+            INSERT INTO users (username, password, money, rating, xp)
+            VALUES (?, ?, ?, ?, ?)
         `);
-    stmt.run("demo", "demo123", 1000, 13);
+    stmt.run("demo", "demo123", 1000, 13, 420);
     console.log('Demo user created: username="demo", password="demo123"');
+  } else {
+    db.prepare("UPDATE users SET xp = ? WHERE username = ?").run(420, "demo");
   }
 
   const nodes = [

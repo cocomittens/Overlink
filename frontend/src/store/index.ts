@@ -7,6 +7,7 @@ export const userAtom = atom<{
   username: string;
   money: number;
   rating: number;
+  xp: number;
 } | null>(null);
 
 const missionsRefreshAtom = atom(0);
