@@ -91,7 +91,7 @@ export function BackgroundMusic() {
         {paused ? (
           <span className="material-icons">play_arrow</span>
         ) : (
-          <span className="material-symbols-outlined">pause</span>
+          <span className="material-icons">pause</span>
         )}
       </button>
       <button
@@ -99,7 +99,7 @@ export function BackgroundMusic() {
         onClick={nextTrack}
         aria-label="Next track"
       >
-        <span className="material-symbols-outlined">skip_next</span>
+        <span className="material-icons">skip_next</span>
       </button>
     </div>
   );
