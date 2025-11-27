@@ -117,6 +117,21 @@ button {
     padding: 1% 0;
     width: 100%;
   }
+  .harddrive-bars {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+
+    .hd-bar {
+      height: 16px;
+      width: 100%;
+      background-color: vars.$violet-mid;
+
+      &:nth-child(even) {
+        background-color: vars.$violet-light;
+      }
+    }
+  }
   .large-field {
     background-color: vars.$violet-dark;
     min-height: 70%;
