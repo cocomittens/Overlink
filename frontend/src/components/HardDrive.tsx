@@ -20,13 +20,14 @@ export function HardDrive({
         <div className="mission-info">
           <div className="header">Hard Drive</div>
           <div className="small-field">Space: 24GB</div>
-          <div className="harddrive-bars">
-            {Array.from({ length: barCount }).map((_, idx) => (
-              <div key={idx} className="hd-bar" />
-            ))}
-          </div>
 
-          <div className="large-field"></div>
+          <div className="large-field">
+            <div className="harddrive-bars">
+              {Array.from({ length: barCount }).map((_, idx) => (
+                <div key={idx} className="hd-bar" />
+              ))}
+            </div>
+          </div>
         </div>
       </>
     </div>
