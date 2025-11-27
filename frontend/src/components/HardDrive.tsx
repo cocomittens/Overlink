@@ -17,11 +17,26 @@ export function HardDrive({
   return (
     <div className="details-container">
       <>
-        <div className="mission-info">
-          <div className="header">Hard Drive</div>
+        <div
+          className="mission-info"
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "flex-start",
+            gap: "1%",
+          }}
+        >
+          <div
+            className="header"
+            style={{
+              paddingTop: "1%",
+            }}
+          >
+            Hard Drive
+          </div>
           <div className="small-field">Space: 24GB</div>
 
-          <div className="large-field">
+          <div className="small-field">
             <div className="harddrive-bars">
               {Array.from({ length: barCount }).map((_, idx) => (
                 <div key={idx} className="hd-bar" />

@@ -57,7 +57,7 @@ export function MissionDetails({
             <div className="small-field">
               <strong>Payment:</strong> {mission.payment} credits
             </div>
-            <div className="large-field">
+            <div className="large-field" style={{ padding: "1% 2%" }}>
               <strong>Description:</strong>
               <div>{mission.description}</div>
             </div>

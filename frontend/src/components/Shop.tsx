@@ -25,8 +25,18 @@ export function Shop({ onClose }: { onClose: () => void }) {
   return (
     <div className="details-container">
       <>
-        <div className="mission-info">
-          <div className="header">Shop</div>
+        <div
+          className="mission-info"
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "flex-start",
+            gap: "1%",
+          }}
+        >
+          <div className="header" style={{ paddingTop: "1%" }}>
+            Shop
+          </div>
 
           <div
             className="small-field"
