@@ -65,9 +65,14 @@ const BottomMenu: React.FC = () => {
       : [];
 
   const openMission = (id: number) => {
-    setSelectedMission(id);
-    setShowHardDrive(false);
-    setShowShop(false);
+    setSelectedMission((prev) => {
+      const next = prev === id ? null : id;
+      if (next !== null) {
+        setShowHardDrive(false);
+        setShowShop(false);
+      }
+      return next;
+    });
   };
 
   const toggleHardDrive = () => {
