@@ -40,6 +40,15 @@
     margin: 0;
   }
 
+  .left-controls {
+    position: absolute;
+    left: 2vw;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0;
+  }
+
   .music-toggle {
     padding: 6px 10px;
     border-radius: 999px;
@@ -76,3 +85,19 @@
     font-weight: bold;
   }
 }
+
+.message-icon {
+  width: 40px;
+  height: 40px;
+  background: linear-gradient(45deg, vars.$cyan-mid 0%, vars.$cyan-dark 60%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  color: #fff;
+
+  &:hover {
+    cursor: pointer;
+  }
+}
+

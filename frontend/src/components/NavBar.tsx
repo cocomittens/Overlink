@@ -10,12 +10,23 @@ const NavBar: React.FC = () => {
   return (
     <nav className="navbar">
       <ul>
-        <li>
-          <Link to="/map">Map</Link>
+        <li className="left-controls">
+          <div className="message-icon">
+            <Link to="/map">
+              <span className="material-symbols-outlined message-icon">
+                map
+              </span>
+            </Link>
+          </div>
+          <div className="message-icon">
+            <Link to="/missions">
+              <span className="material-symbols-outlined message-icon">
+                task
+              </span>
+            </Link>
+          </div>
         </li>
-        <li>
-          <Link to="/missions">Missions</Link>
-        </li>
+
         <li className="right-controls">
           <BackgroundMusic />
           <span className="money">${money}</span>
