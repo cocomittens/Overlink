@@ -64,12 +64,32 @@ const BottomMenu: React.FC = () => {
       ? currentMissionsLoadable.data
       : [];
 
-  const setMission = (id: number) => {
-    if (selectedMission === id) {
-      setSelectedMission(null);
-    } else {
-      setSelectedMission(id);
-    }
+  const openMission = (id: number) => {
+    setSelectedMission(id);
+    setShowHardDrive(false);
+    setShowShop(false);
+  };
+
+  const toggleHardDrive = () => {
+    setShowHardDrive((prev) => {
+      const next = !prev;
+      if (next) {
+        setShowShop(false);
+        setSelectedMission(null);
+      }
+      return next;
+    });
+  };
+
+  const toggleShop = () => {
+    setShowShop((prev) => {
+      const next = !prev;
+      if (next) {
+        setShowHardDrive(false);
+        setSelectedMission(null);
+      }
+      return next;
+    });
   };
 
   const handleAbandon = async (missionId: number) => {
@@ -107,13 +127,13 @@ const BottomMenu: React.FC = () => {
           </li>
           <li
             className="message-icon hard-drive"
-            onClick={() => setShowHardDrive((prev) => !prev)}
+            onClick={toggleHardDrive}
           >
             <span className="material-symbols-outlined">hard_drive</span>
           </li>
           <li
             className="message-icon hard-drive"
-            onClick={() => setShowShop((prev) => !prev)}
+            onClick={toggleShop}
           >
             <span className="material-symbols-outlined">shop</span>
           </li>
@@ -124,7 +144,7 @@ const BottomMenu: React.FC = () => {
             return (
               <li
                 key={mission.id}
-                onClick={() => setMission(mission.id)}
+                onClick={() => openMission(mission.id)}
                 className="message-icon"
               >
                 <span className="material-symbols-outlined">mail</span>
