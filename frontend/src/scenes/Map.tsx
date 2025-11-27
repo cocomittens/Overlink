@@ -1,10 +1,10 @@
 import "../styles/map.scss";
 
-import { chainAtom, currentNodeAtom, nodesAtom } from "../store";
+import { chainAtom, currentNodeAtom, nodesAtom, soundEnabledAtom } from "../store";
 
 import MapNode from "../components/MapNode";
 import React, { useEffect, useRef } from "react";
-import { useAtom } from "jotai";
+import { useAtom, useAtomValue } from "jotai";
 import { useNavigate } from "react-router-dom";
 import { getMapNodes } from "../api";
 
@@ -13,6 +13,7 @@ export default function Map() {
   const [chain, setChain] = useAtom(chainAtom);
   const [currentNode, setCurrentNode] = useAtom(currentNodeAtom);
   const clickSoundRef = useRef<HTMLAudioElement | null>(null);
+  const soundEnabled = useAtomValue(soundEnabledAtom);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -24,13 +25,19 @@ export default function Map() {
   }, []);
 
   useEffect(() => {
+    if (!soundEnabled && clickSoundRef.current) {
+      clickSoundRef.current.pause();
+    }
+  }, [soundEnabled]);
+
+  useEffect(() => {
     getMapNodes()
       .then((data) => setNodes(data || []))
       .catch((err) => console.error("Failed to load map nodes", err));
   }, [setNodes]);
 
   const toggleNode = (id: string) => {
-    if (clickSoundRef.current) {
+    if (soundEnabled && clickSoundRef.current) {
       clickSoundRef.current.currentTime = 0;
       clickSoundRef.current.play().catch(() => {});
     }

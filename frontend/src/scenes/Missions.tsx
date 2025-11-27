@@ -7,6 +7,7 @@ import {
   ratingAtom,
   refreshMissionsAtom,
   userAtom,
+  soundEnabledAtom,
 } from "../store";
 import { useAtom, useAtomValue, useSetAtom } from "jotai";
 
@@ -23,6 +24,7 @@ export default function Missions() {
   const currentMissionsLoadable = useAtomValue(loadable(currentMissionsAtom));
   const [rating] = useAtom(ratingAtom);
   const refreshMissions = useSetAtom(refreshMissionsAtom);
+  const soundEnabled = useAtomValue(soundEnabledAtom);
 
   useEffect(() => {
     acceptSoundRef.current = typeof Audio !== "undefined" ? new Audio("/soundEffects/accept.mp3") : null;
@@ -30,6 +32,12 @@ export default function Missions() {
       acceptSoundRef.current.volume = 0.6;
     }
   }, []);
+
+  useEffect(() => {
+    if (!soundEnabled && acceptSoundRef.current) {
+      acceptSoundRef.current.pause();
+    }
+  }, [soundEnabled]);
 
   const missions =
     missionsLoadable.state === "hasData" ? missionsLoadable.data : [];
@@ -41,7 +49,7 @@ export default function Missions() {
     if (mission && user) {
       try {
         await acceptMission(user.id, mission.id);
-        if (acceptSoundRef.current) {
+        if (soundEnabled && acceptSoundRef.current) {
           acceptSoundRef.current.currentTime = 0;
           acceptSoundRef.current.play().catch(() => {});
         }

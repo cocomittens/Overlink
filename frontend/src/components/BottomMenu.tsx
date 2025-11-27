@@ -7,6 +7,7 @@ import {
   refreshMissionsAtom,
   userAtom,
   softwareAtom,
+  soundEnabledAtom,
 } from "../store";
 import { useAtom, useAtomValue, useSetAtom } from "jotai";
 
@@ -48,6 +49,7 @@ const BottomMenu: React.FC = () => {
   const currentMissionsLoadable = useAtomValue(loadable(currentMissionsAtom));
   const refreshMissions = useSetAtom(refreshMissionsAtom);
   const abandonSoundRef = useRef<HTMLAudioElement | null>(null);
+  const soundEnabled = useAtomValue(soundEnabledAtom);
 
   useEffect(() => {
     abandonSoundRef.current =
@@ -58,6 +60,12 @@ const BottomMenu: React.FC = () => {
       abandonSoundRef.current.volume = 0.6;
     }
   }, []);
+
+  useEffect(() => {
+    if (!soundEnabled && abandonSoundRef.current) {
+      abandonSoundRef.current.pause();
+    }
+  }, [soundEnabled]);
 
   const currentMissions =
     currentMissionsLoadable.state === "hasData"
@@ -101,7 +109,7 @@ const BottomMenu: React.FC = () => {
     if (!user) return;
     try {
       await abandonMission(user.id, missionId);
-      if (abandonSoundRef.current) {
+      if (soundEnabled && abandonSoundRef.current) {
         abandonSoundRef.current.currentTime = 0;
         abandonSoundRef.current.play().catch(() => {});
       }

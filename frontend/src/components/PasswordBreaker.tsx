@@ -5,6 +5,7 @@ interface Props {
   password: string | null;
   start?: boolean;
   onComplete?: () => void;
+  soundEnabled?: boolean;
 }
 interface State {
   lettersGuessed: number;
@@ -15,6 +16,9 @@ interface State {
 export class PasswordBreaker extends React.Component<Props, State> {
   private randomInterval?: ReturnType<typeof setInterval>;
   private beepAudio?: HTMLAudioElement;
+  static defaultProps = {
+    soundEnabled: true,
+  };
 
   constructor(props: Props) {
     super(props);
@@ -41,6 +45,9 @@ export class PasswordBreaker extends React.Component<Props, State> {
   componentDidUpdate(prevProps: Props) {
     if (!prevProps.start && this.props.start) {
       this.startGuessing();
+    }
+    if (prevProps.soundEnabled && !this.props.soundEnabled && this.beepAudio) {
+      this.beepAudio.pause();
     }
   }
 
@@ -86,7 +93,7 @@ export class PasswordBreaker extends React.Component<Props, State> {
       await new Promise((res) => setTimeout(res, speed));
       letters++;
       this.setState({ lettersGuessed: letters, lastGuessedIndex: letters - 1 });
-      if (this.beepAudio) {
+      if (this.beepAudio && this.props.soundEnabled) {
         // Restart the sound to ensure it plays on each guess
         this.beepAudio.currentTime = 0;
         this.beepAudio.play().catch(() => {

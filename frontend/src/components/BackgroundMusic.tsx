@@ -1,4 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
+import { useAtom } from "jotai";
+import { soundEnabledAtom } from "../store";
 
 const TRACKS = [
   "/audio/bg1.mp3",
@@ -22,7 +24,10 @@ const TRACKS = [
 
 export function BackgroundMusic() {
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const resumeOnEnableRef = useRef(false);
+  const initialSoundEnabled = useRef<boolean | null>(null);
   const [paused, setPaused] = useState(false);
+  const [soundEnabled, setSoundEnabled] = useAtom(soundEnabledAtom);
   const [trackIndex, setTrackIndex] = useState(() =>
     Math.floor(Math.random() * TRACKS.length)
   );
@@ -30,6 +35,10 @@ export function BackgroundMusic() {
   useEffect(() => {
     const audio = new Audio(TRACKS[trackIndex]);
     audio.volume = 0.35;
+    if (initialSoundEnabled.current === null) {
+      initialSoundEnabled.current = soundEnabled;
+    }
+    audio.muted = !initialSoundEnabled.current;
     audioRef.current = audio;
 
     const handleEnded = () => {
@@ -37,14 +46,18 @@ export function BackgroundMusic() {
     };
     audio.addEventListener("ended", handleEnded);
 
-    const start = async () => {
-      try {
-        await audio.play();
-      } catch (err) {
-        setPaused(true);
-      }
-    };
-    start();
+    if (initialSoundEnabled.current) {
+      const start = async () => {
+        try {
+          await audio.play();
+        } catch (err) {
+          setPaused(true);
+        }
+      };
+      start();
+    } else {
+      setPaused(true);
+    }
 
     return () => {
       audio.removeEventListener("ended", handleEnded);
@@ -58,15 +71,39 @@ export function BackgroundMusic() {
     if (!audio) return;
     audio.src = TRACKS[trackIndex];
     audio.currentTime = 0;
+    if (!soundEnabled) {
+      audio.pause();
+      setPaused(true);
+      return;
+    }
     audio
       .play()
       .then(() => setPaused(false))
       .catch(() => setPaused(true));
-  }, [trackIndex]);
+  }, [trackIndex, soundEnabled]);
 
-  const toggle = () => {
+  useEffect(() => {
     const audio = audioRef.current;
     if (!audio) return;
+    audio.muted = !soundEnabled;
+    if (!soundEnabled) {
+      resumeOnEnableRef.current = !audio.paused;
+      if (!audio.paused) {
+        audio.pause();
+        setPaused(true);
+      }
+    } else if (resumeOnEnableRef.current) {
+      audio
+        .play()
+        .then(() => setPaused(false))
+        .catch(() => setPaused(true));
+      resumeOnEnableRef.current = false;
+    }
+  }, [soundEnabled]);
+
+  const togglePlayPause = () => {
+    const audio = audioRef.current;
+    if (!audio || !soundEnabled) return;
     if (audio.paused) {
       audio.play();
       setPaused(false);
@@ -76,6 +113,14 @@ export function BackgroundMusic() {
     }
   };
 
+  const toggleSound = () => {
+    const audio = audioRef.current;
+    if (audio && soundEnabled && !audio.paused) {
+      resumeOnEnableRef.current = true;
+    }
+    setSoundEnabled((prev) => !prev);
+  };
+
   const nextTrack = () => {
     setTrackIndex((prev) => (prev + 1) % TRACKS.length);
   };
@@ -83,10 +128,23 @@ export function BackgroundMusic() {
   return (
     <div className="music-controls">
       <button
+        className={`music-toggle`}
+        onClick={toggleSound}
+        aria-label={soundEnabled ? "Turn off sound" : "Turn on sound"}
+        aria-pressed={soundEnabled}
+      >
+        {soundEnabled ? (
+          <span className="material-icons">music_note</span>
+        ) : (
+          <span className="material-icons">music_off</span>
+        )}
+      </button>
+      <button
         className={`music-toggle ${paused ? "paused" : "playing"}`}
-        onClick={toggle}
+        onClick={togglePlayPause}
         aria-label={paused ? "Play music" : "Pause music"}
         aria-pressed={!paused}
+        disabled={!soundEnabled}
       >
         {paused ? (
           <span className="material-icons">play_arrow</span>

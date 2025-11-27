@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import "../styles/login.scss";
 import { PasswordBreaker } from "../components/PasswordBreaker";
 import { useAtom } from "jotai";
-import { currentNodeAtom, nodesAtom, currentSoftwareAtom } from "../store";
+import { currentNodeAtom, nodesAtom, currentSoftwareAtom, soundEnabledAtom } from "../store";
 import { useNavigate } from "react-router-dom";
 
 export default function Login() {
@@ -14,6 +14,7 @@ export default function Login() {
   const [currentNodeData, setCurrentNodeData] = useState<typeof nodes[0] | undefined>(undefined);
   const [isGuessed, setIsGuessed] = useState(false);
   const successSoundRef = useRef<HTMLAudioElement | null>(null);
+  const [soundEnabled] = useAtom(soundEnabledAtom);
 
   const navigate = useNavigate();
   useEffect(() => {
@@ -43,7 +44,7 @@ export default function Login() {
 
   const handleProceed = () => {
     if (isGuessed) {
-      if (successSoundRef.current) {
+      if (soundEnabled && successSoundRef.current) {
         successSoundRef.current.currentTime = 0;
         successSoundRef.current.play().catch(() => {});
       }
@@ -91,6 +92,7 @@ export default function Login() {
         password={currentNodeData?.password || null}
         start={start}
         onComplete={handleComplete}
+        soundEnabled={soundEnabled}
       />
     </>
   );
