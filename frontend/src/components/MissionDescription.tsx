@@ -1,9 +1,8 @@
 import "../styles/missions.scss";
 
-import React, { useEffect, useState } from "react";
+import React from "react";
 
 import { Mission } from "../types/mission";
-import { agentRatings } from "../util/agentRatings";
 
 export function MissionDescription({ mission }: { mission: Mission | null }) {
   return (
@@ -14,10 +13,7 @@ export function MissionDescription({ mission }: { mission: Mission | null }) {
           <span>
             This job has been assigned a difficulty of {mission.difficulty}
           </span>
-          <span>
-            A rating of {agentRatings[mission.minRating]} or above will be
-            sufficient for automatic acceptance.
-          </span>
+          <span>You must be level {mission.minRating} or above to accept.</span>
         </>
       )}
     </div>

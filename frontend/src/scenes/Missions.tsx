@@ -4,7 +4,6 @@ import React, { useEffect, useRef, useState } from "react";
 import {
   currentMissionsAtom,
   missionsAtom,
-  ratingAtom,
   refreshMissionsAtom,
   userAtom,
   soundEnabledAtom,
@@ -15,6 +14,7 @@ import { Mission } from "../types/mission";
 import { MissionDescription } from "../components/MissionDescription";
 import { acceptMission } from "../api";
 import { loadable } from "jotai/utils";
+import { calculateLevelProgress } from "../util/level";
 
 export default function Missions() {
   const [mission, setMission] = useState<number | null>(null);
@@ -22,9 +22,9 @@ export default function Missions() {
   const user = useAtomValue(userAtom);
   const missionsLoadable = useAtomValue(loadable(missionsAtom));
   const currentMissionsLoadable = useAtomValue(loadable(currentMissionsAtom));
-  const [rating] = useAtom(ratingAtom);
   const refreshMissions = useSetAtom(refreshMissionsAtom);
   const soundEnabled = useAtomValue(soundEnabledAtom);
+  const userLevel = calculateLevelProgress(user?.xp ?? 0).level;
 
   useEffect(() => {
     acceptSoundRef.current = typeof Audio !== "undefined" ? new Audio("/soundEffects/accept.mp3") : null;
@@ -100,12 +100,12 @@ export default function Missions() {
       <button
         type="submit"
         className={`${
-          selectedMission && rating > selectedMission.minRating
+          selectedMission && userLevel < selectedMission.minRating
             ? "disabled"
             : ""
         }`}
         onClick={() => selectedMission && handleAccept(selectedMission.id)}
-        disabled={!selectedMission || rating > selectedMission.minRating}
+        disabled={!selectedMission || userLevel < selectedMission.minRating}
       >
         Accept
       </button>

@@ -99,21 +99,77 @@ function initDatabase() {
   }
 
   const nodes = [
-    { id: "personal_gateway", top: 280, left: 190, name: "Gateway", admin: 1, account: 0, active: 0, password: null },
-    { id: "internal_1", top: 500, left: 350, name: "Nordsec Internal Services", admin: 0, account: 1, active: 0, password: "pass123" },
-    { id: "public_access_1", top: 300, left: 800, name: "SilentWave Public Access Server", admin: 0, account: 0, active: 0, password: null },
-    { id: "internal_2", top: 420, left: 420, name: "SilentWave Internal Services", admin: 0, account: 0, active: 0, password: "catslol" },
-    { id: "bank_1", top: 200, left: 250, name: "Helix Finance Group", admin: 1, account: 0, active: 1, password: "rosebud" },
+    {
+      id: "personal_gateway",
+      top: 280,
+      left: 190,
+      name: "Gateway",
+      admin: 1,
+      account: 0,
+      active: 0,
+      password: null,
+    },
+    {
+      id: "internal_1",
+      top: 500,
+      left: 350,
+      name: "Nordsec Internal Services",
+      admin: 0,
+      account: 1,
+      active: 0,
+      password: "pass123",
+    },
+    {
+      id: "public_access_1",
+      top: 300,
+      left: 800,
+      name: "SilentWave Public Access Server",
+      admin: 0,
+      account: 0,
+      active: 0,
+      password: null,
+    },
+    {
+      id: "internal_2",
+      top: 420,
+      left: 420,
+      name: "SilentWave Internal Services",
+      admin: 0,
+      account: 0,
+      active: 0,
+      password: "catslol",
+    },
+    {
+      id: "bank_1",
+      top: 200,
+      left: 250,
+      name: "Helix Finance Group",
+      admin: 1,
+      account: 0,
+      active: 1,
+      password: "rosebud",
+    },
   ];
 
   nodes.forEach((node) => {
-    const existingNode = db.prepare("SELECT id FROM nodes WHERE id = ?").get(node.id);
+    const existingNode = db
+      .prepare("SELECT id FROM nodes WHERE id = ?")
+      .get(node.id);
     if (!existingNode) {
       const stmt = db.prepare(`
         INSERT INTO nodes (id, top, left, name, admin, account, active, password)
         VALUES (?, ?, ?, ?, ?, ?, ?, ?)
       `);
-      stmt.run(node.id, node.top, node.left, node.name, node.admin, node.account, node.active, node.password);
+      stmt.run(
+        node.id,
+        node.top,
+        node.left,
+        node.name,
+        node.admin,
+        node.account,
+        node.active,
+        node.password
+      );
       console.log(`Node added: "${node.name}"`);
     }
   });
@@ -129,7 +185,7 @@ function initDatabase() {
       date: "2023-10-01",
       payment: 900,
       difficulty: 1,
-      minRating: 12,
+      minRating: 1,
     },
     {
       id: 2,
@@ -140,7 +196,7 @@ function initDatabase() {
       date: "2023-10-02",
       payment: 1400,
       difficulty: 2,
-      minRating: 14,
+      minRating: 2,
     },
     {
       id: 3,
@@ -151,7 +207,7 @@ function initDatabase() {
       date: "2023-10-03",
       payment: 1800,
       difficulty: 3,
-      minRating: 15,
+      minRating: 3,
     },
   ];
 
