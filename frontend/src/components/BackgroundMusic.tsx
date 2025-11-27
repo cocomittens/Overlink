@@ -23,8 +23,8 @@ const TRACKS = [
 export function BackgroundMusic() {
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const [paused, setPaused] = useState(false);
-  const [trackIndex, setTrackIndex] = useState(
-    () => Math.floor(Math.random() * TRACKS.length)
+  const [trackIndex, setTrackIndex] = useState(() =>
+    Math.floor(Math.random() * TRACKS.length)
   );
 
   useEffect(() => {
@@ -83,13 +83,13 @@ export function BackgroundMusic() {
   return (
     <div className="music-controls">
       <button
-        className="music-toggle"
+        className={`music-toggle ${paused ? "paused" : "playing"}`}
         onClick={toggle}
         aria-label={paused ? "Play music" : "Pause music"}
         aria-pressed={!paused}
       >
         {paused ? (
-          <span className="material-symbols-outlined">play_arrow</span>
+          <span className="material-icons">play_arrow</span>
         ) : (
           <span className="material-symbols-outlined">pause</span>
         )}
