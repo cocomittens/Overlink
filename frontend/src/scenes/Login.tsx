@@ -1,8 +1,13 @@
 import React, { useEffect, useRef, useState } from "react";
 import "../styles/login.scss";
-import { PasswordBreaker } from "../components/PasswordBreaker";
+import { PasswordBreaker } from "../software/PasswordBreaker";
 import { useAtom } from "jotai";
-import { currentNodeAtom, nodesAtom, currentSoftwareAtom, soundEnabledAtom } from "../store";
+import {
+  currentNodeAtom,
+  nodesAtom,
+  currentSoftwareAtom,
+  soundEnabledAtom,
+} from "../store";
 import { useNavigate } from "react-router-dom";
 
 export default function Login() {
@@ -11,7 +16,9 @@ export default function Login() {
   const [passwordMask, setPasswordMask] = useState("");
   const [currentNode] = useAtom(currentNodeAtom);
   const [nodes] = useAtom(nodesAtom);
-  const [currentNodeData, setCurrentNodeData] = useState<typeof nodes[0] | undefined>(undefined);
+  const [currentNodeData, setCurrentNodeData] = useState<
+    (typeof nodes)[0] | undefined
+  >(undefined);
   const [isGuessed, setIsGuessed] = useState(false);
   const successSoundRef = useRef<HTMLAudioElement | null>(null);
   const [soundEnabled] = useAtom(soundEnabledAtom);
@@ -24,7 +31,9 @@ export default function Login() {
 
   useEffect(() => {
     successSoundRef.current =
-      typeof Audio !== "undefined" ? new Audio("/soundEffects/login_success.mp3") : null;
+      typeof Audio !== "undefined"
+        ? new Audio("/soundEffects/login_success.mp3")
+        : null;
     if (successSoundRef.current) {
       successSoundRef.current.volume = 0.6;
     }
@@ -38,7 +47,9 @@ export default function Login() {
   const handleComplete = () => {
     setIsGuessed(true);
     setPasswordMask(
-      currentNodeData?.password ? "*".repeat(currentNodeData.password.length) : ""
+      currentNodeData?.password
+        ? "*".repeat(currentNodeData.password.length)
+        : ""
     );
   };
 
@@ -50,7 +61,7 @@ export default function Login() {
       }
       navigate("/terminal");
     }
-  }
+  };
 
   return (
     <>
@@ -84,7 +95,11 @@ export default function Login() {
             </div>
           </form>
         </div>
-        <button type="submit" className={`login-button ${!isGuessed && 'disabled'}`} onClick={handleProceed}>
+        <button
+          type="submit"
+          className={`login-button ${!isGuessed && "disabled"}`}
+          onClick={handleProceed}
+        >
           Proceed
         </button>
       </div>

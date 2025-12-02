@@ -47,7 +47,11 @@ function AppContent() {
           const parsed = JSON.parse(stored);
           const hydratedUser = {
             ...parsed,
-            xp: parsed.xp,
+            xp:
+              parsed.xp ??
+              (parsed.username && parsed.username.toLowerCase() === "demo"
+                ? 420
+                : 0),
           };
           setUser(hydratedUser);
           localStorage.setItem("user", JSON.stringify(hydratedUser));

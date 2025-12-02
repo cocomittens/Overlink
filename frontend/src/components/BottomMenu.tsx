@@ -12,7 +12,7 @@ import {
 import { useAtom, useAtomValue, useSetAtom } from "jotai";
 
 import { MissionDetails } from "./MissionDetails";
-import TraceTracker from "./TraceTracker";
+import TraceTracker from "../software/TraceTracker";
 import { HardDrive } from "./HardDrive";
 import { Shop } from "./Shop";
 import { loadable } from "jotai/utils";
@@ -138,16 +138,10 @@ const BottomMenu: React.FC = () => {
           >
             <span className="material-symbols-outlined">widgets</span>
           </li>
-          <li
-            className="message-icon hard-drive"
-            onClick={toggleHardDrive}
-          >
+          <li className="message-icon hard-drive" onClick={toggleHardDrive}>
             <span className="material-symbols-outlined">hard_drive</span>
           </li>
-          <li
-            className="message-icon hard-drive"
-            onClick={toggleShop}
-          >
+          <li className="message-icon hard-drive" onClick={toggleShop}>
             <span className="material-symbols-outlined">shop</span>
           </li>
         </ul>
