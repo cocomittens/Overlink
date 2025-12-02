@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
 import "../styles/terminal.scss";
-import { useAtom } from "jotai";
-import { directoryAtom } from "../store";
+import { useAtom, useSetAtom } from "jotai";
+import { currentNodeAtom, directoryAtom } from "../store";
 import { useNavigate } from "react-router-dom";
 
 export default function FileList() {
-    const [directory] = useAtom(directoryAtom);
+    const [directory, setDirectory] = useAtom(directoryAtom);
+    const setCurrentNode = useSetAtom(currentNodeAtom);
     const navigate = useNavigate();
 
     const handleBack = () => {
@@ -17,16 +18,34 @@ export default function FileList() {
         }
     };
 
+    const handleDisconnect = () => {
+        setCurrentNode(null);
+        setDirectory({ id: "", name: "", data: [] });
+        sessionStorage.setItem("prevComputerPath", "/");
+        sessionStorage.setItem("lastComputerPath", "/");
+        navigate("/");
+    };
+
     return (
         <div className="files-container">
-            <button
-                type="button"
-                className="icon-button violet"
-                aria-label="Go back"
-                onClick={handleBack}
-            >
-                <span className="material-symbols-outlined">arrow_back</span>
-            </button>
+            <div className="icon-row">
+                <button
+                    type="button"
+                    className="icon-button violet"
+                    aria-label="Go back"
+                    onClick={handleBack}
+                >
+                    <span className="material-symbols-outlined">arrow_back</span>
+                </button>
+                <button
+                    type="button"
+                    className="icon-button cyan"
+                    aria-label="Disconnect"
+                    onClick={handleDisconnect}
+                >
+                    <span className="material-symbols-outlined">power_settings_new</span>
+                </button>
+            </div>
             <h2>{directory.name}</h2>
             <table>
                 <thead>

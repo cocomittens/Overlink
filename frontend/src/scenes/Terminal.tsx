@@ -7,7 +7,7 @@ import { loadable } from "jotai/utils";
 import { useAtomValue } from "jotai";
 
 export default function Terminal() {
-    const [currentNode] = useAtom(currentNodeAtom);
+    const [currentNode, setCurrentNode] = useAtom(currentNodeAtom);
     const dataLoadable = useAtomValue(loadable(dataAtom));
     const data = dataLoadable.state === "hasData" ? dataLoadable.data : [];
     const currData = data.find((node: any) => node.id === currentNode);
@@ -26,6 +26,14 @@ export default function Terminal() {
         }
     };
 
+    const handleDisconnect = () => {
+        setCurrentNode(null);
+        setDirectory({ id: "", name: "", data: [] });
+        sessionStorage.setItem("prevComputerPath", "/");
+        sessionStorage.setItem("lastComputerPath", "/");
+        navigate("/");
+    };
+
     const handleClick = (folderId: string) => {
         const folder = currData?.directory.find((f) => f.id === folderId);
         if (folder) {
@@ -37,15 +45,25 @@ export default function Terminal() {
 
     return (
         <div className="terminal">
-            <button
-                type="button"
-                className="icon-button violet"
-                aria-label="Go back"
-                onClick={handleBack}
-                disabled={isMainDirectory}
-            >
-                <span className="material-symbols-outlined">arrow_back</span>
-            </button>
+            <div className="icon-row">
+                <button
+                    type="button"
+                    className="icon-button violet"
+                    aria-label="Go back"
+                    onClick={handleBack}
+                    disabled={isMainDirectory}
+                >
+                    <span className="material-symbols-outlined">arrow_back</span>
+                </button>
+                <button
+                    type="button"
+                    className="icon-button cyan"
+                    aria-label="Disconnect"
+                    onClick={handleDisconnect}
+                >
+                    <span className="material-symbols-outlined">power_settings_new</span>
+                </button>
+            </div>
             <h2>{currData?.name}</h2>
             {currData?.directory.map((folder, index) => (
                 <div key={index} className="folder">

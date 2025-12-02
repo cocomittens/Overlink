@@ -66,7 +66,18 @@ table {
         background: linear-gradient(45deg, vars.$violet-mid 0%, vars.$violet-dark 60%);
     }
 
+    &.cyan {
+        background: linear-gradient(45deg, vars.$cyan-mid 0%, vars.$cyan-dark 60%);
+    }
+
     .material-symbols-outlined {
         font-size: 24px;
     }
+}
+
+.icon-row {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: center;
+    margin-bottom: 0.75rem;
 }
