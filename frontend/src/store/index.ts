@@ -88,11 +88,15 @@ const directoryBaseAtom = atom<{
 
 export const directoryAtom = atom(
   (get) => get(directoryBaseAtom),
-  (_get, set, value: {
-    id: string;
-    name: string;
-    data: { name: string; data: string[] }[];
-  }) => {
+  (
+    _get,
+    set,
+    value: {
+      id: string;
+      name: string;
+      data: { name: string; data: string[] }[];
+    }
+  ) => {
     set(directoryBaseAtom, value);
     writeStorage("currentDirectory", value);
   }
@@ -104,6 +108,8 @@ export const ratingAtom = atom(13);
 export const softwareAtom = atom([
   { id: "trace_tracker", name: "Trace Monitor", version: 2 },
   { id: "password_breaker", name: "Password Cracker", version: 1 },
+  { id: "file_copier", name: "File Copier", version: 1 },
+  { id: "file_deleter", name: "File Deleter", version: 1 },
 ]);
 
 export const currentSoftwareAtom = atom<Set<string>>(new Set<string>());

@@ -9,12 +9,14 @@ type SavedUserListProps = {
   users: SavedUser[];
   onSelect: (user: SavedUser) => void;
   selectedUsername: string | null;
+  usernameOnly?: boolean;
 };
 
 const SavedUserList: React.FC<SavedUserListProps> = ({
   users,
   onSelect,
   selectedUsername,
+  usernameOnly = false,
 }) => {
   const displayUsers = users.slice(0, 5);
 
@@ -31,7 +33,9 @@ const SavedUserList: React.FC<SavedUserListProps> = ({
               }`}
               onClick={() => onSelect(user)}
             >
-              Username: {user.username} Password: {user.password}
+              {usernameOnly
+                ? user.username
+                : `Username: ${user.username} Password: ${user.password}`}
             </button>
           </li>
         ))}

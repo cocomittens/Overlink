@@ -74,6 +74,7 @@ export default function AgentLogin() {
         users={savedUsers}
         onSelect={handleUserSelect}
         selectedUsername={selectedUser}
+        usernameOnly
       />
       <div className="login-container">
         <div className="login-form">
