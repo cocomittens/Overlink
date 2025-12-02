@@ -71,6 +71,7 @@ const FileCopier: React.FC = () => {
       const row = elementAtPoint?.closest(
         "[data-file-name]"
       ) as HTMLElement | null;
+      let shouldSetDown = true;
       if (row) {
         const name = row.dataset.fileName;
         const location = row.dataset.location;
@@ -90,14 +91,17 @@ const FileCopier: React.FC = () => {
             timeoutsRef.current.push(resetTimer);
           }, 500);
           timeoutsRef.current.push(copyTimer);
+          shouldSetDown = false;
         }
       }
-      isDraggingRef.current = false;
-      setDragging(false);
-      setPosition({
-        x: e.clientX - offsetRef.current.dx,
-        y: e.clientY - offsetRef.current.dy,
-      });
+      if (shouldSetDown) {
+        isDraggingRef.current = false;
+        setDragging(false);
+        setPosition({
+          x: e.clientX - offsetRef.current.dx,
+          y: e.clientY - offsetRef.current.dy,
+        });
+      }
     };
 
     window.addEventListener("mousemove", handleMove, true);
