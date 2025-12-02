@@ -193,9 +193,7 @@ const FileCopier: React.FC = () => {
     };
   }, []);
 
-  const handleCancelClick = (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
+  const handleCancelClick = () => {
     timeoutsRef.current.forEach((id) => window.clearTimeout(id));
     timeoutsRef.current = [];
     setLabel("Copier");
@@ -219,7 +217,12 @@ const FileCopier: React.FC = () => {
           e.stopPropagation();
         }}
       >
-        <CancelIcon className="cancel-icon" onClick={handleCancelClick} />
+        <CancelIcon
+          className="cancel-icon"
+          onClick={() => {
+            handleCancelClick();
+          }}
+        />
       </span>
     </div>
   );

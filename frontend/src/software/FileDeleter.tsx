@@ -190,9 +190,7 @@ const FileDeleter: React.FC = () => {
     };
   }, []);
 
-  const handleCancelClick = (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
+  const handleCancelClick = () => {
     handleCancel();
   };
 
@@ -215,7 +213,12 @@ const FileDeleter: React.FC = () => {
           e.stopPropagation();
         }}
       >
-        <CancelIcon className="cancel-icon" onClick={handleCancelClick} />
+        <CancelIcon
+          className="cancel-icon"
+          onClick={() => {
+            handleCancelClick();
+          }}
+        />
       </span>
     </div>
   );
