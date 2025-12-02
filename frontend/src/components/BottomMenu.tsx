@@ -49,6 +49,7 @@ const BottomMenu: React.FC = () => {
   const currentMissionsLoadable = useAtomValue(loadable(currentMissionsAtom));
   const refreshMissions = useSetAtom(refreshMissionsAtom);
   const abandonSoundRef = useRef<HTMLAudioElement | null>(null);
+  const menuSelectSoundRef = useRef<HTMLAudioElement | null>(null);
   const soundEnabled = useAtomValue(soundEnabledAtom);
 
   useEffect(() => {
@@ -59,11 +60,21 @@ const BottomMenu: React.FC = () => {
     if (abandonSoundRef.current) {
       abandonSoundRef.current.volume = 0.6;
     }
+    menuSelectSoundRef.current =
+      typeof Audio !== "undefined"
+        ? new Audio("/soundEffects/menu_select.mp3")
+        : null;
+    if (menuSelectSoundRef.current) {
+      menuSelectSoundRef.current.volume = 0.5;
+    }
   }, []);
 
   useEffect(() => {
     if (!soundEnabled && abandonSoundRef.current) {
       abandonSoundRef.current.pause();
+    }
+    if (!soundEnabled && menuSelectSoundRef.current) {
+      menuSelectSoundRef.current.pause();
     }
   }, [soundEnabled]);
 
@@ -72,7 +83,18 @@ const BottomMenu: React.FC = () => {
       ? currentMissionsLoadable.data
       : [];
 
+  const playMenuSelect = () => {
+    if (!soundEnabled || !menuSelectSoundRef.current) return;
+    try {
+      menuSelectSoundRef.current.currentTime = 0;
+      menuSelectSoundRef.current.play();
+    } catch {
+      /* ignore playback errors */
+    }
+  };
+
   const openMission = (id: number) => {
+    playMenuSelect();
     setSelectedMission((prev) => {
       const next = prev === id ? null : id;
       if (next !== null) {
@@ -84,6 +106,7 @@ const BottomMenu: React.FC = () => {
   };
 
   const toggleHardDrive = () => {
+    playMenuSelect();
     setShowHardDrive((prev) => {
       const next = !prev;
       if (next) {
@@ -95,6 +118,7 @@ const BottomMenu: React.FC = () => {
   };
 
   const toggleShop = () => {
+    playMenuSelect();
     setShowShop((prev) => {
       const next = !prev;
       if (next) {
@@ -103,6 +127,11 @@ const BottomMenu: React.FC = () => {
       }
       return next;
     });
+  };
+
+  const toggleSoftware = () => {
+    playMenuSelect();
+    setShowSoftware((prev) => !prev);
   };
 
   const handleAbandon = async (missionId: number) => {
@@ -132,10 +161,7 @@ const BottomMenu: React.FC = () => {
       <div className="bottom-menu">
         {showSoftware && <SoftwareList />}
         <ul className="left-icons">
-          <li
-            className="software-icon"
-            onClick={() => setShowSoftware(!showSoftware)}
-          >
+          <li className="software-icon" onClick={toggleSoftware}>
             <span className="material-symbols-outlined">widgets</span>
           </li>
           <li className="message-icon hard-drive" onClick={toggleHardDrive}>
