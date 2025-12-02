@@ -49,3 +49,24 @@ table {
         }
     }
 }
+
+.icon-button {
+    width: 40px;
+    height: 40px;
+    border: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    color: #fff;
+    cursor: pointer;
+    margin-bottom: 0.75rem;
+
+    &.violet {
+        background: linear-gradient(45deg, vars.$violet-mid 0%, vars.$violet-dark 60%);
+    }
+
+    .material-symbols-outlined {
+        font-size: 24px;
+    }
+}

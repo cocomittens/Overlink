@@ -14,6 +14,10 @@ export default function Terminal() {
     const [directory, setDirectory] = useAtom(directoryAtom);
     const navigate = useNavigate();
 
+    const handleBack = () => {
+        navigate(-1);
+    };
+
     const handleClick = (folderId: string) => {
         const folder = currData?.directory.find((f) => f.id === folderId);
         if (folder) {
@@ -25,6 +29,14 @@ export default function Terminal() {
 
     return (
         <div className="terminal">
+            <button
+                type="button"
+                className="icon-button violet"
+                aria-label="Go back"
+                onClick={handleBack}
+            >
+                <span className="material-symbols-outlined">arrow_back</span>
+            </button>
             <h2>{currData?.name}</h2>
             {currData?.directory.map((folder, index) => (
                 <div key={index} className="folder">
