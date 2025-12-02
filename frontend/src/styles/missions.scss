@@ -160,16 +160,6 @@ button {
         cursor: pointer;
       }
 
-      // &.selected {
-      //   border: 2px solid vars.$cyan-mid;
-      //   border-top: 1px solid vars.$cyan-mid;
-      //   border-bottom: 1px solid vars.$cyan-mid;
-      //   width: calc(100% - 4px);
-      // }
-
-      // &.selected:first-of-type {
-      //   border-top: 2px solid vars.$cyan-mid;
-      // }
 
       body.deleter-dragging &.selected:hover {
         box-shadow: 0 0 0 2px vars.$pink-mid inset;
