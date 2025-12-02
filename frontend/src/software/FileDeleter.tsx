@@ -108,7 +108,7 @@ const FileDeleter: React.FC = () => {
 
   return (
     <div
-      className="file-copier-widget file-deleter-widget"
+      className={`file-copier-widget file-deleter-widget${dragging ? " dragging" : ""}`}
       style={{
         top: position.y,
         left: position.x,

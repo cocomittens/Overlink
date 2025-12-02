@@ -111,7 +111,7 @@ const FileCopier: React.FC = () => {
 
   return (
     <div
-      className="file-copier-widget"
+      className={`file-copier-widget${dragging ? " dragging" : ""}`}
       style={{
         top: position.y,
         left: position.x,
@@ -126,7 +126,7 @@ const FileCopier: React.FC = () => {
           e.stopPropagation();
         }}
       >
-        <CancelIcon className="cancel-icon" onClick={() => handleCancelClick} />
+        <CancelIcon className="cancel-icon" onClick={handleCancelClick} />
       </span>
     </div>
   );
