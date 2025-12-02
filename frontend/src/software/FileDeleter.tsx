@@ -8,6 +8,7 @@ const FileDeleter: React.FC = () => {
   const [currentSoftware, setCurrentSoftware] = useAtom(currentSoftwareAtom);
   const [hardDrive, setHardDrive] = useAtom(hardDriveAtom);
   const [, setSelectedFile] = useAtom(selectedFileAtom);
+  const [label, setLabel] = useState("Deleter");
   const [position, setPosition] = useState<{ x: number; y: number }>({
     x: typeof window !== "undefined" ? window.innerWidth * 0.78 : 0,
     y: typeof window !== "undefined" ? window.innerHeight * 0.75 : 0,
@@ -16,6 +17,7 @@ const FileDeleter: React.FC = () => {
   const isDraggingRef = useRef(true);
   const justPickedRef = useRef(false);
   const offsetRef = useRef<{ dx: number; dy: number }>({ dx: 0, dy: 0 });
+  const timeoutsRef = useRef<number[]>([]);
 
   function handleCancel() {
     const updatedSoftware = new Set(currentSoftware);
@@ -73,19 +75,28 @@ const FileDeleter: React.FC = () => {
         const location = row.dataset.location;
         if (name) {
           setSelectedFile({ name, location });
-          setHardDrive((prev) => {
-            if (!prev.files.includes(name)) return prev;
-            let removed = false;
-            const nextFiles = prev.files.filter((f) => {
-              if (removed) return true;
-              if (f === name) {
-                removed = true;
-                return false;
-              }
-              return true;
+          setLabel("Deleting...");
+          const deleteTimer = window.setTimeout(() => {
+            setHardDrive((prev) => {
+              if (!prev.files.includes(name)) return prev;
+              let removed = false;
+              const nextFiles = prev.files.filter((f) => {
+                if (removed) return true;
+                if (f === name) {
+                  removed = true;
+                  return false;
+                }
+                return true;
+              });
+              return { ...prev, files: nextFiles };
             });
-            return { ...prev, files: nextFiles };
-          });
+            setLabel("Deleted");
+            const resetTimer = window.setTimeout(() => {
+              setLabel("Deleter");
+            }, 2000);
+            timeoutsRef.current.push(resetTimer);
+          }, 500);
+          timeoutsRef.current.push(deleteTimer);
         }
       }
       isDraggingRef.current = false;
@@ -137,6 +148,13 @@ const FileDeleter: React.FC = () => {
     };
   }, [dragging]);
 
+  useEffect(() => {
+    return () => {
+      timeoutsRef.current.forEach((id) => window.clearTimeout(id));
+      timeoutsRef.current = [];
+    };
+  }, []);
+
   const handleCancelClick = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
@@ -155,7 +173,7 @@ const FileDeleter: React.FC = () => {
       }}
       onMouseDown={pickUp}
     >
-      <span>Deleter</span>
+      <span>{label}</span>
       <span
         onMouseDown={(e) => {
           e.preventDefault();
