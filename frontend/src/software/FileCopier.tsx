@@ -1,14 +1,20 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import "../styles/bottomMenu.scss";
 import CancelIcon from "../components/CancelIcon";
-import { useAtom } from "jotai";
-import { currentSoftwareAtom, hardDriveAtom, selectedFileAtom } from "../store";
+import { useAtom, useAtomValue } from "jotai";
+import {
+  currentSoftwareAtom,
+  hardDriveAtom,
+  selectedFileAtom,
+  soundEnabledAtom,
+} from "../store";
 
 const FileCopier: React.FC = () => {
   const [currentSoftware, setCurrentSoftware] = useAtom(currentSoftwareAtom);
   const [hardDrive, setHardDrive] = useAtom(hardDriveAtom);
   const [selectedFile] = useAtom(selectedFileAtom);
   const [, setSelectedFile] = useAtom(selectedFileAtom);
+  const soundEnabled = useAtomValue(soundEnabledAtom);
   const [label, setLabel] = useState("Copier");
   const [position, setPosition] = useState<{ x: number; y: number }>({
     x: typeof window !== "undefined" ? window.innerWidth * 0.8 : 0,
@@ -19,12 +25,34 @@ const FileCopier: React.FC = () => {
   const justPickedRef = useRef(false);
   const offsetRef = useRef<{ dx: number; dy: number }>({ dx: 0, dy: 0 });
   const timeoutsRef = useRef<number[]>([]);
+  const clickSoundRef = useRef<HTMLAudioElement | null>(null);
 
   function handleCancel() {
     const updatedSoftware = new Set(currentSoftware);
     updatedSoftware.delete("file_copier");
     setCurrentSoftware(updatedSoftware);
   }
+
+  useEffect(() => {
+    clickSoundRef.current =
+      typeof Audio !== "undefined" ? new Audio("/soundEffects/mouse-click.mp3") : null;
+    if (clickSoundRef.current) {
+      clickSoundRef.current.volume = 0.6;
+    }
+  }, []);
+
+  useEffect(() => {
+    if (!soundEnabled && clickSoundRef.current) {
+      clickSoundRef.current.pause();
+    }
+  }, [soundEnabled]);
+
+  const playClick = () => {
+    if (soundEnabled && clickSoundRef.current) {
+      clickSoundRef.current.currentTime = 0;
+      clickSoundRef.current.play().catch(() => {});
+    }
+  };
 
   useEffect(() => {
     const handleMove = (e: MouseEvent) => {
@@ -78,6 +106,7 @@ const FileCopier: React.FC = () => {
         if (name) {
           setSelectedFile({ name, location });
           setLabel("Copying...");
+          playClick();
           const copyTimer = window.setTimeout(() => {
             setHardDrive((prev) => {
               if (prev.files.includes(name)) return prev;
@@ -97,6 +126,7 @@ const FileCopier: React.FC = () => {
       if (shouldSetDown) {
         isDraggingRef.current = false;
         setDragging(false);
+        playClick();
         setPosition({
           x: e.clientX - offsetRef.current.dx,
           y: e.clientY - offsetRef.current.dy,
@@ -125,6 +155,7 @@ const FileCopier: React.FC = () => {
       dx: e.clientX - centerX,
       dy: e.clientY - centerY,
     };
+    playClick();
     isDraggingRef.current = true;
     setDragging(true);
     justPickedRef.current = true;
