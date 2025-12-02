@@ -12,6 +12,8 @@ const FileCopier: React.FC = () => {
   });
   const [dragging, setDragging] = useState(true);
   const isDraggingRef = useRef(true);
+  const justPickedRef = useRef(false);
+  const offsetRef = useRef<{ dx: number; dy: number }>({ dx: 0, dy: 0 });
 
   function handleCancel() {
     const updatedSoftware = new Set(currentSoftware);
@@ -22,38 +24,60 @@ const FileCopier: React.FC = () => {
   useEffect(() => {
     const handleMove = (e: MouseEvent) => {
       if (!isDraggingRef.current) return;
-      setPosition({ x: e.clientX, y: e.clientY });
+      setPosition({
+        x: e.clientX - offsetRef.current.dx,
+        y: e.clientY - offsetRef.current.dy,
+      });
     };
 
-    const handleUp = (e: MouseEvent) => {
+    const handleClick = (e: MouseEvent) => {
       if (!isDraggingRef.current) return;
       const elementAtPoint = document.elementFromPoint(
         e.clientX,
         e.clientY
       ) as HTMLElement | null;
+      if (justPickedRef.current) {
+        justPickedRef.current = false;
+        if (elementAtPoint?.closest(".file-copier-widget")) return;
+      }
       const blocked = elementAtPoint?.closest(".message-icon, .software-icon");
       if (blocked) return;
       isDraggingRef.current = false;
       setDragging(false);
-      setPosition({ x: e.clientX, y: e.clientY });
+      setPosition({
+        x: e.clientX - offsetRef.current.dx,
+        y: e.clientY - offsetRef.current.dy,
+      });
     };
 
     window.addEventListener("mousemove", handleMove, true);
-    window.addEventListener("mouseup", handleUp, true);
+    window.addEventListener("click", handleClick, true);
     return () => {
       window.removeEventListener("mousemove", handleMove, true);
-      window.removeEventListener("mouseup", handleUp, true);
+      window.removeEventListener("click", handleClick, true);
     };
   }, []);
 
   const pickUp = (e: React.MouseEvent) => {
+    if (isDraggingRef.current) return;
     e.preventDefault();
     e.stopPropagation();
     const target = e.target as HTMLElement;
     if (target.closest(".cancel-icon")) return;
+    const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
+    const centerX = rect.left + rect.width / 2;
+    const centerY = rect.top + rect.height / 2;
+    offsetRef.current = {
+      dx: e.clientX - centerX,
+      dy: e.clientY - centerY,
+    };
     isDraggingRef.current = true;
     setDragging(true);
-    setPosition({ x: e.clientX, y: e.clientY });
+    justPickedRef.current = true;
+    setPosition({
+      x: e.clientX - offsetRef.current.dx,
+      y: e.clientY - offsetRef.current.dy,
+    });
   };
 
   const handleCancelClick = (e: React.MouseEvent) => {
