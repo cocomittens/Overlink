@@ -63,6 +63,17 @@ function AppContent() {
     setHydrated(true);
   }, [user, setUser]);
 
+  useEffect(() => {
+    if (location.pathname === "/login" || location.pathname === "/agentLogin") {
+      return;
+    }
+    const lastPath = sessionStorage.getItem("lastComputerPath");
+    if (lastPath && lastPath !== location.pathname) {
+      sessionStorage.setItem("prevComputerPath", lastPath);
+    }
+    sessionStorage.setItem("lastComputerPath", location.pathname);
+  }, [location.pathname]);
+
   return (
     <>
       <NavBar />

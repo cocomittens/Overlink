@@ -9,7 +9,12 @@ export default function FileList() {
     const navigate = useNavigate();
 
     const handleBack = () => {
-        navigate(-1);
+        const prev = sessionStorage.getItem("prevComputerPath");
+        if (prev && prev !== "/login" && prev !== "/agentLogin") {
+            navigate(prev);
+        } else {
+            navigate("/");
+        }
     };
 
     return (

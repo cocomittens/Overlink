@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useAtom } from "jotai";
 import { currentNodeAtom, dataAtom, directoryAtom } from "../store";
 import "../styles/terminal.scss";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { loadable } from "jotai/utils";
 import { useAtomValue } from "jotai";
 
@@ -13,9 +13,17 @@ export default function Terminal() {
     const currData = data.find((node: any) => node.id === currentNode);
     const [directory, setDirectory] = useAtom(directoryAtom);
     const navigate = useNavigate();
+    const location = useLocation();
+    const isMainDirectory = location.pathname === "/terminal";
 
     const handleBack = () => {
-        navigate(-1);
+        if (isMainDirectory) return;
+        const prev = sessionStorage.getItem("prevComputerPath");
+        if (prev && prev !== "/login" && prev !== "/agentLogin") {
+            navigate(prev);
+        } else {
+            navigate("/");
+        }
     };
 
     const handleClick = (folderId: string) => {
@@ -34,6 +42,7 @@ export default function Terminal() {
                 className="icon-button violet"
                 aria-label="Go back"
                 onClick={handleBack}
+                disabled={isMainDirectory}
             >
                 <span className="material-symbols-outlined">arrow_back</span>
             </button>
