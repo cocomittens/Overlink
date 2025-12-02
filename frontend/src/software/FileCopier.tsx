@@ -45,7 +45,9 @@ const FileCopier: React.FC = () => {
       }
       const blocked = elementAtPoint?.closest(".message-icon, .software-icon");
       if (blocked) return;
-      const row = elementAtPoint?.closest("[data-file-name]") as HTMLElement | null;
+      const row = elementAtPoint?.closest(
+        "[data-file-name]"
+      ) as HTMLElement | null;
       if (row) {
         const name = row.dataset.fileName;
         const location = row.dataset.location;

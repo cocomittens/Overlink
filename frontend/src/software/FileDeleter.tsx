@@ -2,10 +2,12 @@ import React, { useEffect, useRef, useState } from "react";
 import "../styles/bottomMenu.scss";
 import CancelIcon from "../components/CancelIcon";
 import { useAtom } from "jotai";
-import { currentSoftwareAtom } from "../store";
+import { currentSoftwareAtom, hardDriveAtom, selectedFileAtom } from "../store";
 
 const FileDeleter: React.FC = () => {
   const [currentSoftware, setCurrentSoftware] = useAtom(currentSoftwareAtom);
+  const [hardDrive, setHardDrive] = useAtom(hardDriveAtom);
+  const [, setSelectedFile] = useAtom(selectedFileAtom);
   const [position, setPosition] = useState<{ x: number; y: number }>({
     x: typeof window !== "undefined" ? window.innerWidth * 0.78 : 0,
     y: typeof window !== "undefined" ? window.innerHeight * 0.75 : 0,
@@ -42,6 +44,24 @@ const FileDeleter: React.FC = () => {
       }
       const blocked = elementAtPoint?.closest(".message-icon, .software-icon");
       if (blocked) return;
+      const row = elementAtPoint?.closest("[data-file-name]") as HTMLElement | null;
+      if (row) {
+        const name = row.dataset.fileName;
+        const location = row.dataset.location;
+        if (name) {
+          setSelectedFile({ name, location });
+          setHardDrive((prev) => {
+            if (!prev.files.includes(name)) return prev;
+            const nextFiles = prev.files.filter((f, idx) => {
+              if (f !== name) return true;
+              // remove first match only
+              const alreadyRemoved = prev.files.indexOf(name) !== idx;
+              return alreadyRemoved;
+            });
+            return { ...prev, files: nextFiles };
+          });
+        }
+      }
       isDraggingRef.current = false;
       setDragging(false);
       setPosition({
@@ -103,7 +123,7 @@ const FileDeleter: React.FC = () => {
           e.stopPropagation();
         }}
       >
-        <CancelIcon className="cancel-icon" onClick={() => handleCancelClick} />
+        <CancelIcon className="cancel-icon" onClick={handleCancelClick} />
       </span>
     </div>
   );
