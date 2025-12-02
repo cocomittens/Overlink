@@ -23,7 +23,7 @@ export function Shop({ onClose }: { onClose: () => void }) {
   };
 
   return (
-    <div className="details-container">
+    <div className="details-container shop">
       <>
         <div
           className="mission-info"

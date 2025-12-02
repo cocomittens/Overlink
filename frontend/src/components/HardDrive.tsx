@@ -50,7 +50,7 @@ export function HardDrive({
             return (
               <div
                 key={idx}
-                className={`hd-bar ${filled ? "selected" : ""}`}
+                className={`hd-bar is-hd ${filled ? "selected" : ""}`}
                 data-file-name={filled ? fileName : undefined}
                 data-location="hard_drive"
               >
