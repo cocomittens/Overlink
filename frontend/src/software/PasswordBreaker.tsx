@@ -15,6 +15,7 @@ interface State {
   lastGuessedIndex: number | null;
   position: { x: number; y: number };
   dragging: boolean;
+  hasDragged: boolean;
 }
 
 export class PasswordBreaker extends React.Component<Props, State> {
@@ -38,6 +39,7 @@ export class PasswordBreaker extends React.Component<Props, State> {
         y: typeof window !== "undefined" ? window.innerHeight * 0.85 : 0,
       },
       dragging: false,
+      hasDragged: false,
     };
     this.beepAudio =
       typeof Audio !== "undefined"
@@ -166,6 +168,7 @@ export class PasswordBreaker extends React.Component<Props, State> {
     this.justPicked = true;
     this.setState({
       dragging: true,
+      hasDragged: true,
       position: {
         x: e.clientX - this.offset.dx,
         y: e.clientY - this.offset.dy,
@@ -181,6 +184,7 @@ export class PasswordBreaker extends React.Component<Props, State> {
       lastGuessedIndex,
       position,
       dragging,
+      hasDragged,
     } = this.state;
 
     // build animated spans for revealed letters then random letters
@@ -207,11 +211,19 @@ export class PasswordBreaker extends React.Component<Props, State> {
         className="password-breaker-container"
         style={{
           position: "fixed",
-          top: position.y,
-          left: position.x,
-          transform: dragging
-            ? "translate(-50%, -50%) scale(1.02)"
-            : "translate(-50%, -50%)",
+          ...(hasDragged
+            ? {
+                top: position.y,
+                left: position.x,
+                transform: dragging
+                  ? "translate(-50%, -50%) scale(1.02)"
+                  : "translate(-50%, -50%)",
+              }
+            : {
+                top: "85vh",
+                left: "50%",
+                transform: "translate(-50%, -50%)",
+              }),
           minWidth: "30vw",
         }}
         onMouseDown={this.handlePickUp}

@@ -34,15 +34,6 @@ const SoftwareList = ({ onSelect }: { onSelect?: () => void }) => {
             setCurrentSoftware((prev) => {
               const next = new Set(prev);
               const alreadyOpen = next.has(item.id);
-              if (item.id === "password_breaker") {
-                if (alreadyOpen) {
-                  next.delete(item.id);
-                } else {
-                  onSelect?.();
-                  next.add(item.id);
-                }
-                return next;
-              }
               if (!alreadyOpen) {
                 onSelect?.();
                 next.add(item.id);
