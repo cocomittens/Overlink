@@ -16,11 +16,13 @@ const SavedUserList: React.FC<SavedUserListProps> = ({
   onSelect,
   selectedUsername,
 }) => {
+  const displayUsers = users.slice(0, 5);
+
   return (
     <div className="saved-user-list">
-      <h3>Saved Users</h3>
+      <h3>Saved Logins</h3>
       <ul>
-        {users.map((user) => (
+        {displayUsers.map((user) => (
           <li key={user.username}>
             <button
               type="button"
@@ -29,7 +31,7 @@ const SavedUserList: React.FC<SavedUserListProps> = ({
               }`}
               onClick={() => onSelect(user)}
             >
-              {user.username}
+              Username: {user.username} Password: {user.password}
             </button>
           </li>
         ))}

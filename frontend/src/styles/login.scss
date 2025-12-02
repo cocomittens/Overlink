@@ -2,8 +2,9 @@
 
 .login-page {
     display: flex;
-    gap: 2rem;
-    align-items: flex-start;
+    flex-direction: column;
+    gap: 1rem;
+    align-items: center;
 }
 
 .login-container {
@@ -18,10 +19,14 @@
 }
 
 .saved-user-list {
-    min-width: 180px;
-    padding: 0.5rem 0;
+    width: 100%;
+    max-width: 320px;
+    padding: 0.5rem 0 1rem;
     background: transparent;
     color: #fff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 
     h3 {
         margin-top: 0;
@@ -34,7 +39,9 @@
         margin: 0;
         display: flex;
         flex-direction: column;
+        align-items: center;
         gap: 0.5rem;
+        width: 100%;
     }
 }
 
@@ -44,7 +51,7 @@
     border: none;
     background: none;
     color: #fff;
-    text-align: left;
+    text-align: center;
     cursor: pointer;
     transition: color 0.2s ease;
 
