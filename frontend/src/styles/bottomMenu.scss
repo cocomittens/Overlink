@@ -39,7 +39,8 @@
 
 .software-list {
   position: absolute;
-  top: -75px;
+  bottom: 90px;
+  left: 8px;
 
   li {
     background: linear-gradient(45deg, vars.$violet-mid 0%, vars.$violet-dark 60%);
@@ -104,5 +105,34 @@
 
   h3 {
     margin: 0;
+  }
+}
+
+.file-copier-widget {
+  position: fixed;
+  color: #fff;
+  width: 8vw;
+  min-width: 140px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.4rem;
+  padding: 0 0.5rem;
+  background: linear-gradient(45deg, vars.$violet-mid 0%, vars.$violet-dark 60%);
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
+  cursor: grab;
+  z-index: 50;
+  user-select: none;
+
+  span:first-child {
+    flex: 1;
+    text-align: center;
+  }
+
+  .cancel-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 }

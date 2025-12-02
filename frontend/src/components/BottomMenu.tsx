@@ -13,6 +13,7 @@ import { useAtom, useAtomValue, useSetAtom } from "jotai";
 
 import { MissionDetails } from "./MissionDetails";
 import TraceTracker from "../software/TraceTracker";
+import FileCopier from "../software/FileCopier";
 import { HardDrive } from "./HardDrive";
 import { Shop } from "./Shop";
 import { loadable } from "jotai/utils";
@@ -186,6 +187,7 @@ const BottomMenu: React.FC = () => {
           })}
         </ul>
         {currentSoftware.has("trace_tracker") && <TraceTracker />}
+        {currentSoftware.has("file_copier") && <FileCopier />}
       </div>
     </>
   );

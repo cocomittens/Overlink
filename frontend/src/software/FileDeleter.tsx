@@ -4,7 +4,7 @@ import CancelIcon from "../components/CancelIcon";
 import { useAtom } from "jotai";
 import { currentSoftwareAtom, traceAtom, traceTimeAtom } from "../store";
 
-const TraceTracker: React.FC = () => {
+const FileDeleter: React.FC = () => {
   const [currentSoftware, setCurrentSoftware] = useAtom(currentSoftwareAtom);
 
   function handleCancel() {
@@ -14,11 +14,11 @@ const TraceTracker: React.FC = () => {
   }
 
   return (
-    <div className="file-copier">
-      <span>File Copier</span>
+    <div className="file-deleter">
+      <span>File Deleter</span>
       <CancelIcon onClick={handleCancel} />
     </div>
   );
 };
 
-export default TraceTracker;
+export default FileDeleter;
