@@ -21,7 +21,7 @@ import { loadable } from "jotai/utils";
 import { abandonMission } from "../api";
 import { useEffect, useRef } from "react";
 
-const SoftwareList = () => {
+const SoftwareList = ({ onSelect }: { onSelect?: () => void }) => {
   const [software] = useAtom(softwareAtom);
   const [currentSoftware, setCurrentSoftware] = useAtom(currentSoftwareAtom);
 
@@ -31,7 +31,24 @@ const SoftwareList = () => {
         <li
           key={item.id}
           onClick={() =>
-            setCurrentSoftware((prev) => new Set(prev).add(item.id))
+            setCurrentSoftware((prev) => {
+              const next = new Set(prev);
+              const alreadyOpen = next.has(item.id);
+              if (item.id === "password_breaker") {
+                if (alreadyOpen) {
+                  next.delete(item.id);
+                } else {
+                  onSelect?.();
+                  next.add(item.id);
+                }
+                return next;
+              }
+              if (!alreadyOpen) {
+                onSelect?.();
+                next.add(item.id);
+              }
+              return alreadyOpen ? prev : next;
+            })
           }
         >
           {item.name}
@@ -52,6 +69,7 @@ const BottomMenu: React.FC = () => {
   const refreshMissions = useSetAtom(refreshMissionsAtom);
   const abandonSoundRef = useRef<HTMLAudioElement | null>(null);
   const menuSelectSoundRef = useRef<HTMLAudioElement | null>(null);
+  const mouseClickSoundRef = useRef<HTMLAudioElement | null>(null);
   const soundEnabled = useAtomValue(soundEnabledAtom);
 
   useEffect(() => {
@@ -69,6 +87,13 @@ const BottomMenu: React.FC = () => {
     if (menuSelectSoundRef.current) {
       menuSelectSoundRef.current.volume = 0.5;
     }
+    mouseClickSoundRef.current =
+      typeof Audio !== "undefined"
+        ? new Audio("/soundEffects/mouse-click.mp3")
+        : null;
+    if (mouseClickSoundRef.current) {
+      mouseClickSoundRef.current.volume = 0.75;
+    }
   }, []);
 
   useEffect(() => {
@@ -77,6 +102,9 @@ const BottomMenu: React.FC = () => {
     }
     if (!soundEnabled && menuSelectSoundRef.current) {
       menuSelectSoundRef.current.pause();
+    }
+    if (!soundEnabled && mouseClickSoundRef.current) {
+      mouseClickSoundRef.current.pause();
     }
   }, [soundEnabled]);
 
@@ -90,6 +118,17 @@ const BottomMenu: React.FC = () => {
     try {
       menuSelectSoundRef.current.currentTime = 0;
       menuSelectSoundRef.current.play();
+    } catch {
+      /* ignore playback errors */
+    }
+  };
+
+  const playMouseClick = () => {
+    if (!soundEnabled || !mouseClickSoundRef.current) return;
+    try {
+      mouseClickSoundRef.current.pause();
+      mouseClickSoundRef.current.currentTime = 0;
+      mouseClickSoundRef.current.play();
     } catch {
       /* ignore playback errors */
     }
@@ -161,7 +200,7 @@ const BottomMenu: React.FC = () => {
       {showHardDrive && <HardDrive onClose={() => setShowHardDrive(false)} />}
       {showShop && <Shop onClose={() => setShowShop(false)} />}
       <div className="bottom-menu">
-        {showSoftware && <SoftwareList />}
+        {showSoftware && <SoftwareList onSelect={playMouseClick} />}
         <ul className="left-icons">
           <li className="software-icon" onClick={toggleSoftware}>
             <span className="material-symbols-outlined">widgets</span>

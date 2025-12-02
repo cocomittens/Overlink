@@ -6,6 +6,7 @@ import {
   currentNodeAtom,
   nodesAtom,
   soundEnabledAtom,
+  currentSoftwareAtom,
 } from "../store";
 import { useNavigate } from "react-router-dom";
 import SavedUserList, { SavedUser } from "../components/SavedUserList";
@@ -17,6 +18,7 @@ export default function Login() {
   const [passwordMask, setPasswordMask] = useState("");
   const [currentNode] = useAtom(currentNodeAtom);
   const [nodes, setNodes] = useAtom(nodesAtom);
+  const [currentSoftware, setCurrentSoftware] = useAtom(currentSoftwareAtom);
   const [currentNodeData, setCurrentNodeData] = useState<
     (typeof nodes)[0] | undefined
   >(undefined);
@@ -195,12 +197,21 @@ export default function Login() {
           selectedUsername={selectedUser}
         />
       </div>
-      <PasswordBreaker
-        password={currentNodeData?.password || null}
-        start={start}
-        onComplete={handleComplete}
-        soundEnabled={soundEnabled}
-      />
+      {currentSoftware.has("password_breaker") && (
+        <PasswordBreaker
+          password={currentNodeData?.password || null}
+          start={start}
+          onComplete={handleComplete}
+          soundEnabled={soundEnabled}
+          onClose={() =>
+            setCurrentSoftware((prev) => {
+              const next = new Set(prev);
+              next.delete("password_breaker");
+              return next;
+            })
+          }
+        />
+      )}
     </>
   );
 }
