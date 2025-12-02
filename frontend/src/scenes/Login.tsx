@@ -9,13 +9,14 @@ import {
 } from "../store";
 import { useNavigate } from "react-router-dom";
 import SavedUserList, { SavedUser } from "../components/SavedUserList";
+import { getMapNodes } from "../api";
 
 export default function Login() {
   const [start, setStart] = useState(false);
   const [username, setUsername] = useState("");
   const [passwordMask, setPasswordMask] = useState("");
   const [currentNode] = useAtom(currentNodeAtom);
-  const [nodes] = useAtom(nodesAtom);
+  const [nodes, setNodes] = useAtom(nodesAtom);
   const [currentNodeData, setCurrentNodeData] = useState<
     (typeof nodes)[0] | undefined
   >(undefined);
@@ -73,6 +74,14 @@ export default function Login() {
     const data = nodes.find((node) => node.id === currentNode);
     setCurrentNodeData(data);
   }, [nodes, currentNode]);
+
+  useEffect(() => {
+    if (nodes.length === 0) {
+      getMapNodes()
+        .then((data) => setNodes(data || []))
+        .catch((err) => console.error("Failed to load map nodes for login", err));
+    }
+  }, [nodes.length, setNodes]);
 
   useEffect(() => {
     successSoundRef.current =
