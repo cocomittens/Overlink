@@ -188,11 +188,13 @@ button {
     gap: 12px;
     height: 10%;
 
+
     .mission-action {
       &:hover {
         background-color: vars.$violet-light;
       }
       background-color: vars.$violet-dark;
+      user-select: none;
       flex: 1 1 0;
       max-width: 33%;
       text-align: center;

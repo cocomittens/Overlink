@@ -1,26 +1,49 @@
 import "../styles/navbar.scss";
 
-import { moneyAtom, userAtom } from "../store";
+import { moneyAtom, soundEnabledAtom, userAtom } from "../store";
 
 import { BackgroundMusic } from "./BackgroundMusic";
 import { Link } from "react-router-dom";
-import React from "react";
-import { useAtom } from "jotai";
+import React, { useEffect, useRef } from "react";
+import { useAtom, useAtomValue } from "jotai";
 import { calculateLevelProgress } from "../util/level";
 
 const NavBar: React.FC = () => {
   const [money] = useAtom(moneyAtom);
   const [user] = useAtom(userAtom);
+  const soundEnabled = useAtomValue(soundEnabledAtom);
+  const mapOpenSoundRef = useRef<HTMLAudioElement | null>(null);
   const currentXp = user?.xp ?? 0;
   const { level, progress } = calculateLevelProgress(currentXp);
   const filledBlocks = Math.round(progress * 10);
+
+  useEffect(() => {
+    mapOpenSoundRef.current =
+      typeof Audio !== "undefined" ? new Audio("/soundEffects/map-open.mp3") : null;
+    if (mapOpenSoundRef.current) {
+      mapOpenSoundRef.current.volume = 0.6;
+    }
+  }, []);
+
+  useEffect(() => {
+    if (!soundEnabled && mapOpenSoundRef.current) {
+      mapOpenSoundRef.current.pause();
+    }
+  }, [soundEnabled]);
+
+  const handleMapOpen = () => {
+    if (soundEnabled && mapOpenSoundRef.current) {
+      mapOpenSoundRef.current.currentTime = 0;
+      mapOpenSoundRef.current.play().catch(() => {});
+    }
+  };
 
   return (
     <nav className="navbar">
       <ul>
         <li className="left-controls">
           <div className="message-icon">
-            <Link to="/map">
+            <Link to="/map" onClick={handleMapOpen}>
               <span className="material-symbols-outlined message-icon">
                 map
               </span>
