@@ -138,7 +138,10 @@
   }
 
   &.dragging {
-    background: linear-gradient(45deg, vars.$cyan-mid 0%, vars.$cyan-dark 60%);
+    outline: 2px solid vars.$cyan-mid;
+    outline-offset: -2px;
+    transform: scale(1.03);
     box-shadow: 0 6px 14px rgba(0, 0, 0, 0.45);
+    pointer-events: none;
   }
 }

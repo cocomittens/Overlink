@@ -158,12 +158,33 @@ button {
 
       &:hover {
         cursor: pointer;
-        background-color: color.mix(vars.$violet-light, #fff, 20%);
       }
 
       &.selected {
-        box-shadow: 0 0 0 1px vars.$cyan-mid inset;
+        border: 2px solid vars.$cyan-mid;
+        border-top: 1px solid vars.$cyan-mid;
+        border-bottom: 1px solid vars.$cyan-mid;
+        width: calc(100% - 4px);
       }
+
+      &.selected:first-of-type {
+        border-top: 2px solid vars.$cyan-mid;
+      }
+
+      &:not(.selected):first-of-type {
+        border-top: 1px solid vars.$cyan-mid;
+      }
+
+      body.deleter-dragging &.selected:hover {
+        border: 2px solid vars.$pink-mid;
+        width: calc(100% - 4px);
+height: calc(100% - 4px);
+      }
+    }
+
+    .hd-bar:not(.selected):first-child,
+    .hd-bar.selected + .hd-bar:not(.selected) {
+      border-top: 1px solid vars.$cyan-mid;
     }
   }
 

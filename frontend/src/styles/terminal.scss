@@ -40,6 +40,17 @@ table {
             &:hover {
                 cursor: pointer;
             }
+
+            body.copier-dragging &[data-file-name]:hover {
+                outline: 2px solid vars.$cyan-mid;
+                outline-offset: -2px;
+            }
+
+            body.deleter-dragging &[data-file-name]:hover {
+                outline: 2px solid vars.$pink-mid;
+                outline-offset: -2px;
+                box-shadow: 0 0 0 2px vars.$pink-mid inset;
+            }
         }
 
         td {

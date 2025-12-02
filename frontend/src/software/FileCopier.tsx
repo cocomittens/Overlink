@@ -35,16 +35,37 @@ const FileCopier: React.FC = () => {
 
     const handleClick = (e: MouseEvent) => {
       if (!isDraggingRef.current) return;
-      const elementAtPoint = document.elementFromPoint(
+      const widget = (e.target as HTMLElement)?.closest(
+        ".file-copier-widget"
+      ) as HTMLElement | null;
+      let elementAtPoint = document.elementFromPoint(
         e.clientX,
         e.clientY
       ) as HTMLElement | null;
+      let restore: (() => void) | null = null;
+      if (widget) {
+        const prev = widget.style.pointerEvents;
+        widget.style.pointerEvents = "none";
+        restore = () => {
+          widget.style.pointerEvents = prev;
+        };
+        elementAtPoint = document.elementFromPoint(
+          e.clientX,
+          e.clientY
+        ) as HTMLElement | null;
+      }
       if (justPickedRef.current) {
         justPickedRef.current = false;
-        if (elementAtPoint?.closest(".file-copier-widget")) return;
+        if (restore) restore();
+        return;
       }
       const blocked = elementAtPoint?.closest(".message-icon, .software-icon");
-      if (blocked) return;
+      if (restore) restore();
+      if (blocked) {
+        isDraggingRef.current = false;
+        setDragging(false);
+        return;
+      }
       const row = elementAtPoint?.closest(
         "[data-file-name]"
       ) as HTMLElement | null;
@@ -102,6 +123,17 @@ const FileCopier: React.FC = () => {
       return { ...prev, files: [...prev.files, selectedFile.name] };
     });
   }, [currentSoftware, selectedFile, setHardDrive]);
+
+  useEffect(() => {
+    if (dragging) {
+      document.body.classList.add("copier-dragging");
+    } else {
+      document.body.classList.remove("copier-dragging");
+    }
+    return () => {
+      document.body.classList.remove("copier-dragging");
+    };
+  }, [dragging]);
 
   const handleCancelClick = (e: React.MouseEvent) => {
     e.preventDefault();

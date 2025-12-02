@@ -48,7 +48,12 @@ export function HardDrive({
             const fileName = hardDrive.files[idx] ?? "";
             const filled = idx < hardDrive.files.length;
             return (
-              <div key={idx} className={`hd-bar ${filled ? "selected" : ""}`}>
+              <div
+                key={idx}
+                className={`hd-bar ${filled ? "selected" : ""}`}
+                data-file-name={filled ? fileName : undefined}
+                data-location="hard_drive"
+              >
                 {fileName}
               </div>
             );

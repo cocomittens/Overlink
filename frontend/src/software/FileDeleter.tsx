@@ -34,17 +34,40 @@ const FileDeleter: React.FC = () => {
 
     const handleClick = (e: MouseEvent) => {
       if (!isDraggingRef.current) return;
-      const elementAtPoint = document.elementFromPoint(
+      const widget = (e.target as HTMLElement)?.closest(
+        ".file-deleter-widget"
+      ) as HTMLElement | null;
+      let elementAtPoint = document.elementFromPoint(
         e.clientX,
         e.clientY
       ) as HTMLElement | null;
+      let restore: (() => void) | null = null;
+      if (widget) {
+        const prev = widget.style.pointerEvents;
+        widget.style.pointerEvents = "none";
+        restore = () => {
+          widget.style.pointerEvents = prev;
+        };
+        elementAtPoint = document.elementFromPoint(
+          e.clientX,
+          e.clientY
+        ) as HTMLElement | null;
+      }
       if (justPickedRef.current) {
         justPickedRef.current = false;
-        if (elementAtPoint?.closest(".file-deleter-widget")) return;
+        if (restore) restore();
+        return;
       }
       const blocked = elementAtPoint?.closest(".message-icon, .software-icon");
-      if (blocked) return;
-      const row = elementAtPoint?.closest("[data-file-name]") as HTMLElement | null;
+      if (restore) restore();
+      if (blocked) {
+        isDraggingRef.current = false;
+        setDragging(false);
+        return;
+      }
+      const row = elementAtPoint?.closest(
+        "[data-file-name]"
+      ) as HTMLElement | null;
       if (row) {
         const name = row.dataset.fileName;
         const location = row.dataset.location;
@@ -52,11 +75,14 @@ const FileDeleter: React.FC = () => {
           setSelectedFile({ name, location });
           setHardDrive((prev) => {
             if (!prev.files.includes(name)) return prev;
-            const nextFiles = prev.files.filter((f, idx) => {
-              if (f !== name) return true;
-              // remove first match only
-              const alreadyRemoved = prev.files.indexOf(name) !== idx;
-              return alreadyRemoved;
+            let removed = false;
+            const nextFiles = prev.files.filter((f) => {
+              if (removed) return true;
+              if (f === name) {
+                removed = true;
+                return false;
+              }
+              return true;
             });
             return { ...prev, files: nextFiles };
           });
@@ -100,6 +126,17 @@ const FileDeleter: React.FC = () => {
     });
   };
 
+  useEffect(() => {
+    if (dragging) {
+      document.body.classList.add("deleter-dragging");
+    } else {
+      document.body.classList.remove("deleter-dragging");
+    }
+    return () => {
+      document.body.classList.remove("deleter-dragging");
+    };
+  }, [dragging]);
+
   const handleCancelClick = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
@@ -108,7 +145,9 @@ const FileDeleter: React.FC = () => {
 
   return (
     <div
-      className={`file-copier-widget file-deleter-widget${dragging ? " dragging" : ""}`}
+      className={`file-copier-widget file-deleter-widget${
+        dragging ? " dragging" : ""
+      }`}
       style={{
         top: position.y,
         left: position.x,
