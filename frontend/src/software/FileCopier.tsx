@@ -9,6 +9,7 @@ const FileCopier: React.FC = () => {
   const [hardDrive, setHardDrive] = useAtom(hardDriveAtom);
   const [selectedFile] = useAtom(selectedFileAtom);
   const [, setSelectedFile] = useAtom(selectedFileAtom);
+  const [label, setLabel] = useState("Copier");
   const [position, setPosition] = useState<{ x: number; y: number }>({
     x: typeof window !== "undefined" ? window.innerWidth * 0.8 : 0,
     y: typeof window !== "undefined" ? window.innerHeight * 0.85 : 0,
@@ -17,6 +18,7 @@ const FileCopier: React.FC = () => {
   const isDraggingRef = useRef(true);
   const justPickedRef = useRef(false);
   const offsetRef = useRef<{ dx: number; dy: number }>({ dx: 0, dy: 0 });
+  const timeoutsRef = useRef<number[]>([]);
 
   function handleCancel() {
     const updatedSoftware = new Set(currentSoftware);
@@ -74,6 +76,20 @@ const FileCopier: React.FC = () => {
         const location = row.dataset.location;
         if (name) {
           setSelectedFile({ name, location });
+          setLabel("Copying...");
+          const copyTimer = window.setTimeout(() => {
+            setHardDrive((prev) => {
+              if (prev.files.includes(name)) return prev;
+              if (prev.files.length >= prev.capacity) return prev;
+              return { ...prev, files: [...prev.files, name] };
+            });
+            setLabel("Copied");
+            const resetTimer = window.setTimeout(() => {
+              setLabel("Copier");
+            }, 2000);
+            timeoutsRef.current.push(resetTimer);
+          }, 500);
+          timeoutsRef.current.push(copyTimer);
         }
       }
       isDraggingRef.current = false;
@@ -135,9 +151,19 @@ const FileCopier: React.FC = () => {
     };
   }, [dragging]);
 
+  useEffect(() => {
+    return () => {
+      timeoutsRef.current.forEach((id) => window.clearTimeout(id));
+      timeoutsRef.current = [];
+    };
+  }, []);
+
   const handleCancelClick = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
+    timeoutsRef.current.forEach((id) => window.clearTimeout(id));
+    timeoutsRef.current = [];
+    setLabel("Copier");
     handleCancel();
   };
 
@@ -151,7 +177,7 @@ const FileCopier: React.FC = () => {
       }}
       onMouseDown={pickUp}
     >
-      <span>Copier</span>
+      <span>{label}</span>
       <span
         onMouseDown={(e) => {
           e.preventDefault();
