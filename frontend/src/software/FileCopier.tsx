@@ -2,10 +2,13 @@ import React, { useEffect, useMemo, useRef, useState } from "react";
 import "../styles/bottomMenu.scss";
 import CancelIcon from "../components/CancelIcon";
 import { useAtom } from "jotai";
-import { currentSoftwareAtom } from "../store";
+import { currentSoftwareAtom, hardDriveAtom, selectedFileAtom } from "../store";
 
 const FileCopier: React.FC = () => {
   const [currentSoftware, setCurrentSoftware] = useAtom(currentSoftwareAtom);
+  const [hardDrive, setHardDrive] = useAtom(hardDriveAtom);
+  const [selectedFile] = useAtom(selectedFileAtom);
+  const [, setSelectedFile] = useAtom(selectedFileAtom);
   const [position, setPosition] = useState<{ x: number; y: number }>({
     x: typeof window !== "undefined" ? window.innerWidth * 0.8 : 0,
     y: typeof window !== "undefined" ? window.innerHeight * 0.85 : 0,
@@ -42,6 +45,14 @@ const FileCopier: React.FC = () => {
       }
       const blocked = elementAtPoint?.closest(".message-icon, .software-icon");
       if (blocked) return;
+      const row = elementAtPoint?.closest("[data-file-name]") as HTMLElement | null;
+      if (row) {
+        const name = row.dataset.fileName;
+        const location = row.dataset.location;
+        if (name) {
+          setSelectedFile({ name, location });
+        }
+      }
       isDraggingRef.current = false;
       setDragging(false);
       setPosition({
@@ -79,6 +90,16 @@ const FileCopier: React.FC = () => {
       y: e.clientY - offsetRef.current.dy,
     });
   };
+
+  useEffect(() => {
+    if (!currentSoftware.has("file_copier")) return;
+    if (!selectedFile) return;
+    setHardDrive((prev) => {
+      if (prev.files.includes(selectedFile.name)) return prev;
+      if (prev.files.length >= prev.capacity) return prev;
+      return { ...prev, files: [...prev.files, selectedFile.name] };
+    });
+  }, [currentSoftware, selectedFile, setHardDrive]);
 
   const handleCancelClick = (e: React.MouseEvent) => {
     e.preventDefault();

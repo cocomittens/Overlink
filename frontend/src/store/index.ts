@@ -114,8 +114,42 @@ export const softwareAtom = atom([
 
 export const currentSoftwareAtom = atom<Set<string>>(new Set<string>());
 
+const hardDriveBaseAtom = atom(
+  readStorage("hardDrive", { capacity: 10, files: [] as string[] })
+);
+export const hardDriveAtom = atom(
+  (get) => get(hardDriveBaseAtom),
+  (
+    get,
+    set,
+    value:
+      | { capacity: number; files: string[] }
+      | ((prev: { capacity: number; files: string[] }) => {
+          capacity: number;
+          files: string[];
+        })
+  ) => {
+    const next =
+      typeof value === "function"
+        ? (
+            value as (prev: { capacity: number; files: string[] }) => {
+              capacity: number;
+              files: string[];
+            }
+          )(get(hardDriveBaseAtom))
+        : value;
+    set(hardDriveBaseAtom, next);
+    writeStorage("hardDrive", next);
+  }
+);
+
 export const traceAtom = atom<number>(0);
 
 export const traceTimeAtom = atom<number>(0);
 
 export const soundEnabledAtom = atom<boolean>(true);
+
+export const selectedFileAtom = atom<{
+  name: string;
+  location?: string;
+} | null>(null);

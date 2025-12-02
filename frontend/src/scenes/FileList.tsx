@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from "react";
 import "../styles/terminal.scss";
 import { useAtom, useSetAtom } from "jotai";
-import { currentNodeAtom, directoryAtom } from "../store";
+import { currentNodeAtom, currentSoftwareAtom, directoryAtom, selectedFileAtom } from "../store";
 import { useNavigate } from "react-router-dom";
 
 export default function FileList() {
     const [directory, setDirectory] = useAtom(directoryAtom);
+    const [currentSoftware] = useAtom(currentSoftwareAtom);
+    const [, setSelectedFile] = useAtom(selectedFileAtom);
     const setCurrentNode = useSetAtom(currentNodeAtom);
     const navigate = useNavigate();
 
@@ -60,13 +62,27 @@ export default function FileList() {
                 <tbody>
                     {directory.data && directory.data.length > 0 &&
                         Array.from({ length: directory.data[0].data.length }).map(
-                            (_, rowIndex) => (
-                                <tr key={rowIndex}>
-                                    {directory.data.map((col, colIndex) => (
-                                        <td key={colIndex}>{col.data[rowIndex]}</td>
-                                    ))}
-                                </tr>
-                            )
+                            (_, rowIndex) => {
+                                const fileName = directory.data[0]?.data[rowIndex] ?? `file-${rowIndex}`;
+                                return (
+                                    <tr
+                                        key={rowIndex}
+                                        data-file-name={fileName}
+                                        data-location={directory.name}
+                                        onClick={() => {
+                                            if (!currentSoftware.has("file_copier")) return;
+                                            setSelectedFile({
+                                                name: fileName,
+                                                location: directory.name,
+                                            });
+                                        }}
+                                    >
+                                        {directory.data.map((col, colIndex) => (
+                                            <td key={colIndex}>{col.data[rowIndex]}</td>
+                                        ))}
+                                    </tr>
+                                );
+                            }
                         )}
                 </tbody>
             </table>
