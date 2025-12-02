@@ -96,14 +96,14 @@ const FileCopier: React.FC = () => {
       }}
       onMouseDown={pickUp}
     >
-      <span>File Copier</span>
+      <span>Copier</span>
       <span
         onMouseDown={(e) => {
           e.preventDefault();
           e.stopPropagation();
         }}
       >
-        <CancelIcon className="cancel-icon" onClick={handleCancelClick} />
+        <CancelIcon className="cancel-icon" onClick={() => handleCancelClick} />
       </span>
     </div>
   );
