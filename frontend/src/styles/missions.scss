@@ -151,6 +151,7 @@ button {
       cursor: default;
       text-shadow: 0 0 4px rgba(0, 0, 0, 0.7);
       font-weight: semibold;
+      font-size: .8rem;
 
       &:nth-child(even) {
         background-color: color.mix(vars.$violet-light, vars.$violet-mid, 50%);
