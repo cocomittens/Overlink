@@ -1,9 +1,14 @@
 import "../styles/map.scss";
 
-import { chainAtom, currentNodeAtom, nodesAtom, soundEnabledAtom } from "../store";
+import {
+  chainAtom,
+  currentNodeAtom,
+  nodesAtom,
+  soundEnabledAtom,
+} from "../store";
 
 import MapNode from "../components/MapNode";
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useMemo, useRef } from "react";
 import { useAtom, useAtomValue } from "jotai";
 import { useNavigate } from "react-router-dom";
 import { getMapNodes } from "../api";
@@ -18,7 +23,9 @@ export default function Map() {
 
   useEffect(() => {
     clickSoundRef.current =
-      typeof Audio !== "undefined" ? new Audio("/soundEffects/map_node_select.mp3") : null;
+      typeof Audio !== "undefined"
+        ? new Audio("/soundEffects/map_node_select.mp3")
+        : null;
     if (clickSoundRef.current) {
       clickSoundRef.current.volume = 0.6;
     }
@@ -35,6 +42,30 @@ export default function Map() {
       .then((data) => setNodes(data || []))
       .catch((err) => console.error("Failed to load map nodes", err));
   }, [setNodes]);
+
+  const nodesWithPct = useMemo(() => {
+    const maxLeft = nodes.reduce((max, n) => Math.max(max, n.left || 0), 1);
+    const maxTop = nodes.reduce((max, n) => Math.max(max, n.top || 0), 1);
+    const overrides: Record<string, Partial<{ xPct: number; yPct: number }>> = {
+      bank_1: { xPct: 30 },
+      public_access_1: { xPct: 75, yPct: 45 },
+      internal_1: { yPct: 70, xPct: 40 },
+      internal_2: { xPct: 60, yPct: 60 },
+      personal_gateway: { xPct: 20, yPct: 30 },
+    };
+    return nodes.map((n) => {
+      const base = {
+        xPct: ((n.left || 0) / maxLeft) * 100,
+        yPct: ((n.top || 0) / maxTop) * 100,
+      };
+      const override = overrides[n.id] ?? {};
+      return {
+        ...n,
+        xPct: override.xPct ?? base.xPct,
+        yPct: override.yPct ?? base.yPct,
+      };
+    });
+  }, [nodes]);
 
   const toggleNode = (id: string) => {
     if (soundEnabled && clickSoundRef.current) {
@@ -76,23 +107,23 @@ export default function Map() {
 
   return (
     <div>
-      <div className="map-container">
+      <div className="map-wrapper">
         <svg
           className="map-lines"
           xmlns="http://www.w3.org/2000/svg"
-          width="100%"
-          height="100%"
+          viewBox="0 0 100 100"
+          preserveAspectRatio="none"
         >
           {chain.map((id, i) => {
             const nextId = chain[i + 1];
             if (!nextId) return null;
-            const from = nodes.find((n) => n.id === id);
-            const to = nodes.find((n) => n.id === nextId);
+            const from = nodesWithPct.find((n) => n.id === id);
+            const to = nodesWithPct.find((n) => n.id === nextId);
             if (!from || !to) return null;
-            const x1 = from.left + 5;
-            const y1 = from.top + 5;
-            const x2 = to.left + 5;
-            const y2 = to.top + 5;
+            const x1 = from.xPct;
+            const y1 = from.yPct;
+            const x2 = to.xPct;
+            const y2 = to.yPct;
             return (
               <line
                 key={`${id}-${nextId}`}
@@ -101,16 +132,17 @@ export default function Map() {
                 x2={x2}
                 y2={y2}
                 stroke="#fff"
-                strokeWidth={2}
+                strokeWidth={0.35}
+                strokeLinecap="round"
               />
             );
           })}
         </svg>
-        {nodes.map((node) => (
+        {nodesWithPct.map((node) => (
           <MapNode
             key={node.id}
-            top={node.top}
-            left={node.left}
+            xPct={node.xPct}
+            yPct={node.yPct}
             name={node.name}
             active={node.active}
             admin={node.admin}
