@@ -81,7 +81,9 @@ export default function Login() {
     if (nodes.length === 0) {
       getMapNodes()
         .then((data) => setNodes(data || []))
-        .catch((err) => console.error("Failed to load map nodes for login", err));
+        .catch((err) =>
+          console.error("Failed to load map nodes for login", err)
+        );
     }
   }, [nodes.length, setNodes]);
 
@@ -156,7 +158,7 @@ export default function Login() {
         <div className="login-container">
           <h2>{currentNodeData?.name || currentNode}</h2>
           <div className="login-form">
-            <h2>User Authorization Required</h2>
+            <h3>User Authorization Required</h3>
             <form>
               <div className="form-group">
                 <label htmlFor="username">Name</label>

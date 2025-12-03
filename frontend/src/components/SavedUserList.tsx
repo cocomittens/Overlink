@@ -18,7 +18,7 @@ const SavedUserList: React.FC<SavedUserListProps> = ({
   selectedUsername,
   usernameOnly = false,
 }) => {
-  const displayUsers = users.slice(0, 5);
+  const displayUsers = users.slice(0, 3);
 
   return (
     <div className="saved-user-list">

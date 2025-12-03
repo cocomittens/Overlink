@@ -135,17 +135,7 @@ export class PasswordBreaker extends React.Component<Props, State> {
       : null;
 
     return (
-      <div
-        className="password-breaker-container"
-        style={{
-          position: "fixed",
-          top: "85vh",
-          left: "50%",
-          transform: "translate(-50%, -50%)",
-          minWidth: "30vw",
-          zIndex: 2,
-        }}
-      >
+      <div className="password-breaker-container" style={{}}>
         <div
           style={{
             position: "absolute",
