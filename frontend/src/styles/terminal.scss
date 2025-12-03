@@ -3,6 +3,18 @@
 
 $table-stripe: rgba(40, 40, 40, .5);
 
+.terminal, .files-container {
+    display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  height: 100vh;
+  margin-top: 20vh;
+
+  h2 {
+    margin-top: 1vh;
+    margin-bottom: 1vh;
+  }
+}
 
 a {
     cursor: pointer;
@@ -97,5 +109,4 @@ table {
     display: flex;
     gap: 0.5rem;
     justify-content: center;
-    margin-bottom: 0.75rem;
 }
