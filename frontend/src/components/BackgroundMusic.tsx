@@ -8,7 +8,7 @@ const TRACKS = [
   "/audio/bg3.mp3",
   "/audio/bg4.mp3",
   "/audio/bg5.mp3",
-  "/audio/bg6.mp3",
+  // "/audio/bg6.mp3",
   "/audio/bg7.mp3",
   "/audio/bg8.mp3",
   "/audio/bg9.mp3",
