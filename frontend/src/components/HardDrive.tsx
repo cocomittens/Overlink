@@ -3,7 +3,7 @@ import "../styles/missions.scss";
 import React from "react";
 import { useAtomValue } from "jotai";
 import { hardDriveAtom } from "../store";
-
+import CancelIcon from "./CancelIcon";
 export function HardDrive({
   onClose,
   barCount = 10,
@@ -35,7 +35,8 @@ export function HardDrive({
             paddingTop: "1%",
           }}
         >
-          Hard Drive
+          <span>Hard Drive</span>
+          <CancelIcon onClick={handleClose} aria-label="Close hard drive" />
         </div>
         <div className="small-field">
           Space: {hardDrive.capacity}GB, Files: {hardDrive.files.length}

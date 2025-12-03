@@ -1,6 +1,7 @@
 import "../styles/missions.scss";
 
 import React, { useState } from "react";
+import CancelIcon from "./CancelIcon";
 
 export function Shop({ onClose }: { onClose: () => void }) {
   const handleClose = (e: React.MouseEvent | React.KeyboardEvent) => {
@@ -35,7 +36,8 @@ export function Shop({ onClose }: { onClose: () => void }) {
           }}
         >
           <div className="header" style={{ paddingTop: "1%" }}>
-            Shop
+            <span>Shop</span>
+            <CancelIcon onClick={handleClose} aria-label="Close shop" />
           </div>
 
           <div
