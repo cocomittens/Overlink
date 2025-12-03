@@ -39,7 +39,11 @@ export function HardDrive({
           <CancelIcon onClick={handleClose} aria-label="Close hard drive" />
         </div>
         <div className="small-field">
-          Space: {hardDrive.capacity}GB, Files: {hardDrive.files.length}
+          <strong>Capacity:</strong> {hardDrive.capacity}GB
+        </div>
+        <div className="small-field">
+          <strong>Remaining:</strong>{" "}
+          {hardDrive.capacity - hardDrive.files.length}GB
         </div>
 
         <div className="harddrive-bars">

@@ -43,11 +43,19 @@ export function UserProfile({ onClose }: { onClose: () => void }) {
           <span>User details</span>
           <CancelIcon onClick={handleClose} aria-label="Close user details" />
         </div>
-        <div className="mission-info-body">
-          <div className="small-field">Username: {user?.username ?? "—"}</div>
+        <div
+          className="mission-info-body"
+          style={{ justifyContent: "flex-start", gap: "1vh" }}
+        >
           <div className="small-field">
-            Level: {user ? Math.floor((user.xp ?? 0) / 100) : 0} / XP:{" "}
-            {user?.xp ?? 0}
+            <strong>Username:</strong> {user?.username ?? "—"}
+          </div>
+          <div className="small-field">
+            <strong>Level:</strong>{" "}
+            {user ? Math.floor((user.xp ?? 0) / 100) : 0} / XP: {user?.xp ?? 0}
+          </div>
+          <div className="small-field">
+            <strong>Completed missions:</strong> {user?.completedMissions ?? 0}
           </div>
         </div>
         <div className="action-buttons">
