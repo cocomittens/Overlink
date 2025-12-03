@@ -1,10 +1,15 @@
 import "../styles/navbar.scss";
 
-import { moneyAtom, soundEnabledAtom, userAtom } from "../store";
+import {
+  moneyAtom,
+  soundEnabledAtom,
+  userAtom,
+  currentNodeAtom,
+} from "../store";
 
 import { BackgroundMusic } from "./BackgroundMusic";
-import { Link } from "react-router-dom";
-import React, { useEffect, useRef } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import React, { useEffect, useRef, useCallback } from "react";
 import { useAtom, useAtomValue } from "jotai";
 import { calculateLevelProgress } from "../util/level";
 
@@ -12,7 +17,9 @@ const NavBar: React.FC = () => {
   const [money] = useAtom(moneyAtom);
   const [user] = useAtom(userAtom);
   const soundEnabled = useAtomValue(soundEnabledAtom);
+  const currentNode = useAtomValue(currentNodeAtom);
   const menuOpenSoundRef = useRef<HTMLAudioElement | null>(null);
+  const navigate = useNavigate();
   const currentXp = user?.xp ?? 0;
   const { level, progress } = calculateLevelProgress(currentXp);
   const filledBlocks = Math.round(progress * 10);
@@ -40,16 +47,34 @@ const NavBar: React.FC = () => {
     }
   };
 
+  const handleHome = useCallback(
+    (e: React.MouseEvent) => {
+      e.preventDefault();
+      playMenuOpen();
+      if (currentNode) {
+        const lastPath = sessionStorage.getItem("lastComputerPath");
+        const target =
+          lastPath && (lastPath.startsWith("/terminal") || lastPath.startsWith("/files"))
+            ? lastPath
+            : "/terminal";
+        navigate(target);
+      } else {
+        navigate("/");
+      }
+    },
+    [currentNode, navigate, playMenuOpen]
+  );
+
   return (
     <nav className="navbar">
       <ul>
         <li className="left-controls">
           <div className="message-icon">
-            <Link to="/" onClick={playMenuOpen}>
+            <a href="/" onClick={handleHome}>
               <span className="material-symbols-outlined message-icon">
                 home
               </span>
-            </Link>
+            </a>
           </div>
           <div className="message-icon">
             <Link to="/map" onClick={playMenuOpen}>
