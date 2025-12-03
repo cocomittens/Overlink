@@ -102,7 +102,7 @@ const FileDeleter: React.FC = () => {
       if (row) {
         const name = row.dataset.fileName;
         const location = row.dataset.location;
-        if (name) {
+        if (name && location === "hard_drive") {
           setSelectedFile({ name, location });
           setLabel("Deleting...");
           playClick();
