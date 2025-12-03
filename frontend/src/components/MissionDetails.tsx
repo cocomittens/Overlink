@@ -5,6 +5,7 @@ import React from "react";
 import { currentMissionsAtom } from "../store";
 import { loadable } from "jotai/utils";
 import { useAtomValue } from "jotai";
+import CancelIcon from "../components/CancelIcon";
 
 export function MissionDetails({
   missionId,
@@ -49,7 +50,13 @@ export function MissionDetails({
       {mission ? (
         <>
           <div className="mission-info">
-            <div className="header">Mission</div>
+            <div className="header">
+              <span>Mission</span>
+              <CancelIcon
+                onClick={handleClose}
+                aria-label="Close mission details"
+              />
+            </div>
             <div className="small-field">{mission.title}</div>
             <div className="small-field">
               <strong>Employer:</strong> {mission.employer}
@@ -63,22 +70,8 @@ export function MissionDetails({
             </div>
           </div>
           <div className="action-buttons">
-            <div
-              className="mission-action"
-              onClick={handleClose}
-              role="button"
-              tabIndex={0}
-              onKeyDown={(e) => {
-                if (e.key === "Enter" || e.key === " ") {
-                  e.preventDefault();
-                  handleClose(e);
-                }
-              }}
-            >
-              <span>Close</span>
-            </div>
             <div className="mission-action">
-              <span>Reply</span>
+              <span>Complete</span>
             </div>
             <div className="mission-action">
               <span
@@ -92,7 +85,7 @@ export function MissionDetails({
                   }
                 }}
               >
-                Abandon
+                Abort
               </span>
             </div>
           </div>

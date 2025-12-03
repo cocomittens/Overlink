@@ -109,7 +109,7 @@ button {
   bottom: 90px;
   max-height: 70vh;
   border-radius: 4px;
-  z-index: 0;
+  z-index: 1;
   .mission-info {
     display: flex;
     flex-direction: column;
@@ -121,6 +121,16 @@ button {
   .header {
     text-align: center;
     font-weight: bold;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    svg {
+      position: absolute;
+      right: 8px;
+      &:hover {
+        cursor: pointer;
+      }
+    }
   }
   .small-field {
     background-color: vars.$violet-dark;
@@ -184,7 +194,7 @@ button {
     bottom: 0;
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: space-evenly;
     padding: 0 12px;
     gap: 12px;
     height: 10%;
@@ -197,7 +207,8 @@ button {
       background-color: vars.$violet-dark;
       user-select: none;
       flex: 1 1 0;
-      max-width: 33%;
+      max-width: 48%;
+      border-radius: 4px;
       text-align: center;
       height: 80%;
       display: flex;
