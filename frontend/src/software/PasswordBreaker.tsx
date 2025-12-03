@@ -13,17 +13,11 @@ interface State {
   lettersGuessed: number;
   randomSuffix: string;
   lastGuessedIndex: number | null;
-  position: { x: number; y: number };
-  dragging: boolean;
-  hasDragged: boolean;
 }
 
 export class PasswordBreaker extends React.Component<Props, State> {
   private randomInterval?: ReturnType<typeof setInterval>;
   private beepAudio?: HTMLAudioElement;
-  private isDragging = false;
-  private offset = { dx: 0, dy: 0 };
-  private justPicked = false;
   static defaultProps = {
     soundEnabled: true,
   };
@@ -34,12 +28,6 @@ export class PasswordBreaker extends React.Component<Props, State> {
       lettersGuessed: 0,
       randomSuffix: "",
       lastGuessedIndex: null,
-      position: {
-        x: typeof window !== "undefined" ? window.innerWidth / 2 : 0,
-        y: typeof window !== "undefined" ? window.innerHeight * 0.85 : 0,
-      },
-      dragging: false,
-      hasDragged: false,
     };
     this.beepAudio =
       typeof Audio !== "undefined"
@@ -54,8 +42,6 @@ export class PasswordBreaker extends React.Component<Props, State> {
     if (this.props.start) {
       this.startGuessing();
     }
-    window.addEventListener("mousemove", this.handleMove, true);
-    window.addEventListener("click", this.handleClick, true);
   }
 
   componentDidUpdate(prevProps: Props) {
@@ -69,8 +55,6 @@ export class PasswordBreaker extends React.Component<Props, State> {
 
   componentWillUnmount() {
     if (this.randomInterval) clearInterval(this.randomInterval);
-    window.removeEventListener("mousemove", this.handleMove, true);
-    window.removeEventListener("click", this.handleClick, true);
   }
 
   private randomString(length: number): string {
@@ -127,65 +111,9 @@ export class PasswordBreaker extends React.Component<Props, State> {
     }
   }
 
-  private handleMove = (e: MouseEvent) => {
-    if (!this.isDragging) return;
-    this.setState({
-      position: {
-        x: e.clientX - this.offset.dx,
-        y: e.clientY - this.offset.dy,
-      },
-    });
-  };
-
-  private handleClick = (e: MouseEvent) => {
-    if (!this.isDragging) return;
-    if (this.justPicked) {
-      this.justPicked = false;
-      return;
-    }
-    this.isDragging = false;
-    this.setState({
-      dragging: false,
-      position: {
-        x: e.clientX - this.offset.dx,
-        y: e.clientY - this.offset.dy,
-      },
-    });
-  };
-
-  private handlePickUp = (e: React.MouseEvent) => {
-    if (this.isDragging) return;
-    e.preventDefault();
-    e.stopPropagation();
-    const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
-    const centerX = rect.left + rect.width / 2;
-    const centerY = rect.top + rect.height / 2;
-    this.offset = {
-      dx: e.clientX - centerX,
-      dy: e.clientY - centerY,
-    };
-    this.isDragging = true;
-    this.justPicked = true;
-    this.setState({
-      dragging: true,
-      hasDragged: true,
-      position: {
-        x: e.clientX - this.offset.dx,
-        y: e.clientY - this.offset.dy,
-      },
-    });
-  };
-
   render() {
     const { password } = this.props;
-    const {
-      lettersGuessed,
-      randomSuffix,
-      lastGuessedIndex,
-      position,
-      dragging,
-      hasDragged,
-    } = this.state;
+    const { lettersGuessed, randomSuffix, lastGuessedIndex } = this.state;
 
     // build animated spans for revealed letters then random letters
     const content = password
@@ -211,22 +139,12 @@ export class PasswordBreaker extends React.Component<Props, State> {
         className="password-breaker-container"
         style={{
           position: "fixed",
-          ...(hasDragged
-            ? {
-                top: position.y,
-                left: position.x,
-                transform: dragging
-                  ? "translate(-50%, -50%) scale(1.02)"
-                  : "translate(-50%, -50%)",
-              }
-            : {
-                top: "85vh",
-                left: "50%",
-                transform: "translate(-50%, -50%)",
-              }),
+          top: "85vh",
+          left: "50%",
+          transform: "translate(-50%, -50%)",
           minWidth: "30vw",
+          zIndex: 2,
         }}
-        onMouseDown={this.handlePickUp}
       >
         <div
           style={{
@@ -234,9 +152,9 @@ export class PasswordBreaker extends React.Component<Props, State> {
             top: 4,
             right: 4,
             cursor: "pointer",
+            pointerEvents: "auto",
           }}
-          onClick={(e) => {
-            e.stopPropagation();
+          onClick={() => {
             this.props.onClose?.();
           }}
         >
