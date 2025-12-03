@@ -41,7 +41,12 @@ export function Shop({ onClose }: { onClose: () => void }) {
         <div className="mission-info-body">
           <div
             className="small-field"
-            style={{ minHeight: "65%", overflow: "auto" }}
+            style={{
+              minHeight: "65%",
+              overflow: "auto",
+              backgroundColor: "transparent",
+              padding: 0,
+            }}
           >
             <div className="harddrive-bars">
               {placeholderItems.map((item, idx) => (
