@@ -40,7 +40,7 @@ export function UserProfile({ onClose }: { onClose: () => void }) {
     <div className="details-container user-profile">
       <div className="mission-info">
         <div className="header" style={{ padding: "1%" }}>
-          <span>User details</span>
+          <span>User Details</span>
           <CancelIcon onClick={handleClose} aria-label="Close user details" />
         </div>
         <div
