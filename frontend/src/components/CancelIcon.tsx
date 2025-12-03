@@ -1,4 +1,6 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
+import { useAtomValue } from "jotai";
+import { soundEnabledAtom } from "../store";
 
 const CancelIcon: React.FC<{
   size?: number;
@@ -11,6 +13,31 @@ const CancelIcon: React.FC<{
   className = "",
   onClick = () => {},
 }) => {
+  const soundEnabled = useAtomValue(soundEnabledAtom);
+  const closeSoundRef = useRef<HTMLAudioElement | null>(null);
+
+  useEffect(() => {
+    closeSoundRef.current =
+      typeof Audio !== "undefined"
+        ? new Audio("/soundEffects/mouse-click.mp3")
+        : null;
+    if (closeSoundRef.current) {
+      closeSoundRef.current.volume = 0.6;
+    }
+  }, []);
+
+  const handleClick = (e: React.MouseEvent | React.KeyboardEvent) => {
+    if (soundEnabled && closeSoundRef.current) {
+      try {
+        closeSoundRef.current.currentTime = 0;
+        closeSoundRef.current.play();
+      } catch {
+        /* ignore playback errors */
+      }
+    }
+    onClick?.(e);
+  };
+
   return (
     <svg
       width={size}
@@ -19,7 +46,7 @@ const CancelIcon: React.FC<{
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       className={className}
-      onClick={onClick}
+      onClick={handleClick}
     >
       <circle cx="12" cy="12" r="12" fill="none" />
       <line
