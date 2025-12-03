@@ -26,6 +26,32 @@ module.exports = [
             ],
           },
         ],
+        folders: [
+          {
+            id: "reports_folder",
+            name: "Reports Folder",
+            data: [
+              {
+                name: "Filename",
+                data: ["q3_summary.pdf", "forecast.xlsx"],
+              },
+              {
+                name: "Notes",
+                data: ["finance", "next steps"],
+              },
+            ],
+          },
+          {
+            id: "archives_folder",
+            name: "Archives",
+            data: [
+              {
+                name: "Filename",
+                data: ["backup_2022.zip", "audit_2021.log"],
+              },
+            ],
+          },
+        ],
       },
       {
         id: "view_logs",
@@ -55,6 +81,18 @@ module.exports = [
               "sample_data_1337",
               "sample_data_42",
               "auth.txt",
+            ],
+          },
+        ],
+        folders: [
+          {
+            id: "reports_folder_sw",
+            name: "Internal Reports",
+            data: [
+              {
+                name: "Filename",
+                data: ["incident.log", "ops-notes.txt"],
+              },
             ],
           },
         ],
@@ -89,6 +127,18 @@ module.exports = [
             data: ["q3 projections", "pending wires", "internal audit"],
           },
         ],
+        folders: [
+          {
+            id: "finance_ops",
+            name: "Finance Ops",
+            data: [
+              {
+                name: "Filename",
+                data: ["ops_checklist.docx", "fraud_watch.csv"],
+              },
+            ],
+          },
+        ],
       },
       {
         id: "view_logs",
@@ -118,6 +168,18 @@ module.exports = [
               "sample_data_1337",
               "sample_data_42",
               "auth.txt",
+            ],
+          },
+        ],
+        folders: [
+          {
+            id: "internal_archives",
+            name: "Internal Archives",
+            data: [
+              {
+                name: "Filename",
+                data: ["system_backup.tar", "readme.txt"],
+              },
             ],
           },
         ],

@@ -80,23 +80,20 @@ export const dataAtom = atom<Promise<any[]>>(async () => {
   return await getNodeData();
 });
 
-const directoryBaseAtom = atom<{
+export type Directory = {
   id: string;
   name: string;
   data: { name: string; data: string[] }[];
-}>(readStorage("currentDirectory", { id: "", name: "", data: [] }));
+  folders?: Directory[];
+};
+
+const directoryBaseAtom = atom<Directory>(
+  readStorage("currentDirectory", { id: "", name: "", data: [] })
+);
 
 export const directoryAtom = atom(
   (get) => get(directoryBaseAtom),
-  (
-    _get,
-    set,
-    value: {
-      id: string;
-      name: string;
-      data: { name: string; data: string[] }[];
-    }
-  ) => {
+  (_get, set, value: Directory) => {
     set(directoryBaseAtom, value);
     writeStorage("currentDirectory", value);
   }

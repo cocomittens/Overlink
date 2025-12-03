@@ -6,6 +6,7 @@ import {
   currentSoftwareAtom,
   directoryAtom,
   selectedFileAtom,
+  Directory,
 } from "../store";
 import { useNavigate } from "react-router-dom";
 
@@ -33,6 +34,10 @@ export default function FileList() {
     navigate("/");
   };
 
+  const handleFolderClick = (folder: Directory) => {
+    setDirectory(folder);
+  };
+
   return (
     <div className="files-container">
       <div className="icon-row">
@@ -54,43 +59,58 @@ export default function FileList() {
         </button>
       </div>
       <h2>{directory.name}</h2>
-      <table>
-        <thead>
-          <tr>
-            {directory.data?.map((col, index) => (
-              <th key={index}>{col.name}</th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>
-          {directory.data &&
-            directory.data.length > 0 &&
-            Array.from({ length: directory.data[0].data.length }).map(
-              (_, rowIndex) => {
-                const fileName =
-                  directory.data[0]?.data[rowIndex] ?? `file-${rowIndex}`;
-                return (
-                  <tr
-                    key={rowIndex}
-                    data-file-name={fileName}
-                    data-location={directory.name}
-                    onClick={() => {
-                      if (!currentSoftware.has("file_copier")) return;
-                      setSelectedFile({
-                        name: fileName,
-                        location: directory.name,
-                      });
-                    }}
-                  >
-                    {directory.data.map((col, colIndex) => (
-                      <td key={colIndex}>{col.data[rowIndex]}</td>
-                    ))}
-                  </tr>
-                );
-              }
-            )}
-        </tbody>
-      </table>
+      {directory.folders && directory.folders.length > 0 && (
+        <div className="folder-list">
+          {directory.folders.map((folder) => (
+            <div
+              key={folder.id}
+              className="folder"
+              onClick={() => handleFolderClick(folder)}
+            >
+              <a className="folder-name">{folder.name}</a>
+            </div>
+          ))}
+        </div>
+      )}
+      {(!directory.folders || directory.folders.length === 0) && (
+        <table>
+          <thead>
+            <tr>
+              {directory.data?.map((col, index) => (
+                <th key={index}>{col.name}</th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {directory.data &&
+              directory.data.length > 0 &&
+              Array.from({ length: directory.data[0].data.length }).map(
+                (_, rowIndex) => {
+                  const fileName =
+                    directory.data[0]?.data[rowIndex] ?? `file-${rowIndex}`;
+                  return (
+                    <tr
+                      key={rowIndex}
+                      data-file-name={fileName}
+                      data-location={directory.name}
+                      onClick={() => {
+                        if (!currentSoftware.has("file_copier")) return;
+                        setSelectedFile({
+                          name: fileName,
+                          location: directory.name,
+                        });
+                      }}
+                    >
+                      {directory.data.map((col, colIndex) => (
+                        <td key={colIndex}>{col.data[rowIndex]}</td>
+                      ))}
+                    </tr>
+                  );
+                }
+              )}
+          </tbody>
+        </table>
+      )}
     </div>
   );
 }

@@ -44,7 +44,6 @@ export function Shop({ onClose }: { onClose: () => void }) {
             style={{
               minHeight: "65%",
               overflow: "auto",
-              backgroundColor: "transparent",
               padding: 0,
             }}
           >
