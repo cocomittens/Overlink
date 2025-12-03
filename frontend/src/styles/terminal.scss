@@ -8,7 +8,8 @@ $table-stripe: rgba(40, 40, 40, .5);
   flex-direction: column;
   justify-content: flex-start;
   height: 100vh;
-  margin-top: 20vh;
+  position: relative;
+  top: 20vh;
 
   h2 {
     margin-top: 1vh;

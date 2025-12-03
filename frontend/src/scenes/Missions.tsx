@@ -27,7 +27,10 @@ export default function Missions() {
   const userLevel = calculateLevelProgress(user?.xp ?? 0).level;
 
   useEffect(() => {
-    acceptSoundRef.current = typeof Audio !== "undefined" ? new Audio("/soundEffects/accept.mp3") : null;
+    acceptSoundRef.current =
+      typeof Audio !== "undefined"
+        ? new Audio("/soundEffects/accept.mp3")
+        : null;
     if (acceptSoundRef.current) {
       acceptSoundRef.current.volume = 0.6;
     }
@@ -53,7 +56,6 @@ export default function Missions() {
           acceptSoundRef.current.currentTime = 0;
           acceptSoundRef.current.play().catch(() => {});
         }
-        // Refresh missions to update the lists
         refreshMissions();
       } catch (error) {
         console.error("Failed to accept mission:", error);
@@ -86,12 +88,18 @@ export default function Missions() {
           </tr>
         </thead>
         <tbody>
-          {missions.map((mission: Mission) => (
-            <tr key={mission.id} onClick={() => setMission(mission.id)}>
-              <td>{new Date(mission.date).toLocaleDateString()}</td>
-              <td>{mission.title}</td>
+          {missions.length === 0 ? (
+            <tr>
+              <td colSpan={2}>No new missions are currently available</td>
             </tr>
-          ))}
+          ) : (
+            missions.map((mission: Mission) => (
+              <tr key={mission.id} onClick={() => setMission(mission.id)}>
+                <td>{new Date(mission.date).toLocaleDateString()}</td>
+                <td>{mission.title}</td>
+              </tr>
+            ))
+          )}
         </tbody>
       </table>
       <div>
