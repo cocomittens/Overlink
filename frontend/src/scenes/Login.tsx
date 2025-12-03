@@ -30,28 +30,18 @@ export default function Login() {
 
   const navigate = useNavigate();
   const getStorageKeys = () =>
-    currentNode
-      ? [`savedLogins-${currentNode}`, "savedLogins"]
-      : ["savedLogins"];
+    currentNode ? [`savedLogins-${currentNode}`] : ["savedLogins"];
 
   const loadSavedUsers = (): SavedUser[] => {
     if (typeof localStorage === "undefined") return [];
-    const merged: SavedUser[] = [];
-    getStorageKeys().forEach((key) => {
-      try {
-        const raw = localStorage.getItem(key);
-        if (!raw) return;
-        const parsed = JSON.parse(raw) as SavedUser[];
-        parsed.forEach((u) => {
-          if (!merged.find((m) => m.username === u.username)) {
-            merged.push(u);
-          }
-        });
-      } catch {
-        /* ignore */
-      }
-    });
-    return merged;
+    const [key] = getStorageKeys();
+    try {
+      const raw = localStorage.getItem(key);
+      if (!raw) return [];
+      return JSON.parse(raw) as SavedUser[];
+    } catch {
+      return [];
+    }
   };
 
   const persistSavedUsers = (users: SavedUser[]) => {
@@ -61,8 +51,6 @@ export default function Login() {
       : "savedLogins";
     try {
       localStorage.setItem(primaryKey, JSON.stringify(users));
-      // Also keep a global copy as a fallback across nodes.
-      localStorage.setItem("savedLogins", JSON.stringify(users));
     } catch {
       /* ignore storage errors */
     }
@@ -118,14 +106,27 @@ export default function Login() {
       (passwordMask ? passwordMask.replace(/\*/g, "•") : "");
     if (!passwordToSave) return;
     setSavedUsers((prev) => {
-      const existing = prev.find((u) => u.username === usernameToSave);
-      const next = existing
-        ? prev.map((u) =>
-            u.username === usernameToSave
-              ? { username: usernameToSave, password: passwordToSave }
-              : u
-          )
-        : [...prev, { username: usernameToSave, password: passwordToSave }];
+      const existingIndex = prev.findIndex(
+        (u) => u.username === usernameToSave
+      );
+      let next: SavedUser[];
+      if (existingIndex >= 0) {
+        next = [...prev];
+        next[existingIndex] = {
+          username: usernameToSave,
+          password: passwordToSave,
+          nodeId: currentNode || undefined,
+        };
+      } else {
+        next = [
+          ...prev,
+          {
+            username: usernameToSave,
+            password: passwordToSave,
+            nodeId: currentNode || undefined,
+          },
+        ];
+      }
       persistSavedUsers(next);
       setSelectedUser(usernameToSave);
       return next;

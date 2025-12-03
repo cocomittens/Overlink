@@ -3,6 +3,7 @@ import React from "react";
 export type SavedUser = {
   username: string;
   password: string;
+  nodeId?: string;
 };
 
 type SavedUserListProps = {
