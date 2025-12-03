@@ -25,24 +25,23 @@ export function Shop({ onClose }: { onClose: () => void }) {
 
   return (
     <div className="details-container shop">
-      <>
-        <div
-          className="mission-info"
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "flex-start",
-            gap: "1%",
-          }}
-        >
-          <div className="header" style={{ paddingTop: "1%" }}>
-            <span>Shop</span>
-            <CancelIcon onClick={handleClose} aria-label="Close shop" />
-          </div>
-
+      <div
+        className="mission-info"
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "flex-start",
+          gap: "1%",
+        }}
+      >
+        <div className="header" style={{ paddingTop: "1%" }}>
+          <span>Shop</span>
+          <CancelIcon onClick={handleClose} aria-label="Close shop" />
+        </div>
+        <div className="mission-info-body">
           <div
             className="small-field"
-            style={{ minHeight: "50%", overflow: "auto" }}
+            style={{ minHeight: "65%", overflow: "auto" }}
           >
             <div className="harddrive-bars">
               {placeholderItems.map((item, idx) => (
@@ -72,7 +71,12 @@ export function Shop({ onClose }: { onClose: () => void }) {
             )}
           </div>
         </div>
-      </>
+      </div>
+      <div className="action-buttons">
+        <div className="mission-action">
+          <span>Purchase</span>
+        </div>
+      </div>
     </div>
   );
 }
