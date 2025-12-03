@@ -12,29 +12,31 @@ const NavBar: React.FC = () => {
   const [money] = useAtom(moneyAtom);
   const [user] = useAtom(userAtom);
   const soundEnabled = useAtomValue(soundEnabledAtom);
-  const mapOpenSoundRef = useRef<HTMLAudioElement | null>(null);
+  const menuOpenSoundRef = useRef<HTMLAudioElement | null>(null);
   const currentXp = user?.xp ?? 0;
   const { level, progress } = calculateLevelProgress(currentXp);
   const filledBlocks = Math.round(progress * 10);
 
   useEffect(() => {
-    mapOpenSoundRef.current =
-      typeof Audio !== "undefined" ? new Audio("/soundEffects/map-open.mp3") : null;
-    if (mapOpenSoundRef.current) {
-      mapOpenSoundRef.current.volume = 0.6;
+    menuOpenSoundRef.current =
+      typeof Audio !== "undefined"
+        ? new Audio("/soundEffects/menu-open.wav")
+        : null;
+    if (menuOpenSoundRef.current) {
+      menuOpenSoundRef.current.volume = 0.6;
     }
   }, []);
 
   useEffect(() => {
-    if (!soundEnabled && mapOpenSoundRef.current) {
-      mapOpenSoundRef.current.pause();
+    if (!soundEnabled && menuOpenSoundRef.current) {
+      menuOpenSoundRef.current.pause();
     }
   }, [soundEnabled]);
 
-  const handleMapOpen = () => {
-    if (soundEnabled && mapOpenSoundRef.current) {
-      mapOpenSoundRef.current.currentTime = 0;
-      mapOpenSoundRef.current.play().catch(() => {});
+  const playMenuOpen = () => {
+    if (soundEnabled && menuOpenSoundRef.current) {
+      menuOpenSoundRef.current.currentTime = 0;
+      menuOpenSoundRef.current.play().catch(() => {});
     }
   };
 
@@ -43,21 +45,21 @@ const NavBar: React.FC = () => {
       <ul>
         <li className="left-controls">
           <div className="message-icon">
-            <Link to="/">
+            <Link to="/" onClick={playMenuOpen}>
               <span className="material-symbols-outlined message-icon">
                 home
               </span>
             </Link>
           </div>
           <div className="message-icon">
-            <Link to="/map" onClick={handleMapOpen}>
+            <Link to="/map" onClick={playMenuOpen}>
               <span className="material-symbols-outlined message-icon">
                 map
               </span>
             </Link>
           </div>
           <div className="message-icon">
-            <Link to="/missions">
+            <Link to="/missions" onClick={playMenuOpen}>
               <span className="material-symbols-outlined message-icon">
                 task
               </span>
