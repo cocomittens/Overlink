@@ -73,6 +73,37 @@ module.exports = [
     ],
   },
   {
+    id: "bank_1",
+    name: "Helix Finance Group",
+    directory: [
+      {
+        id: "file_server",
+        name: "File Server",
+        data: [
+          {
+            name: "Filename",
+            data: ["balances_q3.csv", "wire_logs.txt", "audit_report.pdf"],
+          },
+          {
+            name: "Notes",
+            data: ["q3 projections", "pending wires", "internal audit"],
+          },
+        ],
+      },
+      {
+        id: "view_logs",
+        name: "View Logs",
+        data: [
+          { name: "Date", data: ["2023-10-01", "2023-10-02", "2023-10-03"] },
+          {
+            name: "Action",
+            data: ["login_success", "ledger_update", "trace_alert"],
+          },
+        ],
+      },
+    ],
+  },
+  {
     id: "internal_1",
     name: "Nordsec Internal Services",
     directory: [
