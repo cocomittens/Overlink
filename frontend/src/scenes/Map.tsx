@@ -99,10 +99,9 @@ export default function Map() {
     }
   };
 
-  const handleCancel = () => {
-    console.log("handleCancel clicked");
+  const handleClear = () => {
+    if (currentNode) return; // do nothing if connected
     setChain(["personal_gateway"]);
-    navigate("/");
   };
 
   return (
@@ -152,8 +151,13 @@ export default function Map() {
         ))}
       </div>
       <div className="button-container">
-        <button type="button" className="button" onClick={handleCancel}>
-          Cancel
+        <button
+          type="button"
+          className={`button${currentNode ? " disabled" : ""}`}
+          onClick={handleClear}
+          disabled={!!currentNode}
+        >
+          Clear
         </button>
         <button type="button" className="button" onClick={handleConnect}>
           {currentNode ? "Disconnect" : "Connect"}
