@@ -18,6 +18,7 @@ export default function Map() {
   const [chain, setChain] = useAtom(chainAtom);
   const [currentNode, setCurrentNode] = useAtom(currentNodeAtom);
   const clickSoundRef = useRef<HTMLAudioElement | null>(null);
+  const cancelSoundRef = useRef<HTMLAudioElement | null>(null);
   const soundEnabled = useAtomValue(soundEnabledAtom);
   const navigate = useNavigate();
 
@@ -29,11 +30,21 @@ export default function Map() {
     if (clickSoundRef.current) {
       clickSoundRef.current.volume = 0.6;
     }
+    cancelSoundRef.current =
+      typeof Audio !== "undefined"
+        ? new Audio("/soundEffects/cancel.wav")
+        : null;
+    if (cancelSoundRef.current) {
+      cancelSoundRef.current.volume = 0.6;
+    }
   }, []);
 
   useEffect(() => {
     if (!soundEnabled && clickSoundRef.current) {
       clickSoundRef.current.pause();
+    }
+    if (!soundEnabled && cancelSoundRef.current) {
+      cancelSoundRef.current.pause();
     }
   }, [soundEnabled]);
 
@@ -82,6 +93,10 @@ export default function Map() {
     // Toggle connection: disconnect if already connected
     if (currentNode) {
       console.log("disconnecting", currentNode);
+      if (soundEnabled && cancelSoundRef.current) {
+        cancelSoundRef.current.currentTime = 0;
+        cancelSoundRef.current.play().catch(() => {});
+      }
       setCurrentNode(null);
       navigate("/map");
       return;

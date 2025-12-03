@@ -1,6 +1,11 @@
-import React, { useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import { useAtom } from "jotai";
-import { currentNodeAtom, dataAtom, directoryAtom } from "../store";
+import {
+  currentNodeAtom,
+  dataAtom,
+  directoryAtom,
+  soundEnabledAtom,
+} from "../store";
 import "../styles/terminal.scss";
 import { useLocation, useNavigate } from "react-router-dom";
 import { loadable } from "jotai/utils";
@@ -15,6 +20,24 @@ export default function Terminal() {
   const navigate = useNavigate();
   const location = useLocation();
   const isMainDirectory = location.pathname === "/terminal";
+  const soundEnabled = useAtomValue(soundEnabledAtom);
+  const cancelSoundRef = useRef<HTMLAudioElement | null>(null);
+
+  useEffect(() => {
+    cancelSoundRef.current =
+      typeof Audio !== "undefined"
+        ? new Audio("/soundEffects/cancel.wav")
+        : null;
+    if (cancelSoundRef.current) {
+      cancelSoundRef.current.volume = 0.6;
+    }
+  }, []);
+
+  useEffect(() => {
+    if (!soundEnabled && cancelSoundRef.current) {
+      cancelSoundRef.current.pause();
+    }
+  }, [soundEnabled]);
 
   const handleBack = () => {
     if (isMainDirectory) return;
@@ -27,6 +50,14 @@ export default function Terminal() {
   };
 
   const handleDisconnect = () => {
+    if (soundEnabled && cancelSoundRef.current) {
+      try {
+        cancelSoundRef.current.currentTime = 0;
+        cancelSoundRef.current.play();
+      } catch {
+        /* ignore playback errors */
+      }
+    }
     setCurrentNode(null);
     setDirectory({ id: "", name: "", data: [] });
     sessionStorage.setItem("prevComputerPath", "/");
