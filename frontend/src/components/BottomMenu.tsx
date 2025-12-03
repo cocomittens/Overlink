@@ -17,6 +17,7 @@ import FileCopier from "../software/FileCopier";
 import FileDeleter from "../software/FileDeleter";
 import { HardDrive } from "./HardDrive";
 import { Shop } from "./Shop";
+import { UserProfile } from "./UserProfile";
 import { loadable } from "jotai/utils";
 import { abandonMission } from "../api";
 import { useEffect, useRef } from "react";
@@ -54,6 +55,7 @@ const BottomMenu: React.FC = () => {
   const [selectedMission, setSelectedMission] = useState<number | null>(null);
   const [showHardDrive, setShowHardDrive] = useState(false);
   const [showShop, setShowShop] = useState(false);
+  const [showProfile, setShowProfile] = useState(false);
   const [currentSoftware] = useAtom(currentSoftwareAtom);
   const [user] = useAtom(userAtom);
   const currentMissionsLoadable = useAtomValue(loadable(currentMissionsAtom));
@@ -132,6 +134,7 @@ const BottomMenu: React.FC = () => {
       if (next !== null) {
         setShowHardDrive(false);
         setShowShop(false);
+        setShowProfile(false);
       }
       return next;
     });
@@ -144,6 +147,7 @@ const BottomMenu: React.FC = () => {
       if (next) {
         setShowShop(false);
         setSelectedMission(null);
+        setShowProfile(false);
       }
       return next;
     });
@@ -156,6 +160,7 @@ const BottomMenu: React.FC = () => {
       if (next) {
         setShowHardDrive(false);
         setSelectedMission(null);
+        setShowProfile(false);
       }
       return next;
     });
@@ -190,6 +195,7 @@ const BottomMenu: React.FC = () => {
       />
       {showHardDrive && <HardDrive onClose={() => setShowHardDrive(false)} />}
       {showShop && <Shop onClose={() => setShowShop(false)} />}
+      {showProfile && <UserProfile onClose={() => setShowProfile(false)} />}
       <div className="bottom-menu">
         {showSoftware && <SoftwareList onSelect={playMouseClick} />}
         <ul className="left-icons">
@@ -201,6 +207,20 @@ const BottomMenu: React.FC = () => {
           </li>
           <li className="message-icon hard-drive" onClick={toggleShop}>
             <span className="material-symbols-outlined">shop</span>
+          </li>
+          <li className="message-icon hard-drive" onClick={() => {
+            playMenuSelect();
+            setShowProfile((prev) => {
+              const next = !prev;
+              if (next) {
+                setShowHardDrive(false);
+                setShowShop(false);
+                setSelectedMission(null);
+              }
+              return next;
+            });
+          }}>
+            <span className="material-symbols-outlined">account_circle</span>
           </li>
         </ul>
 
