@@ -22,6 +22,7 @@ export default function Terminal() {
   const isMainDirectory = location.pathname === "/terminal";
   const soundEnabled = useAtomValue(soundEnabledAtom);
   const cancelSoundRef = useRef<HTMLAudioElement | null>(null);
+  const clickSoundRef = useRef<HTMLAudioElement | null>(null);
 
   useEffect(() => {
     cancelSoundRef.current =
@@ -31,16 +32,34 @@ export default function Terminal() {
     if (cancelSoundRef.current) {
       cancelSoundRef.current.volume = 0.6;
     }
+    clickSoundRef.current =
+      typeof Audio !== "undefined"
+        ? new Audio("/soundEffects/mouse-click.mp3")
+        : null;
+    if (clickSoundRef.current) {
+      clickSoundRef.current.volume = 0.75;
+    }
   }, []);
 
   useEffect(() => {
     if (!soundEnabled && cancelSoundRef.current) {
       cancelSoundRef.current.pause();
     }
+    if (!soundEnabled && clickSoundRef.current) {
+      clickSoundRef.current.pause();
+    }
   }, [soundEnabled]);
 
   const handleBack = () => {
     if (isMainDirectory) return;
+    if (soundEnabled && clickSoundRef.current) {
+      try {
+        clickSoundRef.current.currentTime = 0;
+        clickSoundRef.current.play();
+      } catch {
+        /* ignore playback errors */
+      }
+    }
     const prev = sessionStorage.getItem("prevComputerPath");
     if (prev && prev !== "/login" && prev !== "/agentLogin") {
       navigate(prev);
@@ -75,8 +94,24 @@ export default function Terminal() {
         folders: folder.folders ?? folder.directory ?? [],
       };
       setDirectory(nextDirectory);
+      if (soundEnabled && clickSoundRef.current) {
+        try {
+          clickSoundRef.current.currentTime = 0;
+          clickSoundRef.current.play();
+        } catch {
+          /* ignore playback errors */
+        }
+      }
       navigate(`/files`);
       return;
+    }
+    if (soundEnabled && clickSoundRef.current) {
+      try {
+        clickSoundRef.current.currentTime = 0;
+        clickSoundRef.current.play();
+      } catch {
+        /* ignore playback errors */
+      }
     }
     navigate(`/files`);
   };
