@@ -22,7 +22,9 @@ export default function AgentLogin() {
 
   useEffect(() => {
     successSoundRef.current =
-      typeof Audio !== "undefined" ? new Audio("/soundEffects/login_success.mp3") : null;
+      typeof Audio !== "undefined"
+        ? new Audio("/soundEffects/login_success.mp3")
+        : null;
     if (successSoundRef.current) {
       successSoundRef.current.volume = 0.6;
     }

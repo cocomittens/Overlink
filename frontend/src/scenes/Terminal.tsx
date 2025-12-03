@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { useRef, useEffect } from "react";
 import { useAtom } from "jotai";
 import {
   currentNodeAtom,
@@ -66,10 +66,17 @@ export default function Terminal() {
   };
 
   const handleClick = (folderId: string) => {
-    const folder = currData?.directory.find((f) => f.id === folderId);
+    const folder = currData?.directory.find((f: any) => f.id === folderId);
     if (folder) {
-      setDirectory(folder);
+      const nextDirectory = {
+        id: folder.id ?? "",
+        name: folder.name ?? "",
+        data: folder.data ?? [],
+        folders: folder.folders ?? folder.directory ?? [],
+      };
+      setDirectory(nextDirectory);
       navigate(`/files`);
+      return;
     }
     navigate(`/files`);
   };
