@@ -46,7 +46,7 @@ export function MissionDetails({
   };
 
   return (
-    <div className="details-container">
+    <div className="details-container" style={{ zIndex: 1 }}>
       {mission ? (
         <>
           <div className="mission-info">
