@@ -50,7 +50,7 @@ export function MissionDetails({
       {mission ? (
         <>
           <div className="mission-info">
-            <div className="header">
+            <div className="header" style={{ padding: "1% 0" }}>
               <span>Mission</span>
               <CancelIcon
                 onClick={handleClose}
