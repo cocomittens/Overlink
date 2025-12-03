@@ -43,6 +43,13 @@ const NavBar: React.FC = () => {
       <ul>
         <li className="left-controls">
           <div className="message-icon">
+            <Link to="/">
+              <span className="material-symbols-outlined message-icon">
+                home
+              </span>
+            </Link>
+          </div>
+          <div className="message-icon">
             <Link to="/map" onClick={handleMapOpen}>
               <span className="material-symbols-outlined message-icon">
                 map
