@@ -57,16 +57,18 @@ export function MissionDetails({
                 aria-label="Close mission details"
               />
             </div>
-            <div className="small-field">{mission.title}</div>
-            <div className="small-field">
-              <strong>Employer:</strong> {mission.employer}
-            </div>
-            <div className="small-field">
-              <strong>Payment:</strong> {mission.payment} credits
-            </div>
-            <div className="large-field" style={{ padding: "1% 2%" }}>
-              <strong>Description:</strong>
-              <div>{mission.description}</div>
+            <div className="mission-info-body">
+              <div className="small-field">{mission.title}</div>
+              <div className="small-field">
+                <strong>Employer:</strong> {mission.employer}
+              </div>
+              <div className="small-field">
+                <strong>Payment:</strong> {mission.payment} credits
+              </div>
+              <div className="large-field" style={{ padding: "1% 2%" }}>
+                <strong>Description:</strong>
+                <div>{mission.description}</div>
+              </div>
             </div>
           </div>
           <div className="action-buttons">

@@ -110,12 +110,20 @@ button {
   max-height: 70vh;
   border-radius: 4px;
   z-index: 0;
+  
   .mission-info {
     display: flex;
     flex-direction: column;
-    justify-content: space-evenly;
+    justify-content: space-between;
     height: 90%;
     column-gap: 8px;
+  }
+
+  .mission-info-body {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
   }
 
   .header {
@@ -124,6 +132,7 @@ button {
     display: flex;
     justify-content: center;
     align-items: center;
+    padding: 1% 0;
     svg {
       position: absolute;
       right: 8px;
