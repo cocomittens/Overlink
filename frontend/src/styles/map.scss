@@ -4,6 +4,7 @@
 .map-wrapper {
   position: relative;
   width: min(90vw, 90vh * 16 / 9);
+  max-height: 80vh;
   aspect-ratio: 16 / 9;
   margin: 0 auto;
   background-image:
