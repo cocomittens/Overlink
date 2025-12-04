@@ -22,11 +22,9 @@ The missions menu can be accessed in the top navigation menu. It contains a list
 The map can also be accessed in the navigation menu. It displays all known devices available for you to connect to. Nodes with a dashed border are devices you have access to at least one account on, while a solid border indicates admin access. Green nodes represent devices that are involved in a mission you are currently on. Route your connection through more nodes in order to delay detection - but make sure to clear your logs!
 
 ### Login
-<img width="390" alt="image" src="https://github.com/user-attachments/assets/3fbf6e6b-b0c4-4870-ac27-66db83a304fd" />
+<img width="1312" height="762" alt="image" src="https://github.com/user-attachments/assets/9bd5570c-34bc-469a-8854-6dfc25b042c1" />
 
 Upon connecting to an endpoint that you do not yet have access to, you will be presented with a login screen. You will need to find the correct username and password in order to access the system.
-
-<img width="390" src="https://github.com/user-attachments/assets/bf514776-e7a2-4ead-83a1-7b54249b88cd" />
 
 Use the Password Breaker (and additional software for more complex systems) to obtain credentials and gain access to the system. Click on the `Code` input field to start the Password Breaker.
 
