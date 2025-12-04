@@ -1,5 +1,5 @@
 # What is Overlink?
-Overlink is an Uplink inspired web-based cybersecurity simulation game with modernized quality of life features. It is currently in a very early stage of development, with updates and new features added frequently.
+Overlink is an Uplink inspired web-based cybersecurity simulation game with modernized quality of life features. 
 
 ## Running the Game
 To start the backend,
