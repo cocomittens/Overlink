@@ -35,7 +35,7 @@ Use the Password Breaker (and additional software for more complex systems) to o
 
 Once a connection is established, you will be presented with a list of folders that currently exist on that device. Click on a folder name to see the files that it contains.
 
-<img width="546" alt="image" src="https://github.com/user-attachments/assets/e67d47b3-e0e0-46d9-beeb-94cb05935016" />
+<img width="398" height="466" alt="image" src="https://github.com/user-attachments/assets/5862c633-2f3d-4dfe-b004-6536fb95a914" />
 
 You will then be able to view and interact with (copy, delete, etc) the files in the folder you selected. 
 
