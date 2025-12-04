@@ -7,12 +7,14 @@ import {
   hardDriveAtom,
   selectedFileAtom,
   soundEnabledAtom,
+  deletedServerFilesAtom,
 } from "../store";
 
 const FileDeleter: React.FC = () => {
   const [currentSoftware, setCurrentSoftware] = useAtom(currentSoftwareAtom);
   const [hardDrive, setHardDrive] = useAtom(hardDriveAtom);
   const [, setSelectedFile] = useAtom(selectedFileAtom);
+  const [, setDeletedServerFiles] = useAtom(deletedServerFilesAtom);
   const soundEnabled = useAtomValue(soundEnabledAtom);
   const [label, setLabel] = useState("Deleter");
   const [position, setPosition] = useState<{ x: number; y: number }>({
@@ -102,24 +104,40 @@ const FileDeleter: React.FC = () => {
       if (row) {
         const name = row.dataset.fileName;
         const location = row.dataset.location;
-        if (name && location === "hard_drive") {
+        if (name) {
           setSelectedFile({ name, location });
           setLabel("Deleting...");
           playClick();
           const deleteTimer = window.setTimeout(() => {
-            setHardDrive((prev) => {
-              if (!prev.files.includes(name)) return prev;
-              let removed = false;
-              const nextFiles = prev.files.filter((f) => {
-                if (removed) return true;
-                if (f === name) {
-                  removed = true;
-                  return false;
-                }
-                return true;
+            if (location === "hard_drive") {
+              setHardDrive((prev) => {
+                if (!prev.files.includes(name)) return prev;
+                let removed = false;
+                const nextFiles = prev.files.filter((f) => {
+                  if (removed) return true;
+                  if (f === name) {
+                    removed = true;
+                    return false;
+                  }
+                  return true;
+                });
+                return { ...prev, files: nextFiles };
               });
-              return { ...prev, files: nextFiles };
-            });
+            } else if (location) {
+              const cells = Array.from(
+                row.querySelectorAll("td")
+              ).map((td) => td.textContent?.trim() ?? "");
+              setDeletedServerFiles((prev) => {
+                const exists = prev.some(
+                  (entry) => entry.location === location && entry.name === name
+                );
+                if (exists) return prev;
+                return [...prev, { location, name, values: cells }];
+              });
+              row.querySelectorAll("td").forEach((td) => {
+                td.textContent = "file deleted";
+              });
+            }
             setLabel("Deleted");
             const resetTimer = window.setTimeout(() => {
               setLabel("Deleter");

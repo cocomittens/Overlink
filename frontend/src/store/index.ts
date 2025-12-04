@@ -33,6 +33,7 @@ export const userAtom = atom<{
   money: number;
   rating: number;
   xp: number;
+  completedMissions?: number;
 } | null>(null);
 
 const missionsRefreshAtom = atom(0);
@@ -150,3 +151,23 @@ export const selectedFileAtom = atom<{
   name: string;
   location?: string;
 } | null>(null);
+
+type DeletedServerFile = {
+  location: string;
+  name: string;
+  values: string[];
+};
+
+const deletedServerFilesBaseAtom = atom<DeletedServerFile[]>(
+  readStorage("deletedServerFiles", [])
+);
+
+export const deletedServerFilesAtom = atom(
+  (get) => get(deletedServerFilesBaseAtom),
+  (get, set, value: DeletedServerFile[] | ((prev: DeletedServerFile[]) => DeletedServerFile[])) => {
+    const next =
+      typeof value === "function" ? (value as (prev: DeletedServerFile[]) => DeletedServerFile[])(get(deletedServerFilesBaseAtom)) : value;
+    set(deletedServerFilesBaseAtom, next);
+    writeStorage("deletedServerFiles", next);
+  }
+);

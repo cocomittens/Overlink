@@ -7,13 +7,16 @@ import {
   directoryAtom,
   selectedFileAtom,
   Directory,
+  deletedServerFilesAtom,
 } from "../store";
 import { useNavigate } from "react-router-dom";
+import { useAtomValue } from "jotai";
 
 export default function FileList() {
   const [directory, setDirectory] = useAtom(directoryAtom);
   const [currentSoftware] = useAtom(currentSoftwareAtom);
   const [, setSelectedFile] = useAtom(selectedFileAtom);
+  const deletedServerFiles = useAtomValue(deletedServerFilesAtom);
   const setCurrentNode = useSetAtom(currentNodeAtom);
   const navigate = useNavigate();
 
@@ -88,6 +91,11 @@ export default function FileList() {
                 (_, rowIndex) => {
                   const fileName =
                     directory.data[0]?.data[rowIndex] ?? `file-${rowIndex}`;
+                  const isDeleted = deletedServerFiles.some(
+                    (entry) =>
+                      entry.location === directory.name &&
+                      entry.name === fileName
+                  );
                   return (
                     <tr
                       key={rowIndex}
@@ -102,7 +110,9 @@ export default function FileList() {
                       }}
                     >
                       {directory.data.map((col, colIndex) => (
-                        <td key={colIndex}>{col.data[rowIndex]}</td>
+                        <td key={colIndex}>
+                          {isDeleted ? "- DELETED -" : col.data[rowIndex]}
+                        </td>
                       ))}
                     </tr>
                   );
