@@ -4,10 +4,12 @@ Overlink is an Uplink inspired web-based cybersecurity simulation game with mode
 ## Running the Game
 To start the backend,
   * Navigate to the `backend` folder
+  * Type `npm i`
   * Type `npm run dev`
 
 To start the frontend,
   * Navigate to the `frontend` folder
+  * Type `npm i`
   * Type `npm run dev`
 
 ## Gameplay
