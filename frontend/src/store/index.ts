@@ -108,6 +108,7 @@ export const softwareAtom = atom([
   { id: "password_breaker", name: "Password Cracker", version: 1 },
   { id: "file_copier", name: "Copier", version: 1 },
   { id: "file_deleter", name: "Deleter", version: 1 },
+  { id: "file_undeleter", name: "Undeleter", version: 1 },
 ]);
 
 export const currentSoftwareAtom = atom<Set<string>>(new Set<string>());
