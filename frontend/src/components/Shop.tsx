@@ -10,9 +10,24 @@ export function Shop({ onClose }: { onClose: () => void }) {
   };
 
   const placeholderItems = [
-    { id: 1, name: "item1", description: "description1", price: 1337 },
-    { id: 2, name: "item2", description: "description2", price: 420 },
-    { id: 3, name: "item3", description: "description3", price: 1000 },
+    {
+      id: 1,
+      name: "Undeleter",
+      description: "Undeletes deleted files",
+      price: 1337,
+    },
+    {
+      id: 2,
+      name: "Hard drive cleaner",
+      description: "Deletes all files in hard drive, except selected files.",
+      price: 420,
+    },
+    {
+      id: 3,
+      name: "Password Cracker v2",
+      description: "Makes password cracker faster.",
+      price: 1000,
+    },
   ];
 
   const [selectedItem, setSelectedItem] = useState<
