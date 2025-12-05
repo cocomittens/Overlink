@@ -15,7 +15,19 @@ app.get("/api/missions", (req, res) => {
     const missions = db
       .prepare("SELECT * FROM missions ORDER BY createdAt DESC")
       .all();
-    res.json(missions);
+    // Parse targets JSON string to array
+    const missionsWithParsedTargets = missions.map((mission) => {
+      if (mission.targets) {
+        try {
+          mission.targets = JSON.parse(mission.targets);
+        } catch (e) {
+          console.error(`Error parsing targets for mission ${mission.id}:`, e);
+          mission.targets = null;
+        }
+      }
+      return mission;
+    });
+    res.json(missionsWithParsedTargets);
   } catch (error) {
     console.error("Error fetching missions:", error);
     res.status(500).json({ error: "Failed to fetch missions" });
@@ -70,6 +82,8 @@ app.get("/api/users/:userId/missions", (req, res) => {
         m.payment,
         m.difficulty,
         m.minRating,
+        m.traceProfileId,
+        m.targets,
         um.status,
         um.accepted_at,
         um.completed_at
@@ -80,7 +94,19 @@ app.get("/api/users/:userId/missions", (req, res) => {
     `
       )
       .all(userId);
-    res.json(missions);
+    // Parse targets JSON string to array
+    const missionsWithParsedTargets = missions.map((mission) => {
+      if (mission.targets) {
+        try {
+          mission.targets = JSON.parse(mission.targets);
+        } catch (e) {
+          console.error(`Error parsing targets for mission ${mission.id}:`, e);
+          mission.targets = null;
+        }
+      }
+      return mission;
+    });
+    res.json(missionsWithParsedTargets);
   } catch (error) {
     console.error("Error fetching user missions:", error);
     res.status(500).json({ error: "Failed to fetch user missions" });
