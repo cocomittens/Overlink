@@ -1,11 +1,17 @@
-import React from "react";
-import { useAtom } from "jotai";
+import React, { useEffect, useState } from "react";
 import "../styles/home.scss";
 
 export default function Home() {
-    return (
-        <div className="home">
-            Welcome to the game.
-        </div>
-    );
+  const [traced, setTraced] = useState(false);
+
+  useEffect(() => {
+    const flag = sessionStorage.getItem("traced");
+    setTraced(flag === "1");
+  }, []);
+
+  return (
+    <div className="home">
+      {traced ? "You have been traced." : "Welcome to the game."}
+    </div>
+  );
 }

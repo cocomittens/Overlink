@@ -73,21 +73,20 @@ const TraceTracker: React.FC = () => {
   const playClick = () => {
     if (soundEnabled && clickSoundRef.current) {
       clickSoundRef.current.currentTime = 0;
-      clickSoundRef.current.play().catch(() => {});
+      clickSoundRef.current.play().catch(() => { });
     }
   };
 
   const playBeep = () => {
     if (soundEnabled && beepSoundRef.current) {
       beepSoundRef.current.currentTime = 0;
-      beepSoundRef.current.play().catch(() => {});
+      beepSoundRef.current.play().catch(() => { });
     }
   };
 
   // Trace progression
   useEffect(() => {
     let intervalId: number | null = null;
-    let lastProgress = traceState.progress;
     if (traceState.active) {
       const profile =
         TRACE_PROFILES[traceState.profileId ?? "medium"] ||
@@ -100,12 +99,9 @@ const TraceTracker: React.FC = () => {
           const next = Math.min(
             100,
             prev.progress +
-              ((tickMs / baseMs) * 100) * profile.accelFactor +
-              (profile.actionPenalty * 0) // placeholder for future loud actions
+            ((tickMs / baseMs) * 100) * profile.accelFactor +
+            (profile.actionPenalty * 0) // placeholder for future loud actions
           );
-          if (next > prev.progress) {
-            playBeep();
-          }
           if (next >= 100) {
             return { ...prev, progress: 100, active: false };
           }
@@ -118,11 +114,21 @@ const TraceTracker: React.FC = () => {
     };
   }, [traceState.active, traceState.profileId, setTraceState]);
 
+  // Play beep when progress moves forward (side effect kept outside state setter)
+  const lastProgressRef = useRef(0);
+  useEffect(() => {
+    if (traceState.active && traceState.progress > lastProgressRef.current) {
+      playBeep();
+    }
+    lastProgressRef.current = traceState.progress;
+  }, [traceState.progress, traceState.active]);
+
   // When trace finishes, disconnect
   useEffect(() => {
     if (traceState.progress >= 100) {
+      sessionStorage.setItem("traced", "1");
       setCurrentNode(null);
-      navigate("/map");
+      navigate("/");
     }
   }, [traceState.progress, setCurrentNode, navigate]);
 
@@ -184,16 +190,16 @@ const TraceTracker: React.FC = () => {
 
   const style: React.CSSProperties = hasDragged
     ? {
-        top: position.y,
-        left: position.x,
-        transform: dragging
-          ? "translate(-50%, -50%) scale(1.03)"
-          : "translate(-50%, -50%)",
-      }
+      top: position.y,
+      left: position.x,
+      transform: dragging
+        ? "translate(-50%, -50%) scale(1.03)"
+        : "translate(-50%, -50%)",
+    }
     : {
-        right: 8,
-        bottom: 4,
-      };
+      right: 8,
+      bottom: 4,
+    };
 
   return (
     <div
