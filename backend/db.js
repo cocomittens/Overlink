@@ -36,12 +36,14 @@ function initDatabase() {
       payment INTEGER NOT NULL,
       difficulty INTEGER NOT NULL,
       minRating INTEGER NOT NULL,
+      traceProfileId TEXT,
       createdAt DATETIME DEFAULT CURRENT_TIMESTAMP
     )
   `);
 
   ensureColumn("missions", "description", "TEXT");
   ensureColumn("missions", "employer", "TEXT");
+  ensureColumn("missions", "traceProfileId", "TEXT");
 
   db.exec(`
     CREATE TABLE IF NOT EXISTS users (
@@ -186,6 +188,7 @@ function initDatabase() {
       payment: 900,
       difficulty: 1,
       minRating: 1,
+      traceProfileId: "low",
     },
     {
       id: 2,
@@ -197,6 +200,7 @@ function initDatabase() {
       payment: 1400,
       difficulty: 2,
       minRating: 2,
+      traceProfileId: "low",
     },
     {
       id: 3,
@@ -208,6 +212,7 @@ function initDatabase() {
       payment: 1800,
       difficulty: 3,
       minRating: 3,
+      traceProfileId: "medium",
     },
   ];
 
@@ -217,8 +222,8 @@ function initDatabase() {
       .get(mission.id);
     if (!existingMission) {
       const stmt = db.prepare(`
-                INSERT INTO missions (id, title, date, payment, difficulty, minRating, description, employer)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+                INSERT INTO missions (id, title, date, payment, difficulty, minRating, description, employer, traceProfileId)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
             `);
       stmt.run(
         mission.id,
@@ -228,15 +233,16 @@ function initDatabase() {
         mission.difficulty,
         mission.minRating,
         mission.description,
-        mission.employer
+        mission.employer,
+        mission.traceProfileId
       );
       console.log(`Mission added: "${mission.title}"`);
     } else {
       db.prepare(
         `UPDATE missions 
-         SET description = COALESCE(description, ?), employer = COALESCE(employer, ?) 
+         SET description = COALESCE(description, ?), employer = COALESCE(employer, ?), traceProfileId = COALESCE(traceProfileId, ?) 
          WHERE id = ?`
-      ).run(mission.description, mission.employer, mission.id);
+      ).run(mission.description, mission.employer, mission.traceProfileId, mission.id);
     }
   });
 
