@@ -126,11 +126,17 @@ const TraceTracker: React.FC = () => {
   // When trace finishes, disconnect
   useEffect(() => {
     if (traceState.progress >= 100) {
+      setCurrentSoftware((prev) => {
+        const next = new Set(prev);
+        next.delete("trace_tracker");
+        return next;
+      });
+      setTraceState((prev) => ({ ...prev, active: false }));
       sessionStorage.setItem("traced", "1");
       setCurrentNode(null);
       navigate("/");
     }
-  }, [traceState.progress, setCurrentNode, navigate]);
+  }, [traceState.progress, setCurrentSoftware, setTraceState, setCurrentNode, navigate]);
 
   useEffect(() => {
     const handleMove = (e: MouseEvent) => {
