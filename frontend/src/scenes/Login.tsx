@@ -1,12 +1,13 @@
 import React, { useEffect, useRef, useState } from "react";
 import "../styles/login.scss";
 import { PasswordBreaker } from "../software/PasswordBreaker";
-import { useAtom } from "jotai";
+import { useAtom, useSetAtom } from "jotai";
 import {
   currentNodeAtom,
   nodesAtom,
   soundEnabledAtom,
   currentSoftwareAtom,
+  traceStateAtom,
 } from "../store";
 import { useNavigate } from "react-router-dom";
 import SavedUserList, { SavedUser } from "../components/SavedUserList";
@@ -19,6 +20,7 @@ export default function Login() {
   const [currentNode] = useAtom(currentNodeAtom);
   const [nodes, setNodes] = useAtom(nodesAtom);
   const [currentSoftware, setCurrentSoftware] = useAtom(currentSoftwareAtom);
+  const setTraceState = useSetAtom(traceStateAtom);
   const [currentNodeData, setCurrentNodeData] = useState<
     (typeof nodes)[0] | undefined
   >(undefined);
@@ -88,6 +90,15 @@ export default function Login() {
   const initializeBreaker = () => {
     setUsername("admin");
     setStart(true);
+    if (currentNodeData?.hasTrace) {
+      setTraceState({
+        active: true,
+        progress: 0,
+        profileId: currentNodeData.traceProfileId || "medium",
+      });
+    } else {
+      setTraceState({ active: false, progress: 0, profileId: null });
+    }
   };
 
   const handleSavedSelect = (user: SavedUser) => {
@@ -148,6 +159,15 @@ export default function Login() {
       if (soundEnabled && successSoundRef.current) {
         successSoundRef.current.currentTime = 0;
         successSoundRef.current.play().catch(() => {});
+      }
+      if (currentNodeData?.hasTrace) {
+        setTraceState({
+          active: true,
+          progress: 0,
+          profileId: currentNodeData.traceProfileId || "medium",
+        });
+      } else {
+        setTraceState({ active: false, progress: 0, profileId: null });
       }
       navigate("/terminal");
     }

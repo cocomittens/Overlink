@@ -1,5 +1,5 @@
 import { atom } from "jotai";
-import { Mission } from "../types/mission";
+import { Mission, TraceProfileId } from "../types/mission";
 import { getMissions, getUserMissions, getNodeData } from "../api";
 
 const safeStorage = typeof localStorage !== "undefined" ? localStorage : null;
@@ -142,9 +142,17 @@ export const hardDriveAtom = atom(
   }
 );
 
-export const traceAtom = atom<number>(0);
+export type TraceState = {
+  active: boolean;
+  progress: number; // 0-100
+  profileId: TraceProfileId | null;
+};
 
-export const traceTimeAtom = atom<number>(0);
+export const traceStateAtom = atom<TraceState>({
+  active: false,
+  progress: 0,
+  profileId: null,
+});
 
 export const soundEnabledAtom = atom<boolean>(true);
 

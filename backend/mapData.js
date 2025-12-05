@@ -2,6 +2,9 @@ module.exports = [
   {
     id: "internal_1",
     name: "Nordsec Internal Services",
+    securityTier: "low",
+    traceProfileId: "high",
+    hasTrace: true,
     directory: [
       {
         id: "file_server",
@@ -69,6 +72,9 @@ module.exports = [
   {
     id: "internal_2",
     name: "SilentWave Internal Services",
+    securityTier: "low",
+    traceProfileId: "high",
+    hasTrace: true,
     directory: [
       {
         id: "file_server",
@@ -113,6 +119,9 @@ module.exports = [
   {
     id: "bank_1",
     name: "Helix Finance Group",
+    securityTier: "medium",
+    traceProfileId: "medium",
+    hasTrace: true,
     directory: [
       {
         id: "file_server",
@@ -156,6 +165,9 @@ module.exports = [
   {
     id: "internal_1",
     name: "Nordsec Internal Services",
+    securityTier: "low",
+    traceProfileId: "high",
+    hasTrace: true,
     directory: [
       {
         id: "file_server",

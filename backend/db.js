@@ -26,6 +26,44 @@ function initDatabase() {
     }
   };
 
+  const ensureTableHasColumns = (table, required) => {
+    const info = db.prepare(`PRAGMA table_info(${table})`).all();
+    const names = new Set(info.map((col) => col.name));
+    const missing = required.filter((col) => !names.has(col));
+    if (missing.length > 0) {
+      console.warn(
+        `Recreating table ${table} due to missing columns: ${missing.join(", ")}`
+      );
+      db.exec(`DROP TABLE IF EXISTS ${table};`);
+    }
+  };
+
+  ensureTableHasColumns("nodes", [
+    "id",
+    "top",
+    "left",
+    "name",
+    "admin",
+    "account",
+    "active",
+    "password",
+    "securityTier",
+    "traceProfileId",
+    "hasTrace",
+  ]);
+  ensureTableHasColumns("missions", [
+    "id",
+    "title",
+    "description",
+    "employer",
+    "date",
+    "payment",
+    "difficulty",
+    "minRating",
+    "traceProfileId",
+    "targets",
+  ]);
+
   db.exec(`
     CREATE TABLE IF NOT EXISTS missions (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -37,6 +75,7 @@ function initDatabase() {
       difficulty INTEGER NOT NULL,
       minRating INTEGER NOT NULL,
       traceProfileId TEXT,
+      targets TEXT,
       createdAt DATETIME DEFAULT CURRENT_TIMESTAMP
     )
   `);
@@ -44,6 +83,7 @@ function initDatabase() {
   ensureColumn("missions", "description", "TEXT");
   ensureColumn("missions", "employer", "TEXT");
   ensureColumn("missions", "traceProfileId", "TEXT");
+  ensureColumn("missions", "targets", "TEXT");
 
   db.exec(`
     CREATE TABLE IF NOT EXISTS users (
@@ -67,9 +107,15 @@ function initDatabase() {
       admin BOOLEAN DEFAULT 0,
       account BOOLEAN DEFAULT 0,
       active BOOLEAN DEFAULT 0,
-      password TEXT
+      password TEXT,
+      securityTier TEXT,
+      traceProfileId TEXT,
+      hasTrace BOOLEAN DEFAULT 0
     )
   `);
+  ensureColumn("nodes", "securityTier", "TEXT");
+  ensureColumn("nodes", "traceProfileId", "TEXT");
+  ensureColumn("nodes", "hasTrace", "BOOLEAN DEFAULT 0");
 
   db.exec(`
     CREATE TABLE IF NOT EXISTS user_missions (
@@ -110,6 +156,9 @@ function initDatabase() {
       account: 0,
       active: 0,
       password: null,
+      securityTier: "low",
+      traceProfileId: null,
+      hasTrace: 0,
     },
     {
       id: "internal_1",
@@ -120,6 +169,9 @@ function initDatabase() {
       account: 1,
       active: 0,
       password: "pass123",
+      securityTier: "low",
+      traceProfileId: "high",
+      hasTrace: 1,
     },
     {
       id: "public_access_1",
@@ -130,6 +182,9 @@ function initDatabase() {
       account: 0,
       active: 0,
       password: null,
+      securityTier: "public",
+      traceProfileId: null,
+      hasTrace: 0,
     },
     {
       id: "internal_2",
@@ -140,6 +195,9 @@ function initDatabase() {
       account: 0,
       active: 0,
       password: "catslol",
+      securityTier: "low",
+      traceProfileId: "high",
+      hasTrace: 1,
     },
     {
       id: "bank_1",
@@ -150,6 +208,9 @@ function initDatabase() {
       account: 0,
       active: 1,
       password: "rosebud",
+      securityTier: "medium",
+      traceProfileId: "medium",
+      hasTrace: 1,
     },
   ];
 
@@ -159,8 +220,8 @@ function initDatabase() {
       .get(node.id);
     if (!existingNode) {
       const stmt = db.prepare(`
-        INSERT INTO nodes (id, top, left, name, admin, account, active, password)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+        INSERT INTO nodes (id, top, left, name, admin, account, active, password, securityTier, traceProfileId, hasTrace)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
       `);
       stmt.run(
         node.id,
@@ -170,9 +231,20 @@ function initDatabase() {
         node.admin,
         node.account,
         node.active,
-        node.password
+        node.password,
+        node.securityTier,
+        node.traceProfileId,
+        node.hasTrace
       );
       console.log(`Node added: "${node.name}"`);
+    } else {
+      db.prepare(
+        `UPDATE nodes 
+         SET securityTier = COALESCE(securityTier, ?),
+             traceProfileId = COALESCE(traceProfileId, ?),
+             hasTrace = COALESCE(hasTrace, ?)
+         WHERE id = ?`
+      ).run(node.securityTier, node.traceProfileId, node.hasTrace, node.id);
     }
   });
 
@@ -188,7 +260,10 @@ function initDatabase() {
       payment: 900,
       difficulty: 1,
       minRating: 1,
-      traceProfileId: "low",
+      traceProfileId: null,
+      targets: JSON.stringify([
+        { nodeId: "internal_1", objective: "crack", filePattern: "auth.txt" },
+      ]),
     },
     {
       id: 2,
@@ -200,7 +275,14 @@ function initDatabase() {
       payment: 1400,
       difficulty: 2,
       minRating: 2,
-      traceProfileId: "low",
+      traceProfileId: null,
+      targets: JSON.stringify([
+        {
+          nodeId: "internal_2",
+          objective: "delete",
+          filePattern: "connection.log",
+        },
+      ]),
     },
     {
       id: 3,
@@ -212,7 +294,15 @@ function initDatabase() {
       payment: 1800,
       difficulty: 3,
       minRating: 3,
-      traceProfileId: "medium",
+      traceProfileId: null,
+      targets: JSON.stringify([
+        {
+          nodeId: "bank_1",
+          objective: "copy",
+          filePattern: "ledger-final.dat",
+          adminRequired: true,
+        },
+      ]),
     },
   ];
 
@@ -222,8 +312,8 @@ function initDatabase() {
       .get(mission.id);
     if (!existingMission) {
       const stmt = db.prepare(`
-                INSERT INTO missions (id, title, date, payment, difficulty, minRating, description, employer, traceProfileId)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+                INSERT INTO missions (id, title, date, payment, difficulty, minRating, description, employer, traceProfileId, targets)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             `);
       stmt.run(
         mission.id,
@@ -234,15 +324,22 @@ function initDatabase() {
         mission.minRating,
         mission.description,
         mission.employer,
-        mission.traceProfileId
+        mission.traceProfileId,
+        mission.targets
       );
       console.log(`Mission added: "${mission.title}"`);
     } else {
       db.prepare(
         `UPDATE missions 
-         SET description = COALESCE(description, ?), employer = COALESCE(employer, ?), traceProfileId = COALESCE(traceProfileId, ?) 
+         SET description = COALESCE(description, ?), employer = COALESCE(employer, ?), traceProfileId = COALESCE(traceProfileId, ?), targets = COALESCE(targets, ?) 
          WHERE id = ?`
-      ).run(mission.description, mission.employer, mission.traceProfileId, mission.id);
+      ).run(
+        mission.description,
+        mission.employer,
+        mission.traceProfileId,
+        mission.targets,
+        mission.id
+      );
     }
   });
 

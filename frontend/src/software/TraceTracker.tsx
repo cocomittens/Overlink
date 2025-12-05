@@ -2,18 +2,21 @@ import React, { useEffect, useRef, useState } from "react";
 import "../styles/bottomMenu.scss";
 import CancelIcon from "../components/CancelIcon";
 import { useAtom, useAtomValue } from "jotai";
+import { TRACE_PROFILES } from "../types/mission";
 import {
+  currentNodeAtom,
   currentSoftwareAtom,
   soundEnabledAtom,
-  traceAtom,
-  traceTimeAtom,
+  traceStateAtom,
 } from "../store";
+import { useNavigate } from "react-router-dom";
 
 const TraceTracker: React.FC = () => {
   const [currentSoftware, setCurrentSoftware] = useAtom(currentSoftwareAtom);
-  const [trace, setTrace] = useAtom(traceAtom);
-  const [traceTime, setTraceTime] = useAtom(traceTimeAtom);
+  const [traceState, setTraceState] = useAtom(traceStateAtom);
+  const [currentNode, setCurrentNode] = useAtom(currentNodeAtom);
   const soundEnabled = useAtomValue(soundEnabledAtom);
+  const navigate = useNavigate();
   const [position, setPosition] = useState<{ x: number; y: number }>({
     x: typeof window !== "undefined" ? window.innerWidth - 60 : 0,
     y: typeof window !== "undefined" ? window.innerHeight - 40 : 0,
@@ -24,38 +27,24 @@ const TraceTracker: React.FC = () => {
   const justPickedRef = useRef(false);
   const offsetRef = useRef<{ dx: number; dy: number }>({ dx: 0, dy: 0 });
   const clickSoundRef = useRef<HTMLAudioElement | null>(null);
+  const beepSoundRef = useRef<HTMLAudioElement | null>(null);
 
   function handleCancel() {
     const updatedSoftware = new Set(currentSoftware);
     updatedSoftware.delete("trace_tracker");
     setCurrentSoftware(updatedSoftware);
-    setTrace(0);
-  }
-
-  function handleTrace(time_remaining: number) {
-    const startTime = Date.now();
-    const endTime = startTime + time_remaining;
-
-    const updateTrace = () => {
-      const currentTime = Date.now();
-      const elapsed = currentTime - startTime;
-      const progress = Math.min((elapsed / time_remaining) * 100, 100);
-
-      setTrace(progress);
-
-      if (progress < 100) {
-        requestAnimationFrame(updateTrace);
-      }
-    };
-
-    updateTrace();
+    setTraceState((prev) => ({ ...prev, active: false, progress: 0 }));
   }
 
   useEffect(() => {
-    if (traceTime > 0) {
-      handleTrace(traceTime);
+    // initialize default profile if none
+    if (!traceState.profileId) {
+      setTraceState((prev) => ({
+        ...prev,
+        profileId: prev.profileId ?? "medium",
+      }));
     }
-  }, [traceTime]);
+  }, [traceState.profileId, setTraceState]);
 
   useEffect(() => {
     clickSoundRef.current =
@@ -65,11 +54,19 @@ const TraceTracker: React.FC = () => {
     if (clickSoundRef.current) {
       clickSoundRef.current.volume = 0.6;
     }
+    beepSoundRef.current =
+      typeof Audio !== "undefined" ? new Audio("/soundEffects/dreamy-beep.wav") : null;
+    if (beepSoundRef.current) {
+      beepSoundRef.current.volume = 0.5;
+    }
   }, []);
 
   useEffect(() => {
     if (!soundEnabled && clickSoundRef.current) {
       clickSoundRef.current.pause();
+    }
+    if (!soundEnabled && beepSoundRef.current) {
+      beepSoundRef.current.pause();
     }
   }, [soundEnabled]);
 
@@ -79,6 +76,55 @@ const TraceTracker: React.FC = () => {
       clickSoundRef.current.play().catch(() => {});
     }
   };
+
+  const playBeep = () => {
+    if (soundEnabled && beepSoundRef.current) {
+      beepSoundRef.current.currentTime = 0;
+      beepSoundRef.current.play().catch(() => {});
+    }
+  };
+
+  // Trace progression
+  useEffect(() => {
+    let intervalId: number | null = null;
+    let lastProgress = traceState.progress;
+    if (traceState.active) {
+      const profile =
+        TRACE_PROFILES[traceState.profileId ?? "medium"] ||
+        TRACE_PROFILES.medium;
+      const baseMs = profile.baseSeconds * 1000;
+      const tickMs = 3000;
+      intervalId = window.setInterval(() => {
+        setTraceState((prev) => {
+          if (!prev.active) return prev;
+          const next = Math.min(
+            100,
+            prev.progress +
+              ((tickMs / baseMs) * 100) * profile.accelFactor +
+              (profile.actionPenalty * 0) // placeholder for future loud actions
+          );
+          if (next > prev.progress) {
+            playBeep();
+          }
+          if (next >= 100) {
+            return { ...prev, progress: 100, active: false };
+          }
+          return { ...prev, progress: next };
+        });
+      }, tickMs);
+    }
+    return () => {
+      if (intervalId) window.clearInterval(intervalId);
+    };
+  }, [traceState.active, traceState.profileId, setTraceState]);
+
+  // When trace finishes, disconnect
+  useEffect(() => {
+    if (traceState.progress >= 100) {
+      setCurrentNode(null);
+      navigate("/map");
+    }
+  }, [traceState.progress, setCurrentNode, navigate]);
 
   useEffect(() => {
     const handleMove = (e: MouseEvent) => {
@@ -155,7 +201,7 @@ const TraceTracker: React.FC = () => {
       style={style}
       onMouseDown={pickUp}
     >
-      <span>{Math.round(trace)}%</span>
+      <span>{Math.round(traceState.progress)}%</span>
       <CancelIcon onClick={handleCancel} />
     </div>
   );
