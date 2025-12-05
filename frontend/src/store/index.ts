@@ -117,7 +117,7 @@ const currentSoftwareBaseAtom = atom<Set<string>>(
 
 export const currentSoftwareAtom = atom(
   (get) => get(currentSoftwareBaseAtom),
-  (_get, set, value: Set<string> | ((prev: Set<string>) => Set<string>)) => {
+  (get, set, value: Set<string> | ((prev: Set<string>) => Set<string>)) => {
     const next =
       typeof value === "function"
         ? (value as (prev: Set<string>) => Set<string>)(get(currentSoftwareBaseAtom))
