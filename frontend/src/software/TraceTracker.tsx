@@ -131,7 +131,7 @@ const TraceTracker: React.FC = () => {
         next.delete("trace_tracker");
         return next;
       });
-      setTraceState((prev) => ({ ...prev, active: false }));
+      setTraceState(() => ({ active: false, progress: 0, profileId: null }));
       sessionStorage.setItem("traced", "1");
       setCurrentNode(null);
       navigate("/");
