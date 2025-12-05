@@ -2,6 +2,7 @@ import React, { useRef, useEffect } from "react";
 import { useAtom, useSetAtom } from "jotai";
 import {
   currentNodeAtom,
+  currentSoftwareAtom,
   dataAtom,
   directoryAtom,
   soundEnabledAtom,
@@ -26,6 +27,7 @@ export default function Terminal() {
   const isMainDirectory = location.pathname === "/terminal";
   const soundEnabled = useAtomValue(soundEnabledAtom);
   const setTraceState = useSetAtom(traceStateAtom);
+  const setCurrentSoftware = useSetAtom(currentSoftwareAtom);
   const cancelSoundRef = useRef<HTMLAudioElement | null>(null);
   const clickSoundRef = useRef<HTMLAudioElement | null>(null);
 
@@ -85,6 +87,11 @@ export default function Terminal() {
     setCurrentNode(null);
     setDirectory({ id: "", name: "", data: [] });
     setTraceState({ active: false, progress: 0, profileId: null });
+    setCurrentSoftware((prev) => {
+      const next = new Set(prev);
+      next.delete("trace_tracker");
+      return next;
+    });
     sessionStorage.setItem("prevComputerPath", "/");
     sessionStorage.setItem("lastComputerPath", "/");
     navigate("/");
