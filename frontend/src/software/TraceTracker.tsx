@@ -121,7 +121,7 @@ const TraceTracker: React.FC = () => {
       playBeep();
     }
     lastProgressRef.current = traceState.progress;
-  }, [traceState.progress, traceState.active]);
+  }, [traceState.progress, traceState.active, soundEnabled]);
 
   // When trace finishes, disconnect
   useEffect(() => {
