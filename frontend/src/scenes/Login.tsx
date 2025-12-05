@@ -96,11 +96,9 @@ export default function Login() {
     if (hasTrace) {
       next.add("trace_tracker");
       setTraceState((prev) => {
-        // If a trace is already running for this profile, keep its progress
         if (prev.active && prev.profileId === profileId) {
           return prev;
         }
-        // Start trace with whatever progress has accumulated so far
         return {
           active: true,
           progress: prev.progress,
