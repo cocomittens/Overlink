@@ -87,18 +87,29 @@ export default function Login() {
     }
   }, []);
 
-  const initializeBreaker = () => {
-    setUsername("admin");
-    setStart(true);
-    if (currentNodeData?.hasTrace) {
+  const handleTraceSoftware = () => {
+    const hasTrace = Boolean(currentNodeData?.hasTrace);
+    const next = new Set(currentSoftware);
+
+    if (hasTrace) {
+      next.add("trace_tracker");
       setTraceState({
         active: true,
         progress: 0,
-        profileId: currentNodeData.traceProfileId || "medium",
+        profileId: currentNodeData?.traceProfileId || "medium",
       });
     } else {
+      next.delete("trace_tracker");
       setTraceState({ active: false, progress: 0, profileId: null });
     }
+
+    setCurrentSoftware(next);
+  };
+
+  const initializeBreaker = () => {
+    setUsername("admin");
+    setStart(true);
+    handleTraceSoftware();
   };
 
   const handleSavedSelect = (user: SavedUser) => {
@@ -158,17 +169,9 @@ export default function Login() {
       upsertSavedUser();
       if (soundEnabled && successSoundRef.current) {
         successSoundRef.current.currentTime = 0;
-        successSoundRef.current.play().catch(() => {});
+        successSoundRef.current.play().catch(() => { });
       }
-      if (currentNodeData?.hasTrace) {
-        setTraceState({
-          active: true,
-          progress: 0,
-          profileId: currentNodeData.traceProfileId || "medium",
-        });
-      } else {
-        setTraceState({ active: false, progress: 0, profileId: null });
-      }
+      handleTraceSoftware();
       navigate("/terminal");
     }
   };
