@@ -55,7 +55,7 @@ const TraceTracker: React.FC = () => {
       clickSoundRef.current.volume = 0.6;
     }
     beepSoundRef.current =
-      typeof Audio !== "undefined" ? new Audio("/soundEffects/dreamy-beep.wav") : null;
+      typeof Audio !== "undefined" ? new Audio("/soundEffects/trace-tracker.m4a") : null;
     if (beepSoundRef.current) {
       beepSoundRef.current.volume = 0.5;
     }
