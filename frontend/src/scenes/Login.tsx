@@ -96,12 +96,14 @@ export default function Login() {
     if (hasTrace) {
       next.add("trace_tracker");
       setTraceState((prev) => {
-        if (prev.active && prev.profileId === profileId) {
+        const shouldContinueExisting =
+          prev.active && prev.profileId === profileId && prev.progress < 100;
+        if (shouldContinueExisting) {
           return prev;
         }
         return {
           active: true,
-          progress: prev.progress,
+          progress: 0,
           profileId,
         };
       });
