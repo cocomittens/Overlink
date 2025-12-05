@@ -5,6 +5,7 @@ import {
   dataAtom,
   directoryAtom,
   soundEnabledAtom,
+  Directory,
 } from "../store";
 import "../styles/terminal.scss";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -14,8 +15,10 @@ import { useAtomValue } from "jotai";
 export default function Terminal() {
   const [currentNode, setCurrentNode] = useAtom(currentNodeAtom);
   const dataLoadable = useAtomValue(loadable(dataAtom));
-  const data = dataLoadable.state === "hasData" ? dataLoadable.data : [];
-  const currData = data.find((node: any) => node.id === currentNode);
+  type NodeData = { id: string; name: string; directory: Directory[] };
+  const data: NodeData[] =
+    dataLoadable.state === "hasData" ? (dataLoadable.data as NodeData[]) : [];
+  const currData = data.find((node) => node.id === currentNode);
   const [directory, setDirectory] = useAtom(directoryAtom);
   const navigate = useNavigate();
   const location = useLocation();
@@ -85,13 +88,13 @@ export default function Terminal() {
   };
 
   const handleClick = (folderId: string) => {
-    const folder = currData?.directory.find((f: any) => f.id === folderId);
+    const folder = currData?.directory.find((f: Directory) => f.id === folderId);
     if (folder) {
       const nextDirectory = {
         id: folder.id ?? "",
         name: folder.name ?? "",
         data: folder.data ?? [],
-        folders: folder.folders ?? folder.directory ?? [],
+        folders: folder.folders ?? [],
       };
       setDirectory(nextDirectory);
       if (soundEnabled && clickSoundRef.current) {
@@ -138,8 +141,8 @@ export default function Terminal() {
         </button>
       </div>
       <h2>{currData?.name}</h2>
-      {currData?.directory.map((folder, index) => (
-        <div key={index} className="folder">
+      {currData?.directory.map((folder) => (
+        <div key={folder.id} className="folder">
           <a className="folder-name" onClick={() => handleClick(folder.id)}>
             {folder.name}
           </a>

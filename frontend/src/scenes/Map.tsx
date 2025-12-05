@@ -54,6 +54,20 @@ export default function Map() {
       .catch((err) => console.error("Failed to load map nodes", err));
   }, [setNodes]);
 
+  const getSavedLoginsForNode = (nodeId: string) => {
+    if (typeof localStorage === "undefined") return [];
+    const primary = localStorage.getItem(`savedLogins-${nodeId}`);
+    const fallback = localStorage.getItem("savedLogins");
+    const raw = primary ?? fallback;
+    if (!raw) return [];
+    try {
+      const parsed = JSON.parse(raw) as { username?: string; password?: string }[];
+      return Array.isArray(parsed) ? parsed : [];
+    } catch {
+      return [];
+    }
+  };
+
   const nodesWithPct = useMemo(() => {
     const maxLeft = nodes.reduce((max, n) => Math.max(max, n.left || 0), 1);
     const maxTop = nodes.reduce((max, n) => Math.max(max, n.top || 0), 1);
@@ -65,6 +79,13 @@ export default function Map() {
       personal_gateway: { xPct: 20, yPct: 30 },
     };
     return nodes.map((n) => {
+      const savedLogins = getSavedLoginsForNode(n.id);
+      const hasAdmin = savedLogins.some(
+        (u) => u.username?.toLowerCase() === "admin" && (u.password?.length ?? 0) > 0
+      );
+      const hasAccount = savedLogins.some(
+        (u) => u.username && u.username.toLowerCase() !== "admin" && (u.password?.length ?? 0) > 0
+      );
       const base = {
         xPct: ((n.left || 0) / maxLeft) * 100,
         yPct: ((n.top || 0) / maxTop) * 100,
@@ -74,6 +95,8 @@ export default function Map() {
         ...n,
         xPct: override.xPct ?? base.xPct,
         yPct: override.yPct ?? base.yPct,
+        admin: hasAdmin,
+        account: hasAccount,
       };
     });
   }, [nodes]);
