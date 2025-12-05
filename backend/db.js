@@ -260,7 +260,7 @@ function initDatabase() {
         `UPDATE nodes 
          SET securityTier = COALESCE(securityTier, ?),
              traceProfileId = COALESCE(traceProfileId, ?),
-             hasTrace = COALESCE(?, hasTrace)
+             hasTrace = COALESCE(hasTrace, ?)
          WHERE id = ?`
       ).run(node.securityTier, node.traceProfileId, node.hasTrace, node.id);
     }
