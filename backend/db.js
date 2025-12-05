@@ -26,43 +26,59 @@ function initDatabase() {
     }
   };
 
-  const ensureTableHasColumns = (table, required) => {
+  /**
+   * Ensure a table includes all required columns without dropping data.
+   * Only adds columns that can be safely appended via ALTER TABLE.
+   */
+  const ensureTableHasColumns = (table, requiredDefinitions) => {
     const info = db.prepare(`PRAGMA table_info(${table})`).all();
     const names = new Set(info.map((col) => col.name));
-    const missing = required.filter((col) => !names.has(col));
-    if (missing.length > 0) {
-      console.warn(
-        `Recreating table ${table} due to missing columns: ${missing.join(", ")}`
-      );
-      db.exec(`DROP TABLE IF EXISTS ${table};`);
-    }
+    const missing = Object.entries(requiredDefinitions).filter(
+      ([col]) => !names.has(col)
+    );
+
+    missing.forEach(([column, definition]) => {
+      const disallowed =
+        definition.toLowerCase().includes("primary key") ||
+        definition.toLowerCase().includes("unique");
+      if (disallowed) {
+        console.warn(
+          `Skipped adding column ${column} to ${table} because constraints require manual migration.`
+        );
+        return;
+      }
+      db.prepare(`ALTER TABLE ${table} ADD COLUMN ${column} ${definition}`).run();
+      console.log(`Added missing column ${column} to ${table}`);
+    });
   };
 
-  ensureTableHasColumns("nodes", [
-    "id",
-    "top",
-    "left",
-    "name",
-    "admin",
-    "account",
-    "active",
-    "password",
-    "securityTier",
-    "traceProfileId",
-    "hasTrace",
-  ]);
-  ensureTableHasColumns("missions", [
-    "id",
-    "title",
-    "description",
-    "employer",
-    "date",
-    "payment",
-    "difficulty",
-    "minRating",
-    "traceProfileId",
-    "targets",
-  ]);
+  const tableColumnDefinitions = {
+    nodes: {
+      id: "TEXT",
+      top: "INTEGER",
+      left: "INTEGER",
+      name: "TEXT",
+      admin: "BOOLEAN DEFAULT 0",
+      account: "BOOLEAN DEFAULT 0",
+      active: "BOOLEAN DEFAULT 0",
+      password: "TEXT",
+      securityTier: "TEXT",
+      traceProfileId: "TEXT",
+      hasTrace: "BOOLEAN DEFAULT 0",
+    },
+    missions: {
+      id: "INTEGER",
+      title: "TEXT",
+      description: "TEXT",
+      employer: "TEXT",
+      date: "TEXT",
+      payment: "INTEGER",
+      difficulty: "INTEGER",
+      minRating: "INTEGER",
+      traceProfileId: "TEXT",
+      targets: "TEXT",
+    },
+  };
 
   db.exec(`
     CREATE TABLE IF NOT EXISTS missions (
@@ -84,6 +100,7 @@ function initDatabase() {
   ensureColumn("missions", "employer", "TEXT");
   ensureColumn("missions", "traceProfileId", "TEXT");
   ensureColumn("missions", "targets", "TEXT");
+  ensureTableHasColumns("missions", tableColumnDefinitions.missions);
 
   db.exec(`
     CREATE TABLE IF NOT EXISTS users (
@@ -116,6 +133,7 @@ function initDatabase() {
   ensureColumn("nodes", "securityTier", "TEXT");
   ensureColumn("nodes", "traceProfileId", "TEXT");
   ensureColumn("nodes", "hasTrace", "BOOLEAN DEFAULT 0");
+  ensureTableHasColumns("nodes", tableColumnDefinitions.nodes);
 
   db.exec(`
     CREATE TABLE IF NOT EXISTS user_missions (

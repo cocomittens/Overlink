@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import "../styles/login.scss";
 import { PasswordBreaker } from "../software/PasswordBreaker";
-import { useAtom, useSetAtom } from "jotai";
+import { useAtom, useAtomValue, useSetAtom } from "jotai";
 import {
   currentNodeAtom,
   nodesAtom,
@@ -20,6 +20,7 @@ export default function Login() {
   const [currentNode] = useAtom(currentNodeAtom);
   const [nodes, setNodes] = useAtom(nodesAtom);
   const [currentSoftware, setCurrentSoftware] = useAtom(currentSoftwareAtom);
+  const traceState = useAtomValue(traceStateAtom);
   const setTraceState = useSetAtom(traceStateAtom);
   const [currentNodeData, setCurrentNodeData] = useState<
     (typeof nodes)[0] | undefined
@@ -90,13 +91,21 @@ export default function Login() {
   const handleTraceSoftware = () => {
     const hasTrace = Boolean(currentNodeData?.hasTrace);
     const next = new Set(currentSoftware);
+    const profileId = currentNodeData?.traceProfileId || "medium";
 
     if (hasTrace) {
       next.add("trace_tracker");
-      setTraceState({
-        active: true,
-        progress: 0,
-        profileId: currentNodeData?.traceProfileId || "medium",
+      setTraceState((prev) => {
+        // If a trace is already running for this profile, keep its progress
+        if (prev.active && prev.profileId === profileId) {
+          return prev;
+        }
+        // Start trace with whatever progress has accumulated so far
+        return {
+          active: true,
+          progress: prev.progress,
+          profileId,
+        };
       });
     } else {
       next.delete("trace_tracker");
