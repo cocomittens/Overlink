@@ -115,8 +115,11 @@ const TraceTracker: React.FC = () => {
   }, [traceState.active, traceState.profileId, setTraceState]);
 
   // Play beep when progress moves forward (side effect kept outside state setter)
-  const lastProgressRef = useRef(0);
+  // Initialize with current progress to avoid false beep on page refresh when progress is loaded from localStorage
+  const lastProgressRef = useRef(traceState.progress);
+
   useEffect(() => {
+    // Only play beep if progress actually increased (not on initial mount with persisted value)
     if (traceState.active && traceState.progress > lastProgressRef.current) {
       playBeep();
     }
