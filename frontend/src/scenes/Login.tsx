@@ -89,9 +89,16 @@ export default function Login() {
   }, []);
 
   const handleTraceSoftware = () => {
-    const hasTrace = Boolean(currentNodeData?.hasTrace);
+    // If node data hasn't loaded yet, preserve existing trace state to avoid race condition
+    if (!currentNodeData) {
+      // Don't modify trace state or software if we don't have node data yet
+      // This prevents stopping an active trace during page refresh before nodes load
+      return;
+    }
+
+    const hasTrace = Boolean(currentNodeData.hasTrace);
     const next = new Set(currentSoftware);
-    const profileId = currentNodeData?.traceProfileId || "medium";
+    const profileId = currentNodeData.traceProfileId || "medium";
 
     if (hasTrace) {
       next.add("trace_tracker");
