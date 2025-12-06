@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import "../styles/login.scss";
 import { PasswordBreaker } from "../software/PasswordBreaker";
 import { useAtom, useAtomValue, useSetAtom } from "jotai";
@@ -65,49 +65,7 @@ export default function Login() {
     setSavedUsers(loadSavedUsers());
   }, [currentNode]);
 
-  useEffect(() => {
-    const data = nodes.find((node) => node.id === currentNode);
-    const wasUndefined = prevNodeDataRef.current === undefined;
-    const nodeChanged = prevNodeDataRef.current?.id !== data?.id;
-
-    if (nodeChanged) {
-      traceInitializedRef.current = false;
-    }
-
-    prevNodeDataRef.current = data;
-    setCurrentNodeData(data);
-
-    // Re-evaluate trace state when currentNodeData becomes available after nodes load
-    // This handles the case where handleTraceSoftware was called before nodes loaded
-    // Pass data directly to avoid stale closure issue with async state updates
-    if (wasUndefined && data && !traceInitializedRef.current &&
-      (traceState.active || currentSoftware.has("trace_tracker"))) {
-      traceInitializedRef.current = true;
-      handleTraceSoftware(data);
-    }
-  }, [nodes, currentNode]);
-
-  useEffect(() => {
-    if (nodes.length === 0) {
-      getMapNodes()
-        .then((data) => setNodes(data || []))
-        .catch((err) =>
-          console.error("Failed to load map nodes for login", err)
-        );
-    }
-  }, [nodes.length, setNodes]);
-
-  useEffect(() => {
-    successSoundRef.current =
-      typeof Audio !== "undefined"
-        ? new Audio("/soundEffects/login_success.mp3")
-        : null;
-    if (successSoundRef.current) {
-      successSoundRef.current.volume = 0.6;
-    }
-  }, []);
-
-  const handleTraceSoftware = (nodeData?: (typeof nodes)[0] | undefined) => {
+  const handleTraceSoftware = useCallback((nodeData?: (typeof nodes)[0] | undefined) => {
     // Use provided nodeData or fall back to state (for backward compatibility)
     const nodeDataToUse = nodeData ?? currentNodeData;
 
@@ -152,7 +110,49 @@ export default function Login() {
     }
 
     setCurrentSoftware(next);
-  };
+  }, [currentNodeData, traceState.active, currentSoftware, setCurrentSoftware, setTraceState]);
+
+  useEffect(() => {
+    const data = nodes.find((node) => node.id === currentNode);
+    const wasUndefined = prevNodeDataRef.current === undefined;
+    const nodeChanged = prevNodeDataRef.current?.id !== data?.id;
+
+    if (nodeChanged) {
+      traceInitializedRef.current = false;
+    }
+
+    prevNodeDataRef.current = data;
+    setCurrentNodeData(data);
+
+    // Re-evaluate trace state when currentNodeData becomes available after nodes load
+    // This handles the case where handleTraceSoftware was called before nodes loaded
+    // Pass data directly to avoid stale closure issue with async state updates
+    if (wasUndefined && data && !traceInitializedRef.current &&
+      (traceState.active || currentSoftware.has("trace_tracker"))) {
+      traceInitializedRef.current = true;
+      handleTraceSoftware(data);
+    }
+  }, [nodes, currentNode, traceState.active, currentSoftware, handleTraceSoftware]);
+
+  useEffect(() => {
+    if (nodes.length === 0) {
+      getMapNodes()
+        .then((data) => setNodes(data || []))
+        .catch((err) =>
+          console.error("Failed to load map nodes for login", err)
+        );
+    }
+  }, [nodes.length, setNodes]);
+
+  useEffect(() => {
+    successSoundRef.current =
+      typeof Audio !== "undefined"
+        ? new Audio("/soundEffects/login_success.mp3")
+        : null;
+    if (successSoundRef.current) {
+      successSoundRef.current.volume = 0.6;
+    }
+  }, []);
 
   const initializeBreaker = () => {
     setUsername("admin");
