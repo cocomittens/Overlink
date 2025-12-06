@@ -29,6 +29,8 @@ export default function Login() {
   const [savedUsers, setSavedUsers] = useState<SavedUser[]>([]);
   const [selectedUser, setSelectedUser] = useState<string | null>(null);
   const successSoundRef = useRef<HTMLAudioElement | null>(null);
+  const prevNodeDataRef = useRef<(typeof nodes)[0] | undefined>(undefined);
+  const traceInitializedRef = useRef(false);
   const [soundEnabled] = useAtom(soundEnabledAtom);
 
   const navigate = useNavigate();
@@ -65,7 +67,23 @@ export default function Login() {
 
   useEffect(() => {
     const data = nodes.find((node) => node.id === currentNode);
+    const wasUndefined = prevNodeDataRef.current === undefined;
+    const nodeChanged = prevNodeDataRef.current?.id !== data?.id;
+
+    if (nodeChanged) {
+      traceInitializedRef.current = false;
+    }
+
+    prevNodeDataRef.current = data;
     setCurrentNodeData(data);
+
+    // Re-evaluate trace state when currentNodeData becomes available after nodes load
+    // This handles the case where handleTraceSoftware was called before nodes loaded
+    if (wasUndefined && data && !traceInitializedRef.current &&
+      (traceState.active || currentSoftware.has("trace_tracker"))) {
+      traceInitializedRef.current = true;
+      handleTraceSoftware();
+    }
   }, [nodes, currentNode]);
 
   useEffect(() => {
@@ -93,6 +111,12 @@ export default function Login() {
     if (!currentNodeData) {
       // Don't modify trace state or software if we don't have node data yet
       // This prevents stopping an active trace during page refresh before nodes load
+      // If there's an active trace, preserve it by keeping trace_tracker in software
+      if (traceState.active) {
+        const next = new Set(currentSoftware);
+        next.add("trace_tracker");
+        setCurrentSoftware(next);
+      }
       return;
     }
 
@@ -115,8 +139,12 @@ export default function Login() {
         };
       });
     } else {
+      // Node doesn't have a trace, so remove trace_tracker software
       next.delete("trace_tracker");
-      setTraceState({ active: false, progress: 0, profileId: null });
+      // Stop any active trace since this node doesn't have a trace
+      if (traceState.active) {
+        setTraceState({ active: false, progress: 0, profileId: null });
+      }
     }
 
     setCurrentSoftware(next);
