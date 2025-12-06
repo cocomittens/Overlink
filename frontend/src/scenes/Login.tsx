@@ -79,10 +79,11 @@ export default function Login() {
 
     // Re-evaluate trace state when currentNodeData becomes available after nodes load
     // This handles the case where handleTraceSoftware was called before nodes loaded
+    // Pass data directly to avoid stale closure issue with async state updates
     if (wasUndefined && data && !traceInitializedRef.current &&
       (traceState.active || currentSoftware.has("trace_tracker"))) {
       traceInitializedRef.current = true;
-      handleTraceSoftware();
+      handleTraceSoftware(data);
     }
   }, [nodes, currentNode]);
 
@@ -106,9 +107,12 @@ export default function Login() {
     }
   }, []);
 
-  const handleTraceSoftware = () => {
+  const handleTraceSoftware = (nodeData?: (typeof nodes)[0] | undefined) => {
+    // Use provided nodeData or fall back to state (for backward compatibility)
+    const nodeDataToUse = nodeData ?? currentNodeData;
+
     // If node data hasn't loaded yet, preserve existing trace state to avoid race condition
-    if (!currentNodeData) {
+    if (!nodeDataToUse) {
       // Don't modify trace state or software if we don't have node data yet
       // This prevents stopping an active trace during page refresh before nodes load
       // If there's an active trace, preserve it by keeping trace_tracker in software
@@ -120,9 +124,9 @@ export default function Login() {
       return;
     }
 
-    const hasTrace = Boolean(currentNodeData.hasTrace);
+    const hasTrace = Boolean(nodeDataToUse.hasTrace);
     const next = new Set(currentSoftware);
-    const profileId = currentNodeData.traceProfileId || "medium";
+    const profileId = nodeDataToUse.traceProfileId || "medium";
 
     if (hasTrace) {
       next.add("trace_tracker");
