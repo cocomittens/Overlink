@@ -89,11 +89,15 @@ export default function Login() {
     if (hasTrace) {
       next.add("trace_tracker");
       setTraceState((prev) => {
-        const shouldContinueExisting =
-          prev.active && prev.profileId === profileId && prev.progress < 100;
-        if (shouldContinueExisting) {
-          return prev;
+        // Continue existing trace if active and not complete, preserving progress
+        // Update profileId to match new node's profile (trace speed will adjust)
+        if (prev.active && prev.progress < 100) {
+          return {
+            ...prev,
+            profileId,
+          };
         }
+        // Start new trace if none exists or previous one completed
         return {
           active: true,
           progress: 0,
