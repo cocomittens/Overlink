@@ -33,7 +33,7 @@ const TraceTracker: React.FC = () => {
     const updatedSoftware = new Set(currentSoftware);
     updatedSoftware.delete("trace_tracker");
     setCurrentSoftware(updatedSoftware);
-    setTraceState((prev) => ({ ...prev, active: false, progress: 0 }));
+    setTraceState({ active: false, progress: 0, profileId: null });
   }
 
   useEffect(() => {
