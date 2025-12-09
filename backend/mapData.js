@@ -2,6 +2,9 @@ module.exports = [
   {
     id: "internal_1",
     name: "Nordsec Internal Services",
+    securityTier: "low",
+    traceProfileId: "high",
+    hasTrace: true,
     directory: [
       {
         id: "file_server",
@@ -69,6 +72,9 @@ module.exports = [
   {
     id: "internal_2",
     name: "SilentWave Internal Services",
+    securityTier: "low",
+    traceProfileId: "high",
+    hasTrace: true,
     directory: [
       {
         id: "file_server",
@@ -113,6 +119,9 @@ module.exports = [
   {
     id: "bank_1",
     name: "Helix Finance Group",
+    securityTier: "medium",
+    traceProfileId: "medium",
+    hasTrace: true,
     directory: [
       {
         id: "file_server",
@@ -148,50 +157,6 @@ module.exports = [
           {
             name: "Action",
             data: ["login_success", "ledger_update", "trace_alert"],
-          },
-        ],
-      },
-    ],
-  },
-  {
-    id: "internal_1",
-    name: "Nordsec Internal Services",
-    directory: [
-      {
-        id: "file_server",
-        name: "File Server",
-        data: [
-          {
-            name: "Filename",
-            data: [
-              "sample_data_334",
-              "sample_data_1337",
-              "sample_data_42",
-              "auth.txt",
-            ],
-          },
-        ],
-        folders: [
-          {
-            id: "internal_archives",
-            name: "Internal Archives",
-            data: [
-              {
-                name: "Filename",
-                data: ["system_backup.tar", "readme.txt"],
-              },
-            ],
-          },
-        ],
-      },
-      {
-        id: "view_logs",
-        name: "View Logs",
-        data: [
-          { name: "Date", data: ["2023-10-01", "2023-10-02", "2023-10-03"] },
-          {
-            name: "Action",
-            data: ["log_2023_10_01", "log_2023_10_02", "log_2023_10_03"],
           },
         ],
       },

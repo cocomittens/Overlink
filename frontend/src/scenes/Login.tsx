@@ -1,12 +1,13 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import "../styles/login.scss";
 import { PasswordBreaker } from "../software/PasswordBreaker";
-import { useAtom } from "jotai";
+import { useAtom, useAtomValue, useSetAtom } from "jotai";
 import {
   currentNodeAtom,
   nodesAtom,
   soundEnabledAtom,
   currentSoftwareAtom,
+  traceStateAtom,
 } from "../store";
 import { useNavigate } from "react-router-dom";
 import SavedUserList, { SavedUser } from "../components/SavedUserList";
@@ -19,6 +20,8 @@ export default function Login() {
   const [currentNode] = useAtom(currentNodeAtom);
   const [nodes, setNodes] = useAtom(nodesAtom);
   const [currentSoftware, setCurrentSoftware] = useAtom(currentSoftwareAtom);
+  const traceState = useAtomValue(traceStateAtom);
+  const setTraceState = useSetAtom(traceStateAtom);
   const [currentNodeData, setCurrentNodeData] = useState<
     (typeof nodes)[0] | undefined
   >(undefined);
@@ -26,6 +29,9 @@ export default function Login() {
   const [savedUsers, setSavedUsers] = useState<SavedUser[]>([]);
   const [selectedUser, setSelectedUser] = useState<string | null>(null);
   const successSoundRef = useRef<HTMLAudioElement | null>(null);
+  const prevNodeDataRef = useRef<(typeof nodes)[0] | undefined>(undefined);
+  const traceInitializedRef = useRef(false);
+  const traceRequestedRef = useRef(false);
   const [soundEnabled] = useAtom(soundEnabledAtom);
 
   const navigate = useNavigate();
@@ -60,10 +66,90 @@ export default function Login() {
     setSavedUsers(loadSavedUsers());
   }, [currentNode]);
 
+  const handleTraceSoftware = useCallback((nodeData?: (typeof nodes)[0] | undefined) => {
+    // Use provided nodeData or fall back to state (for backward compatibility)
+    const nodeDataToUse = nodeData ?? currentNodeData;
+
+    // If node data hasn't loaded yet, preserve existing trace state to avoid race condition
+    if (!nodeDataToUse) {
+      // Don't modify trace state or software if we don't have node data yet
+      // This prevents stopping an active trace during page refresh before nodes load
+      // If there's an active trace, preserve it by keeping trace_tracker in software
+      if (traceState.active) {
+        setCurrentSoftware((prev) => {
+          const next = new Set(prev);
+          next.add("trace_tracker");
+          return next;
+        });
+      } else {
+        // Mark that we've requested trace initialization, so it can be handled when nodes load
+        traceRequestedRef.current = true;
+      }
+      return;
+    }
+
+    const hasTrace = Boolean(nodeDataToUse.hasTrace);
+    const profileId = nodeDataToUse.traceProfileId || "medium";
+
+    if (hasTrace) {
+      setCurrentSoftware((prev) => {
+        const next = new Set(prev);
+        next.add("trace_tracker");
+        return next;
+      });
+      setTraceState((prev) => {
+        // Continue existing trace if active and not complete, preserving progress
+        // Update profileId to match new node's profile (trace speed will adjust)
+        if (prev.active && prev.progress < 100) {
+          return {
+            ...prev,
+            profileId,
+          };
+        }
+        // Start new trace if none exists or previous one completed
+        return {
+          active: true,
+          progress: 0,
+          profileId,
+        };
+      });
+    } else {
+      // Node doesn't have a trace, so remove trace_tracker software
+      setCurrentSoftware((prev) => {
+        const next = new Set(prev);
+        next.delete("trace_tracker");
+        return next;
+      });
+      // Stop any active trace since this node doesn't have a trace
+      if (traceState.active) {
+        setTraceState({ active: false, progress: 0, profileId: null });
+      }
+    }
+  }, [currentNodeData, traceState.active, setCurrentSoftware, setTraceState]);
+
   useEffect(() => {
     const data = nodes.find((node) => node.id === currentNode);
+    const wasUndefined = prevNodeDataRef.current === undefined;
+    const nodeChanged = prevNodeDataRef.current?.id !== data?.id;
+
+    if (nodeChanged) {
+      traceInitializedRef.current = false;
+      traceRequestedRef.current = false;
+    }
+
+    prevNodeDataRef.current = data;
     setCurrentNodeData(data);
-  }, [nodes, currentNode]);
+
+    // Re-evaluate trace state when currentNodeData becomes available after nodes load
+    // This handles the case where handleTraceSoftware was called before nodes loaded
+    // Pass data directly to avoid stale closure issue with async state updates
+    if (wasUndefined && data && !traceInitializedRef.current &&
+      (traceState.active || currentSoftware.has("trace_tracker") || traceRequestedRef.current)) {
+      traceInitializedRef.current = true;
+      traceRequestedRef.current = false;
+      handleTraceSoftware(data);
+    }
+  }, [nodes, currentNode, traceState.active, currentSoftware, handleTraceSoftware]);
 
   useEffect(() => {
     if (nodes.length === 0) {
@@ -88,6 +174,7 @@ export default function Login() {
   const initializeBreaker = () => {
     setUsername("admin");
     setStart(true);
+    handleTraceSoftware();
   };
 
   const handleSavedSelect = (user: SavedUser) => {
@@ -147,8 +234,9 @@ export default function Login() {
       upsertSavedUser();
       if (soundEnabled && successSoundRef.current) {
         successSoundRef.current.currentTime = 0;
-        successSoundRef.current.play().catch(() => {});
+        successSoundRef.current.play().catch(() => { });
       }
+      handleTraceSoftware();
       navigate("/terminal");
     }
   };

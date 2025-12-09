@@ -1,5 +1,5 @@
 import { atom } from "jotai";
-import { Mission } from "../types/mission";
+import { Mission, TraceProfileId } from "../types/mission";
 import { getMissions, getUserMissions, getNodeData } from "../api";
 
 const safeStorage = typeof localStorage !== "undefined" ? localStorage : null;
@@ -111,7 +111,21 @@ export const softwareAtom = atom([
   { id: "file_undeleter", name: "Undeleter", version: 1 },
 ]);
 
-export const currentSoftwareAtom = atom<Set<string>>(new Set<string>());
+const currentSoftwareBaseAtom = atom<Set<string>>(
+  new Set(readStorage<string[]>("currentSoftware", []))
+);
+
+export const currentSoftwareAtom = atom(
+  (get) => get(currentSoftwareBaseAtom),
+  (get, set, value: Set<string> | ((prev: Set<string>) => Set<string>)) => {
+    const next =
+      typeof value === "function"
+        ? (value as (prev: Set<string>) => Set<string>)(get(currentSoftwareBaseAtom))
+        : value;
+    set(currentSoftwareBaseAtom, next);
+    writeStorage("currentSoftware", Array.from(next));
+  }
+);
 
 const hardDriveBaseAtom = atom(
   readStorage("hardDrive", { capacity: 10, files: [] as string[] })
@@ -124,27 +138,53 @@ export const hardDriveAtom = atom(
     value:
       | { capacity: number; files: string[] }
       | ((prev: { capacity: number; files: string[] }) => {
-          capacity: number;
-          files: string[];
-        })
+        capacity: number;
+        files: string[];
+      })
   ) => {
     const next =
       typeof value === "function"
         ? (
-            value as (prev: { capacity: number; files: string[] }) => {
-              capacity: number;
-              files: string[];
-            }
-          )(get(hardDriveBaseAtom))
+          value as (prev: { capacity: number; files: string[] }) => {
+            capacity: number;
+            files: string[];
+          }
+        )(get(hardDriveBaseAtom))
         : value;
     set(hardDriveBaseAtom, next);
     writeStorage("hardDrive", next);
   }
 );
 
-export const traceAtom = atom<number>(0);
+export type TraceState = {
+  active: boolean;
+  progress: number; // 0-100
+  profileId: TraceProfileId | null;
+};
 
-export const traceTimeAtom = atom<number>(0);
+const traceStateBaseAtom = atom<TraceState>(
+  readStorage<TraceState>("traceState", {
+    active: false,
+    progress: 0,
+    profileId: null,
+  })
+);
+
+export const traceStateAtom = atom(
+  (get) => get(traceStateBaseAtom),
+  (
+    get,
+    set,
+    value: TraceState | ((prev: TraceState) => TraceState)
+  ) => {
+    const next =
+      typeof value === "function"
+        ? (value as (prev: TraceState) => TraceState)(get(traceStateBaseAtom))
+        : value;
+    set(traceStateBaseAtom, next);
+    writeStorage("traceState", next);
+  }
+);
 
 export const soundEnabledAtom = atom<boolean>(true);
 
