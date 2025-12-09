@@ -31,6 +31,7 @@ export default function Login() {
   const successSoundRef = useRef<HTMLAudioElement | null>(null);
   const prevNodeDataRef = useRef<(typeof nodes)[0] | undefined>(undefined);
   const traceInitializedRef = useRef(false);
+  const traceRequestedRef = useRef(false);
   const [soundEnabled] = useAtom(soundEnabledAtom);
 
   const navigate = useNavigate();
@@ -75,19 +76,27 @@ export default function Login() {
       // This prevents stopping an active trace during page refresh before nodes load
       // If there's an active trace, preserve it by keeping trace_tracker in software
       if (traceState.active) {
-        const next = new Set(currentSoftware);
-        next.add("trace_tracker");
-        setCurrentSoftware(next);
+        setCurrentSoftware((prev) => {
+          const next = new Set(prev);
+          next.add("trace_tracker");
+          return next;
+        });
+      } else {
+        // Mark that we've requested trace initialization, so it can be handled when nodes load
+        traceRequestedRef.current = true;
       }
       return;
     }
 
     const hasTrace = Boolean(nodeDataToUse.hasTrace);
-    const next = new Set(currentSoftware);
     const profileId = nodeDataToUse.traceProfileId || "medium";
 
     if (hasTrace) {
-      next.add("trace_tracker");
+      setCurrentSoftware((prev) => {
+        const next = new Set(prev);
+        next.add("trace_tracker");
+        return next;
+      });
       setTraceState((prev) => {
         // Continue existing trace if active and not complete, preserving progress
         // Update profileId to match new node's profile (trace speed will adjust)
@@ -106,15 +115,17 @@ export default function Login() {
       });
     } else {
       // Node doesn't have a trace, so remove trace_tracker software
-      next.delete("trace_tracker");
+      setCurrentSoftware((prev) => {
+        const next = new Set(prev);
+        next.delete("trace_tracker");
+        return next;
+      });
       // Stop any active trace since this node doesn't have a trace
       if (traceState.active) {
         setTraceState({ active: false, progress: 0, profileId: null });
       }
     }
-
-    setCurrentSoftware(next);
-  }, [currentNodeData, traceState.active, currentSoftware, setCurrentSoftware, setTraceState]);
+  }, [currentNodeData, traceState.active, setCurrentSoftware, setTraceState]);
 
   useEffect(() => {
     const data = nodes.find((node) => node.id === currentNode);
@@ -123,6 +134,7 @@ export default function Login() {
 
     if (nodeChanged) {
       traceInitializedRef.current = false;
+      traceRequestedRef.current = false;
     }
 
     prevNodeDataRef.current = data;
@@ -132,8 +144,9 @@ export default function Login() {
     // This handles the case where handleTraceSoftware was called before nodes loaded
     // Pass data directly to avoid stale closure issue with async state updates
     if (wasUndefined && data && !traceInitializedRef.current &&
-      (traceState.active || currentSoftware.has("trace_tracker"))) {
+      (traceState.active || currentSoftware.has("trace_tracker") || traceRequestedRef.current)) {
       traceInitializedRef.current = true;
+      traceRequestedRef.current = false;
       handleTraceSoftware(data);
     }
   }, [nodes, currentNode, traceState.active, currentSoftware, handleTraceSoftware]);
