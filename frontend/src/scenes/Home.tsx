@@ -3,7 +3,7 @@ import "../styles/home.scss";
 
 export default function Home() {
   const [traced, setTraced] = useState(false);
-  const [showWelcome, setShowWelcome] = useState(false);
+  const [showWelcome, setShowWelcome] = useState(true);
 
   useEffect(() => {
     const flag = sessionStorage.getItem("traced");
