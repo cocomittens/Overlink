@@ -57,9 +57,9 @@ export default function AgentLogin() {
         localStorage.setItem("user", JSON.stringify(data.user));
         if (soundEnabled && successSoundRef.current) {
           successSoundRef.current.currentTime = 0;
-          successSoundRef.current.play().catch(() => {});
+          successSoundRef.current.play().catch(() => { });
         }
-        navigate("/terminal");
+        navigate("/");
       } else {
         setError(data?.message || data?.error || "Login failed");
       }

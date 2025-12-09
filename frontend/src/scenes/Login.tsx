@@ -237,7 +237,7 @@ export default function Login() {
         successSoundRef.current.play().catch(() => { });
       }
       handleTraceSoftware();
-      navigate("/");
+      navigate("/terminal");
     }
   };
 
