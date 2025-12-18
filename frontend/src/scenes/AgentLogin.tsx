@@ -1,6 +1,6 @@
 import "../styles/login.scss";
 
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import SavedUserList, { SavedUser } from "../components/SavedUserList";
 import { useAtom } from "jotai";
 import { userAtom, soundEnabledAtom } from "../store";
@@ -57,7 +57,7 @@ export default function AgentLogin() {
         localStorage.setItem("user", JSON.stringify(data.user));
         if (soundEnabled && successSoundRef.current) {
           successSoundRef.current.currentTime = 0;
-          successSoundRef.current.play().catch(() => { });
+          successSoundRef.current.play().catch(() => {});
         }
         navigate("/");
       } else {

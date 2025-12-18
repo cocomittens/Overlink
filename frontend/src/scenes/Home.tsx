@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import "../styles/home.scss";
 
 export default function Home() {
@@ -18,7 +18,11 @@ export default function Home() {
 
   return (
     <div className="home">
-      {traced ? "You have been traced." : showWelcome ? "Welcome to the game." : ""}
+      {traced
+        ? "You have been traced."
+        : showWelcome
+        ? "Welcome to the game."
+        : ""}
     </div>
   );
 }

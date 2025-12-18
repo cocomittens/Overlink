@@ -1,7 +1,5 @@
 import "../styles/missions.scss";
 
-import React from "react";
-
 import { Mission } from "../types/mission";
 
 export function MissionDescription({ mission }: { mission: Mission | null }) {
