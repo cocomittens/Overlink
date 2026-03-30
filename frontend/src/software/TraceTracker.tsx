@@ -6,6 +6,7 @@ import { TRACE_PROFILES } from "../types/mission";
 import {
   currentNodeAtom,
   currentSoftwareAtom,
+  softwareAtom,
   soundEnabledAtom,
   traceStateAtom,
 } from "../store";
@@ -16,6 +17,9 @@ const TraceTracker: React.FC = () => {
   const [traceState, setTraceState] = useAtom(traceStateAtom);
   const [currentNode, setCurrentNode] = useAtom(currentNodeAtom);
   const soundEnabled = useAtomValue(soundEnabledAtom);
+  const software = useAtomValue(softwareAtom);
+  const trackerVersion =
+    software.find((s) => s.id === "trace_tracker")?.version ?? 1;
   const navigate = useNavigate();
   const [position, setPosition] = useState<{ x: number; y: number }>({
     x: typeof window !== "undefined" ? window.innerWidth - 60 : 0,
@@ -216,7 +220,20 @@ const TraceTracker: React.FC = () => {
       style={style}
       onMouseDown={pickUp}
     >
-      <span>{Math.round(traceState.progress)}%</span>
+      <span>
+        {trackerVersion >= 2
+          ? (() => {
+              const profile =
+                TRACE_PROFILES[traceState.profileId ?? "medium"] ||
+                TRACE_PROFILES.medium;
+              const totalSeconds = profile.baseSeconds / profile.accelFactor;
+              const remaining = Math.ceil(
+                ((100 - traceState.progress) / 100) * totalSeconds
+              );
+              return `${remaining}s`;
+            })()
+          : `${Math.round(traceState.progress)}%`}
+      </span>
       <CancelIcon onClick={handleCancel} />
     </div>
   );

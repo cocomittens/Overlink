@@ -7,6 +7,7 @@ import {
   nodesAtom,
   soundEnabledAtom,
   currentSoftwareAtom,
+  softwareAtom,
   traceStateAtom,
 } from "../store";
 import { useNavigate } from "react-router-dom";
@@ -33,6 +34,9 @@ export default function Login() {
   const traceInitializedRef = useRef(false);
   const traceRequestedRef = useRef(false);
   const [soundEnabled] = useAtom(soundEnabledAtom);
+  const [software] = useAtom(softwareAtom);
+  const passwordCrackerVersion =
+    software.find((s) => s.id === "password_breaker")?.version ?? 1;
 
   const navigate = useNavigate();
   const getStorageKeys = () =>
@@ -309,6 +313,7 @@ export default function Login() {
           start={start}
           onComplete={handleComplete}
           soundEnabled={soundEnabled}
+          version={passwordCrackerVersion}
           onClose={() =>
             setCurrentSoftware((prev) => {
               const next = new Set(prev);

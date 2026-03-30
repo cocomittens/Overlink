@@ -100,16 +100,75 @@ export const directoryAtom = atom(
   }
 );
 
-export const moneyAtom = atom(1000);
+const moneyBaseAtom = atom(readStorage("money", 1000));
+export const moneyAtom = atom(
+  (get) => get(moneyBaseAtom),
+  (_get, set, value: number) => {
+    set(moneyBaseAtom, value);
+    writeStorage("money", value);
+  }
+);
 export const ratingAtom = atom(13);
 
-export const softwareAtom = atom([
-  { id: "trace_tracker", name: "Trace Monitor", version: 2 },
+export const initialSoftware = [
+  { id: "trace_tracker", name: "Trace Monitor", version: 1 },
   { id: "password_breaker", name: "Password Cracker", version: 1 },
   { id: "file_copier", name: "Copier", version: 1 },
   { id: "file_deleter", name: "Deleter", version: 1 },
   { id: "file_undeleter", name: "Undeleter", version: 1 },
-]);
+];
+
+const softwareBaseAtom = atom(readStorage("software", initialSoftware));
+export const softwareAtom = atom(
+  (get) => get(softwareBaseAtom),
+  (_get, set, value: typeof initialSoftware) => {
+    set(softwareBaseAtom, value);
+    writeStorage("software", value);
+  }
+);
+
+export type ShopItem = {
+  id: number;
+  name: string;
+  description: string;
+  price: number;
+};
+
+export const initialShopItems: ShopItem[] = [
+  {
+    id: 1,
+    name: "Undeleter",
+    description: "Undeletes deleted files",
+    price: 1337,
+  },
+  {
+    id: 2,
+    name: "Hard drive cleaner",
+    description: "Deletes all files in hard drive, except selected files.",
+    price: 420,
+  },
+  {
+    id: 3,
+    name: "Password Cracker v2",
+    description: "Makes password cracker faster.",
+    price: 1000,
+  },
+  {
+    id: 4,
+    name: "Trace Monitor v2",
+    description: "Displays remaining trace time in seconds instead of percentage.",
+    price: 420,
+  },
+];
+
+const shopItemsBaseAtom = atom(readStorage<ShopItem[]>("shopItems", initialShopItems));
+export const shopItemsAtom = atom(
+  (get) => get(shopItemsBaseAtom),
+  (_get, set, value: ShopItem[]) => {
+    set(shopItemsBaseAtom, value);
+    writeStorage("shopItems", value);
+  }
+);
 
 const currentSoftwareBaseAtom = atom<Set<string>>(
   new Set(readStorage<string[]>("currentSoftware", []))

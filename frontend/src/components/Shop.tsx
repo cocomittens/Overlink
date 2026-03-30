@@ -3,35 +3,14 @@ import "../styles/missions.scss";
 import React, { useState } from "react";
 import { useAtom } from "jotai";
 import CancelIcon from "./CancelIcon";
-import { moneyAtom } from "../store";
-
-type ShopItem = {
-  id: number;
-  name: string;
-  description: string;
-  price: number;
-};
-
-const initialItems: ShopItem[] = [
-  {
-    id: 1,
-    name: "Undeleter",
-    description: "Undeletes deleted files",
-    price: 1337,
-  },
-  {
-    id: 2,
-    name: "Hard drive cleaner",
-    description: "Deletes all files in hard drive, except selected files.",
-    price: 420,
-  },
-  {
-    id: 3,
-    name: "Password Cracker v2",
-    description: "Makes password cracker faster.",
-    price: 1000,
-  },
-];
+import {
+  moneyAtom,
+  softwareAtom,
+  shopItemsAtom,
+  initialShopItems,
+  initialSoftware,
+  ShopItem,
+} from "../store";
 
 export function Shop({ onClose }: { onClose: () => void }) {
   const handleClose = (e: React.MouseEvent | React.KeyboardEvent) => {
@@ -40,7 +19,8 @@ export function Shop({ onClose }: { onClose: () => void }) {
   };
 
   const [money, setMoney] = useAtom(moneyAtom);
-  const [items, setItems] = useState<ShopItem[]>(initialItems);
+  const [software, setSoftware] = useAtom(softwareAtom);
+  const [items, setItems] = useAtom(shopItemsAtom);
   const [selectedItem, setSelectedItem] = useState<ShopItem | null>(null);
 
   const handleItemClick = (item: ShopItem) => {
@@ -51,14 +31,36 @@ export function Shop({ onClose }: { onClose: () => void }) {
     if (!selectedItem) return;
     if (money < selectedItem.price) return;
     setMoney(money - selectedItem.price);
-    setItems((prev) => prev.filter((i) => i.id !== selectedItem.id));
+    setItems(items.filter((i) => i.id !== selectedItem.id));
+
+    if (selectedItem.id === 3) {
+      setSoftware(
+        software.map((s) =>
+          s.id === "password_breaker"
+            ? { ...s, name: "Password Cracker v2", version: 2 }
+            : s
+        )
+      );
+    }
+
+    if (selectedItem.id === 4) {
+      setSoftware(
+        software.map((s) =>
+          s.id === "trace_tracker"
+            ? { ...s, name: "Trace Monitor v2", version: 2 }
+            : s
+        )
+      );
+    }
+
     setSelectedItem(null);
   };
 
   const handleReset = () => {
-    setItems(initialItems);
+    setItems(initialShopItems);
     setSelectedItem(null);
     setMoney(1000);
+    setSoftware(initialSoftware);
   };
 
   const canAfford = selectedItem ? money >= selectedItem.price : false;
