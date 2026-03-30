@@ -43,6 +43,16 @@ export function Shop({ onClose }: { onClose: () => void }) {
       );
     }
 
+    if (selectedItem.id === 4) {
+      setSoftware(
+        software.map((s) =>
+          s.id === "trace_tracker"
+            ? { ...s, name: "Trace Monitor v2", version: 2 }
+            : s
+        )
+      );
+    }
+
     setSelectedItem(null);
   };
 

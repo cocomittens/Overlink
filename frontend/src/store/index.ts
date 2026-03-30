@@ -111,7 +111,7 @@ export const moneyAtom = atom(
 export const ratingAtom = atom(13);
 
 export const initialSoftware = [
-  { id: "trace_tracker", name: "Trace Monitor", version: 2 },
+  { id: "trace_tracker", name: "Trace Monitor", version: 1 },
   { id: "password_breaker", name: "Password Cracker", version: 1 },
   { id: "file_copier", name: "Copier", version: 1 },
   { id: "file_deleter", name: "Deleter", version: 1 },
@@ -152,6 +152,12 @@ export const initialShopItems: ShopItem[] = [
     name: "Password Cracker v2",
     description: "Makes password cracker faster.",
     price: 1000,
+  },
+  {
+    id: 4,
+    name: "Trace Monitor v2",
+    description: "Displays remaining trace time in seconds instead of percentage.",
+    price: 420,
   },
 ];
 
