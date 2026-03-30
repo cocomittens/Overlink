@@ -8,6 +8,7 @@ interface Props {
   onComplete?: () => void;
   soundEnabled?: boolean;
   onClose?: () => void;
+  version?: number;
 }
 interface State {
   lettersGuessed: number;
@@ -70,7 +71,8 @@ export class PasswordBreaker extends React.Component<Props, State> {
     const { password, onComplete } = this.props;
     if (!password) return;
     let letters = 0;
-    const speed = 2000;
+    const isV2 = (this.props.version ?? 1) >= 2;
+    const speed = isV2 ? 1000 : 2000;
     this.setState({
       lettersGuessed: 0,
       randomSuffix: this.randomString(password.length),
@@ -89,7 +91,7 @@ export class PasswordBreaker extends React.Component<Props, State> {
       } else if (this.randomInterval) {
         clearInterval(this.randomInterval);
       }
-    }, 200);
+    }, isV2 ? 100 : 200);
 
     while (letters < password.length) {
       await new Promise((res) => setTimeout(res, speed));
@@ -150,7 +152,7 @@ export class PasswordBreaker extends React.Component<Props, State> {
         >
           <CancelIcon />
         </div>
-        <p>Password Cracker</p>
+        <p>Password Cracker{(this.props.version ?? 1) >= 2 ? " v2" : ""}</p>
         <span className="password-breaker-display">
           {content && content.length > 0 ? content : "Select a target"}
         </span>
