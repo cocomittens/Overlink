@@ -142,12 +142,6 @@ export const initialShopItems: ShopItem[] = [
     price: 1337,
   },
   {
-    id: 2,
-    name: "Hard drive cleaner",
-    description: "Deletes all files in hard drive, except selected files.",
-    price: 420,
-  },
-  {
     id: 3,
     name: "Password Cracker v2",
     description: "Makes password cracker faster.",
