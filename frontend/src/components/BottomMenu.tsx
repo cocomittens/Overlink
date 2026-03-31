@@ -180,8 +180,8 @@ const BottomMenu: React.FC = () => {
         abandonSoundRef.current.currentTime = 0;
         abandonSoundRef.current.play().catch(() => {});
       }
-      setSelectedMission(null);
       refreshMissions();
+      setSelectedMission(null);
     } catch (err) {
       console.error("Failed to abandon mission", err);
     }

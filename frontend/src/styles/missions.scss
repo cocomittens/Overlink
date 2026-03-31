@@ -18,9 +18,11 @@ body {
   top: 20vh;
   background: vars.$primary-bg;
   padding: 1rem;
+  padding-bottom: 120px;
   border-radius: 0.5rem;
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   width: 40vw;
+  z-index: 2;
   
 
   h2 {

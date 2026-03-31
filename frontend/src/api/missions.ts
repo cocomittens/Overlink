@@ -31,6 +31,16 @@ export const completeMission = async (userId: number, missionId: number) => {
   return response.json();
 };
 
+export const resetMissions = async (userId: number) => {
+  const response = await fetch(
+    `${API_BASE}/users/${userId}/missions/reset`,
+    {
+      method: "POST",
+    }
+  );
+  return response.json();
+};
+
 export const abandonMission = async (userId: number, missionId: number) => {
   const response = await fetch(
     `${API_BASE}/users/${userId}/missions/${missionId}/abandon`,

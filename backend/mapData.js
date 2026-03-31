@@ -87,6 +87,7 @@ module.exports = [
               "sample_data_1337",
               "sample_data_42",
               "auth.txt",
+              "connection.log",
             ],
           },
         ],
@@ -129,7 +130,7 @@ module.exports = [
         data: [
           {
             name: "Filename",
-            data: ["balances_q3.csv", "wire_logs.txt", "audit_report.pdf"],
+            data: ["balances_q3.csv", "wire_logs.txt", "audit_report.pdf", "ledger-final.dat"],
           },
           {
             name: "Notes",
@@ -157,6 +158,61 @@ module.exports = [
           {
             name: "Action",
             data: ["login_success", "ledger_update", "trace_alert"],
+          },
+        ],
+      },
+    ],
+  },
+  {
+    id: "mainframe_1",
+    name: "Cryo-Dyne Systems Mainframe",
+    securityTier: "high",
+    traceProfileId: "medium",
+    hasTrace: true,
+    directory: [
+      {
+        id: "file_server",
+        name: "File Server",
+        data: [
+          {
+            name: "Filename",
+            data: [
+              "sys_config.dat",
+              "employee_roster.csv",
+              "proj_atlas.tar.gz",
+              "reactor_schema.bin",
+            ],
+          },
+          {
+            name: "Classification",
+            data: ["internal", "restricted", "top-secret", "top-secret"],
+          },
+        ],
+        folders: [
+          {
+            id: "classified_ops",
+            name: "Classified Ops",
+            data: [
+              {
+                name: "Filename",
+                data: ["op_nightfall.enc", "asset_list.xlsx"],
+              },
+              {
+                name: "Classification",
+                data: ["top-secret", "restricted"],
+              },
+            ],
+          },
+        ],
+      },
+      {
+        id: "view_logs",
+        name: "View Logs",
+        data: [
+          { name: "Date", data: ["2023-11-10", "2023-11-11", "2023-11-12"] },
+          {
+            name: "Action",
+            data: ["auth_failure", "file_access", "trace_initiated"],
           },
         ],
       },
