@@ -230,6 +230,19 @@ function initDatabase() {
       traceProfileId: "medium",
       hasTrace: 1,
     },
+    {
+      id: "mainframe_1",
+      top: 150,
+      left: 600,
+      name: "Cryo-Dyne Systems Mainframe",
+      admin: 1,
+      account: 0,
+      active: 1,
+      password: "icebreaker",
+      securityTier: "high",
+      traceProfileId: "medium",
+      hasTrace: 1,
+    },
   ];
 
   nodes.forEach((node) => {
@@ -304,6 +317,26 @@ function initDatabase() {
     },
     {
       id: 3,
+      title: "Copy classified project file from a corporate mainframe",
+      description:
+        "A rival corporation needs the blueprints for a classified project codenamed 'Atlas'. Infiltrate the Cryo-Dyne Systems mainframe, locate the file 'proj_atlas.tar.gz' in the File Server, and copy it to your hard drive. Admin access is required — break the password first.",
+      employer: "Obsidian Dynamics",
+      date: "2023-10-03",
+      payment: 2200,
+      difficulty: 3,
+      minRating: 2,
+      traceProfileId: null,
+      targets: JSON.stringify([
+        {
+          nodeId: "mainframe_1",
+          objective: "copy",
+          filePattern: "proj_atlas.tar.gz",
+          adminRequired: true,
+        },
+      ]),
+    },
+    {
+      id: 4,
       title: "Recover a corrupted report from a corporate fileserver",
       description:
         "A corrupted financial report is stuck behind basic security. Break into the fileserver, navigate to /reports/q3/, and copy 'ledger-final.dat' to your workspace. Expect mild intrusion countermeasures.",
@@ -348,12 +381,16 @@ function initDatabase() {
       console.log(`Mission added: "${mission.title}"`);
     } else {
       db.prepare(
-        `UPDATE missions 
-         SET description = COALESCE(description, ?), employer = COALESCE(employer, ?), traceProfileId = COALESCE(traceProfileId, ?), targets = COALESCE(targets, ?) 
+        `UPDATE missions
+         SET title = ?, description = ?, employer = ?, payment = ?, difficulty = ?, minRating = ?, traceProfileId = ?, targets = ?
          WHERE id = ?`
       ).run(
+        mission.title,
         mission.description,
         mission.employer,
+        mission.payment,
+        mission.difficulty,
+        mission.minRating,
         mission.traceProfileId,
         mission.targets,
         mission.id

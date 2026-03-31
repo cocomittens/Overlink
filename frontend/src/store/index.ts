@@ -43,7 +43,7 @@ const allMissionsAtom = atom<Promise<Mission[]>>(async (get) => {
   return await getMissions();
 });
 
-export const currentMissionsAtom = atom<Promise<Mission[]>>(async (get) => {
+const userMissionsAtom = atom<Promise<(Mission & { status?: string })[]>>(async (get) => {
   const user = get(userAtom);
   get(missionsRefreshAtom);
   if (!user) {
@@ -52,16 +52,22 @@ export const currentMissionsAtom = atom<Promise<Mission[]>>(async (get) => {
   return await getUserMissions(user.id);
 });
 
+export const currentMissionsAtom = atom<Promise<Mission[]>>(async (get) => {
+  const all = await get(userMissionsAtom);
+  return all.filter((m) => m.status === "accepted");
+});
+
 export const missionsAtom = atom<Promise<Mission[]>>(async (get) => {
   const allMissions = await get(allMissionsAtom);
-  const acceptedMissions = await get(currentMissionsAtom);
-  const acceptedMissionIds = new Set(acceptedMissions.map((m) => m.id));
-  return allMissions.filter((m) => !acceptedMissionIds.has(m.id));
+  const userMissions = await get(userMissionsAtom);
+  const userMissionIds = new Set(userMissions.map((m) => m.id));
+  return allMissions.filter((m) => !userMissionIds.has(m.id));
 });
 
 export const refreshMissionsAtom = atom(null, (get, set) => {
   set(missionsRefreshAtom, (prev) => prev + 1);
 });
+
 
 export const chainAtom = atom<string[]>(["personal_gateway"]);
 const currentNodeBaseAtom = atom<string | null>(

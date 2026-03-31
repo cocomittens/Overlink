@@ -7,6 +7,8 @@ import {
   selectedFileAtom,
   Directory,
   deletedServerFilesAtom,
+  traceStateAtom,
+  soundEnabledAtom,
 } from "../store";
 import { useNavigate } from "react-router-dom";
 import { useAtomValue } from "jotai";
@@ -17,6 +19,8 @@ export default function FileList() {
   const [, setSelectedFile] = useAtom(selectedFileAtom);
   const deletedServerFiles = useAtomValue(deletedServerFilesAtom);
   const setCurrentNode = useSetAtom(currentNodeAtom);
+  const setTraceState = useSetAtom(traceStateAtom);
+  const setCurrentSoftware = useSetAtom(currentSoftwareAtom);
   const navigate = useNavigate();
 
   const handleBack = () => {
@@ -31,6 +35,12 @@ export default function FileList() {
   const handleDisconnect = () => {
     setCurrentNode(null);
     setDirectory({ id: "", name: "", data: [] });
+    setTraceState({ active: false, progress: 0, profileId: null });
+    setCurrentSoftware((prev) => {
+      const next = new Set(prev);
+      next.delete("trace_tracker");
+      return next;
+    });
     sessionStorage.setItem("prevComputerPath", "/");
     sessionStorage.setItem("lastComputerPath", "/");
     navigate("/");
@@ -74,7 +84,7 @@ export default function FileList() {
           ))}
         </div>
       )}
-      {(!directory.folders || directory.folders.length === 0) && (
+      {directory.data && directory.data.length > 0 && (
         <table>
           <thead>
             <tr>

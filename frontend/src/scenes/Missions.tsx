@@ -4,6 +4,7 @@ import React, { useEffect, useRef, useState } from "react";
 import {
   currentMissionsAtom,
   missionsAtom,
+  moneyAtom,
   refreshMissionsAtom,
   userAtom,
   soundEnabledAtom,
@@ -12,17 +13,19 @@ import { useAtom, useAtomValue, useSetAtom } from "jotai";
 
 import { Mission } from "../types/mission";
 import { MissionDescription } from "../components/MissionDescription";
-import { acceptMission } from "../api";
+import { acceptMission, resetMissions } from "../api";
 import { loadable } from "jotai/utils";
 import { calculateLevelProgress } from "../util/level";
 
 export default function Missions() {
   const [mission, setMission] = useState<number | null>(null);
   const acceptSoundRef = useRef<HTMLAudioElement | null>(null);
+  const cancelSoundRef = useRef<HTMLAudioElement | null>(null);
   const user = useAtomValue(userAtom);
   const missionsLoadable = useAtomValue(loadable(missionsAtom));
   const currentMissionsLoadable = useAtomValue(loadable(currentMissionsAtom));
   const refreshMissions = useSetAtom(refreshMissionsAtom);
+  const [money, setMoney] = useAtom(moneyAtom);
   const soundEnabled = useAtomValue(soundEnabledAtom);
   const userLevel = calculateLevelProgress(user?.xp ?? 0).level;
 
@@ -34,11 +37,21 @@ export default function Missions() {
     if (acceptSoundRef.current) {
       acceptSoundRef.current.volume = 0.6;
     }
+    cancelSoundRef.current =
+      typeof Audio !== "undefined"
+        ? new Audio("/soundEffects/cancel.wav")
+        : null;
+    if (cancelSoundRef.current) {
+      cancelSoundRef.current.volume = 0.6;
+    }
   }, []);
 
   useEffect(() => {
     if (!soundEnabled && acceptSoundRef.current) {
       acceptSoundRef.current.pause();
+    }
+    if (!soundEnabled && cancelSoundRef.current) {
+      cancelSoundRef.current.pause();
     }
   }, [soundEnabled]);
 
@@ -56,10 +69,26 @@ export default function Missions() {
           acceptSoundRef.current.currentTime = 0;
           acceptSoundRef.current.play().catch(() => {});
         }
+        setMission(null);
         refreshMissions();
       } catch (error) {
         console.error("Failed to accept mission:", error);
       }
+    }
+  };
+
+  const handleReset = async () => {
+    if (!user) return;
+    try {
+      await resetMissions(user.id);
+      if (soundEnabled && cancelSoundRef.current) {
+        cancelSoundRef.current.currentTime = 0;
+        cancelSoundRef.current.play().catch(() => {});
+      }
+      setMoney(1000);
+      setMission(null);
+      refreshMissions();
+    } catch (err) {
     }
   };
 
@@ -79,7 +108,17 @@ export default function Missions() {
 
   return (
     <div className="missions-container">
-      <h2>Available Missions</h2>
+      <div style={{ display: "flex", alignItems: "baseline", gap: "12px" }}>
+        <h2 style={{ margin: 0 }}>Available Missions</h2>
+        <span
+          className="material-icons"
+          style={{ cursor: "pointer", fontSize: "1.2em", opacity: 0.7, position: "relative", top: "2px" }}
+          onClick={handleReset}
+          title="Reset all missions and money"
+        >
+          restart_alt
+        </span>
+      </div>
       <table>
         <thead>
           <tr>
@@ -106,13 +145,17 @@ export default function Missions() {
         <MissionDescription mission={selectedMission} />
       </div>
       <button
-        type="submit"
+        type="button"
         className={`${
-          selectedMission && userLevel < selectedMission.minRating
+          !selectedMission || userLevel < selectedMission.minRating
             ? "disabled"
             : ""
         }`}
-        onClick={() => selectedMission && handleAccept(selectedMission.id)}
+        onClick={() => {
+          if (selectedMission) {
+            handleAccept(selectedMission.id);
+          }
+        }}
         disabled={!selectedMission || userLevel < selectedMission.minRating}
       >
         Accept

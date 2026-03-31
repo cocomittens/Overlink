@@ -1,10 +1,18 @@
 import "../styles/missions.scss";
 
 import { Mission } from "../types/mission";
-import React from "react";
-import { currentMissionsAtom } from "../store";
+import React, { useEffect, useRef, useState } from "react";
+import {
+  currentMissionsAtom,
+  hardDriveAtom,
+  moneyAtom,
+  userAtom,
+  refreshMissionsAtom,
+  soundEnabledAtom,
+} from "../store";
 import { loadable } from "jotai/utils";
-import { useAtomValue } from "jotai";
+import { useAtomValue, useAtom, useSetAtom } from "jotai";
+import { completeMission } from "../api";
 import CancelIcon from "../components/CancelIcon";
 
 export function MissionDetails({
@@ -21,6 +29,27 @@ export function MissionDetails({
     currentMissionsLoadable.state === "hasData"
       ? currentMissionsLoadable.data
       : [];
+  const [hardDrive] = useAtom(hardDriveAtom);
+  const [money, setMoney] = useAtom(moneyAtom);
+  const user = useAtomValue(userAtom);
+  const refreshMissions = useSetAtom(refreshMissionsAtom);
+  const soundEnabled = useAtomValue(soundEnabledAtom);
+  const [error, setError] = useState<string | null>(null);
+  const successSoundRef = useRef<HTMLAudioElement | null>(null);
+  const errorSoundRef = useRef<HTMLAudioElement | null>(null);
+
+  useEffect(() => {
+    successSoundRef.current =
+      typeof Audio !== "undefined"
+        ? new Audio("/soundEffects/accept.mp3")
+        : null;
+    if (successSoundRef.current) successSoundRef.current.volume = 0.6;
+    errorSoundRef.current =
+      typeof Audio !== "undefined"
+        ? new Audio("/soundEffects/cancel.wav")
+        : null;
+    if (errorSoundRef.current) errorSoundRef.current.volume = 0.6;
+  }, []);
 
   const mission =
     missionId !== null
@@ -35,13 +64,48 @@ export function MissionDetails({
 
   const handleClose = (e: React.MouseEvent | React.KeyboardEvent) => {
     e.stopPropagation();
+    setError(null);
     onClose();
   };
 
   const handleAbandon = (e: React.MouseEvent | React.KeyboardEvent) => {
     e.stopPropagation();
+    setError(null);
     if (missionId !== null) {
       onAbandon(missionId);
+    }
+  };
+
+
+  const handleComplete = async (e: React.MouseEvent | React.KeyboardEvent) => {
+    e.stopPropagation();
+    if (!mission || !user) return;
+
+    const targets = mission.targets ?? [];
+    for (const target of targets) {
+      if (target.objective === "copy" && target.filePattern) {
+        if (!hardDrive.files.includes(target.filePattern)) {
+          if (soundEnabled && errorSoundRef.current) {
+            errorSoundRef.current.currentTime = 0;
+            errorSoundRef.current.play().catch(() => {});
+          }
+          return;
+        }
+      }
+    }
+
+    try {
+      await completeMission(user.id, mission.id);
+      if (soundEnabled && successSoundRef.current) {
+        successSoundRef.current.currentTime = 0;
+        successSoundRef.current.play().catch(() => {});
+      }
+      setMoney(money + mission.payment);
+      setError(null);
+      onClose();
+      refreshMissions();
+    } catch (err) {
+
     }
   };
 
@@ -73,7 +137,19 @@ export function MissionDetails({
           </div>
           <div className="action-buttons">
             <div className="mission-action">
-              <span>Complete</span>
+              <span
+                role="button"
+                tabIndex={0}
+                onClick={handleComplete}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" || e.key === " ") {
+                    e.preventDefault();
+                    handleComplete(e);
+                  }
+                }}
+              >
+                Complete
+              </span>
             </div>
             <div className="mission-action">
               <span

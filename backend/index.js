@@ -191,6 +191,18 @@ app.delete("/api/users/:userId/missions/:missionId/abandon", (req, res) => {
   }
 });
 
+app.post("/api/users/:userId/missions/reset", (req, res) => {
+  try {
+    const { userId } = req.params;
+    db.prepare("DELETE FROM user_missions WHERE user_id = ?").run(userId);
+    db.prepare("UPDATE users SET money = 1000 WHERE id = ?").run(userId);
+    res.json({ message: "Missions and money reset successfully" });
+  } catch (error) {
+    console.error("Error resetting missions:", error);
+    res.status(500).json({ error: "Failed to reset missions" });
+  }
+});
+
 app.get("/api/health", (req, res) => {
   res.json({ status: "ok", message: "Server is running" });
 });
