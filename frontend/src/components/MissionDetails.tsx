@@ -33,7 +33,7 @@ export function MissionDetails({
   const [hardDrive] = useAtom(hardDriveAtom);
   const deletedServerFiles = useAtomValue(deletedServerFilesAtom);
   const [money, setMoney] = useAtom(moneyAtom);
-  const user = useAtomValue(userAtom);
+  const [user, setUser] = useAtom(userAtom);
   const refreshMissions = useSetAtom(refreshMissionsAtom);
   const soundEnabled = useAtomValue(soundEnabledAtom);
   const [error, setError] = useState<string | null>(null);
@@ -109,12 +109,17 @@ export function MissionDetails({
     }
 
     try {
-      await completeMission(user.id, mission.id);
+      const result = await completeMission(user.id, mission.id);
       if (soundEnabled && successSoundRef.current) {
         successSoundRef.current.currentTime = 0;
         successSoundRef.current.play().catch(() => {});
       }
       setMoney(money + mission.payment);
+      if (result.totalXp != null) {
+        const updatedUser = { ...user, xp: result.totalXp };
+        setUser(updatedUser);
+        localStorage.setItem("user", JSON.stringify(updatedUser));
+      }
       setError(null);
       onClose();
       refreshMissions();

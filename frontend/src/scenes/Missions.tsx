@@ -23,7 +23,7 @@ export default function Missions() {
   const [mission, setMission] = useState<number | null>(null);
   const acceptSoundRef = useRef<HTMLAudioElement | null>(null);
   const cancelSoundRef = useRef<HTMLAudioElement | null>(null);
-  const user = useAtomValue(userAtom);
+  const [user, setUser] = useAtom(userAtom);
   const missionsLoadable = useAtomValue(loadable(missionsAtom));
   const currentMissionsLoadable = useAtomValue(loadable(currentMissionsAtom));
   const refreshMissions = useSetAtom(refreshMissionsAtom);
@@ -92,6 +92,11 @@ export default function Missions() {
       setMoney(1000);
       setDeletedServerFiles([]);
       setHardDrive({ capacity: 10, files: [] });
+      if (user) {
+        const updatedUser = { ...user, xp: 420 };
+        setUser(updatedUser);
+        localStorage.setItem("user", JSON.stringify(updatedUser));
+      }
       setMission(null);
       refreshMissions();
     } catch (err) {
