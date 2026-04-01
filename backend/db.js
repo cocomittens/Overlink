@@ -334,27 +334,7 @@ function initDatabase() {
           adminRequired: true,
         },
       ]),
-    },
-    {
-      id: 4,
-      title: "Recover a corrupted report from a corporate fileserver",
-      description:
-        "A corrupted financial report is stuck behind basic security. Break into the fileserver, navigate to /reports/q3/, and copy 'ledger-final.dat' to your workspace. Expect mild intrusion countermeasures.",
-      employer: "Helix Finance Group",
-      date: "2023-10-03",
-      payment: 1800,
-      difficulty: 3,
-      minRating: 3,
-      traceProfileId: null,
-      targets: JSON.stringify([
-        {
-          nodeId: "bank_1",
-          objective: "copy",
-          filePattern: "ledger-final.dat",
-          adminRequired: true,
-        },
-      ]),
-    },
+    }
   ];
 
   missions.forEach((mission) => {
