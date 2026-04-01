@@ -246,6 +246,14 @@ export const traceStateAtom = atom(
 
 export const soundEnabledAtom = atom<boolean>(true);
 
+const savedLoginsRefreshBaseAtom = atom(0);
+export const savedLoginsRefreshAtom = atom(
+  (get) => get(savedLoginsRefreshBaseAtom),
+  (_get, set) => {
+    set(savedLoginsRefreshBaseAtom, (prev) => prev + 1);
+  }
+);
+
 export const selectedFileAtom = atom<{
   name: string;
   location?: string;

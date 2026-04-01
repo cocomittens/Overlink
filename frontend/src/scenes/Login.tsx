@@ -9,6 +9,7 @@ import {
   currentSoftwareAtom,
   softwareAtom,
   traceStateAtom,
+  savedLoginsRefreshAtom,
 } from "../store";
 import { useNavigate } from "react-router-dom";
 import SavedUserList, { SavedUser } from "../components/SavedUserList";
@@ -66,9 +67,11 @@ export default function Login() {
     }
   };
 
+  const savedLoginsVersion = useAtomValue(savedLoginsRefreshAtom);
+
   useEffect(() => {
     setSavedUsers(loadSavedUsers());
-  }, [currentNode]);
+  }, [currentNode, savedLoginsVersion]);
 
   const handleTraceSoftware = useCallback(
     (nodeData?: (typeof nodes)[0] | undefined) => {

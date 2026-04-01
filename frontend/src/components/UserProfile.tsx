@@ -1,8 +1,8 @@
 import "../styles/missions.scss";
 
 import React, { useRef } from "react";
-import { useAtom, useAtomValue } from "jotai";
-import { userAtom, soundEnabledAtom } from "../store";
+import { useAtom, useAtomValue, useSetAtom } from "jotai";
+import { userAtom, soundEnabledAtom, savedLoginsRefreshAtom } from "../store";
 import CancelIcon from "./CancelIcon";
 import { useNavigate } from "react-router-dom";
 
@@ -17,6 +17,8 @@ export function UserProfile({ onClose }: { onClose: () => void }) {
     onClose();
   };
 
+  const refreshSavedLogins = useSetAtom(savedLoginsRefreshAtom);
+
   const handleClearSavedLogins = () => {
     const keysToRemove: string[] = [];
     for (let i = 0; i < localStorage.length; i++) {
@@ -26,6 +28,7 @@ export function UserProfile({ onClose }: { onClose: () => void }) {
       }
     }
     keysToRemove.forEach((key) => localStorage.removeItem(key));
+    refreshSavedLogins();
   };
 
   const handleLogout = () => {
