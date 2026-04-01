@@ -298,9 +298,9 @@ function initDatabase() {
     },
     {
       id: 2,
-      title: "Purge access logs from a regional data relay",
+      title: "Destroy incriminating connection logs",
       description:
-        "A client was caught snooping where they shouldn't have been. Remotely access the relay node, locate 'connection.log', and delete all entries from the last 24 hours. Cover your tracks and avoid triggering the trace.",
+        "One of our operatives left a trail on a SilentWave internal server. We need that connection log gone before their sysadmin runs the morning audit. Break into the system, find 'connection.log' on the file server, and delete it.",
       employer: "SilentWave Analytics",
       date: "2023-10-02",
       payment: 1400,

@@ -17,6 +17,17 @@ export function UserProfile({ onClose }: { onClose: () => void }) {
     onClose();
   };
 
+  const handleClearSavedLogins = () => {
+    const keysToRemove: string[] = [];
+    for (let i = 0; i < localStorage.length; i++) {
+      const key = localStorage.key(i);
+      if (key && key.startsWith("savedLogins")) {
+        keysToRemove.push(key);
+      }
+    }
+    keysToRemove.forEach((key) => localStorage.removeItem(key));
+  };
+
   const handleLogout = () => {
     if (!logoutSoundRef.current && typeof Audio !== "undefined") {
       logoutSoundRef.current = new Audio("/soundEffects/cancel.wav");
@@ -59,6 +70,9 @@ export function UserProfile({ onClose }: { onClose: () => void }) {
           </div>
         </div>
         <div className="action-buttons">
+          <div className="mission-action" onClick={handleClearSavedLogins}>
+            <span>Clear Logins</span>
+          </div>
           <div className="mission-action" onClick={handleLogout}>
             <span>Logout</span>
           </div>

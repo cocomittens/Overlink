@@ -294,7 +294,7 @@ export default function Login() {
             </form>
           </div>
           <button
-            type="submit"
+            type="button"
             className={`login-button ${!isGuessed && "disabled"}`}
             onClick={handleProceed}
           >
