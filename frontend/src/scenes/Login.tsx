@@ -211,32 +211,25 @@ export default function Login() {
       currentNodeData?.password ||
       (passwordMask ? passwordMask.replace(/\*/g, "•") : "");
     if (!passwordToSave) return;
-    setSavedUsers((prev) => {
-      const existingIndex = prev.findIndex(
-        (u) => u.username === usernameToSave
-      );
-      let next: SavedUser[];
-      if (existingIndex >= 0) {
-        next = [...prev];
-        next[existingIndex] = {
-          username: usernameToSave,
-          password: passwordToSave,
-          nodeId: currentNode || undefined,
-        };
-      } else {
-        next = [
-          ...prev,
-          {
-            username: usernameToSave,
-            password: passwordToSave,
-            nodeId: currentNode || undefined,
-          },
-        ];
-      }
-      persistSavedUsers(next);
-      setSelectedUser(usernameToSave);
-      return next;
-    });
+    const entry: SavedUser = {
+      username: usernameToSave,
+      password: passwordToSave,
+      nodeId: currentNode || undefined,
+    };
+    const prev = savedUsers;
+    const existingIndex = prev.findIndex(
+      (u) => u.username === usernameToSave
+    );
+    let next: SavedUser[];
+    if (existingIndex >= 0) {
+      next = [...prev];
+      next[existingIndex] = entry;
+    } else {
+      next = [...prev, entry];
+    }
+    setSavedUsers(next);
+    persistSavedUsers(next);
+    setSelectedUser(usernameToSave);
   };
 
   const handleComplete = () => {
