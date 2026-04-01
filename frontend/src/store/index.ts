@@ -121,7 +121,6 @@ export const initialSoftware = [
   { id: "password_breaker", name: "Password Cracker", version: 1 },
   { id: "file_copier", name: "Copier", version: 1 },
   { id: "file_deleter", name: "Deleter", version: 1 },
-  { id: "file_undeleter", name: "Undeleter", version: 1 },
 ];
 
 const softwareBaseAtom = atom(readStorage("software", initialSoftware));
@@ -145,7 +144,7 @@ export const initialShopItems: ShopItem[] = [
     id: 1,
     name: "Undeleter",
     description: "Undeletes deleted files",
-    price: 1337,
+    price: 1000,
   },
   {
     id: 3,

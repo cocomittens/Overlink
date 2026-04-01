@@ -8,6 +8,8 @@ import {
   refreshMissionsAtom,
   userAtom,
   soundEnabledAtom,
+  deletedServerFilesAtom,
+  hardDriveAtom,
 } from "../store";
 import { useAtom, useAtomValue, useSetAtom } from "jotai";
 
@@ -26,6 +28,8 @@ export default function Missions() {
   const currentMissionsLoadable = useAtomValue(loadable(currentMissionsAtom));
   const refreshMissions = useSetAtom(refreshMissionsAtom);
   const [money, setMoney] = useAtom(moneyAtom);
+  const setDeletedServerFiles = useSetAtom(deletedServerFilesAtom);
+  const setHardDrive = useSetAtom(hardDriveAtom);
   const soundEnabled = useAtomValue(soundEnabledAtom);
   const userLevel = calculateLevelProgress(user?.xp ?? 0).level;
 
@@ -86,6 +90,8 @@ export default function Missions() {
         cancelSoundRef.current.play().catch(() => {});
       }
       setMoney(1000);
+      setDeletedServerFiles([]);
+      setHardDrive({ capacity: 10, files: [] });
       setMission(null);
       refreshMissions();
     } catch (err) {

@@ -51,7 +51,7 @@ const FileDeleter: React.FC = () => {
   const playClick = () => {
     if (soundEnabled && clickSoundRef.current) {
       clickSoundRef.current.currentTime = 0;
-      clickSoundRef.current.play().catch(() => {});
+      clickSoundRef.current.play().catch(() => { });
     }
   };
 
@@ -135,7 +135,7 @@ const FileDeleter: React.FC = () => {
                 return [...prev, { location, name, values: cells }];
               });
               row.querySelectorAll("td").forEach((td) => {
-                td.textContent = "file deleted";
+                td.textContent = "- DELETED -";
               });
             }
             setLabel("Deleted");
@@ -214,9 +214,8 @@ const FileDeleter: React.FC = () => {
 
   return (
     <div
-      className={`file-copier-widget file-deleter-widget${
-        dragging ? " dragging" : ""
-      }`}
+      className={`file-copier-widget file-deleter-widget${dragging ? " dragging" : ""
+        }`}
       style={{
         top: position.y,
         left: position.x,

@@ -33,6 +33,10 @@ export function Shop({ onClose }: { onClose: () => void }) {
     setMoney(money - selectedItem.price);
     setItems(items.filter((i) => i.id !== selectedItem.id));
 
+    if (selectedItem.id === 1) {
+      setSoftware([...software, { id: "file_undeleter", name: "Undeleter", version: 1 }]);
+    }
+
     if (selectedItem.id === 3) {
       setSoftware(
         software.map((s) =>

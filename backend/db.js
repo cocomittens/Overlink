@@ -319,7 +319,7 @@ function initDatabase() {
       id: 3,
       title: "Copy classified project file from a corporate mainframe",
       description:
-        "A rival corporation needs the blueprints for a classified project codenamed 'Atlas'. Infiltrate the Cryo-Dyne Systems mainframe, locate the file 'proj_atlas.tar.gz' in the File Server, and copy it to your hard drive. Admin access is required — break the password first.",
+        "A rival corporation needs the blueprints for a classified project codenamed 'Atlas'. Infiltrate the Cryo-Dyne Systems mainframe, locate the file 'proj_atlas.tar.gz' in the File Server, copy it to your hard drive, and send it to us.",
       employer: "Obsidian Dynamics",
       date: "2023-10-03",
       payment: 2200,

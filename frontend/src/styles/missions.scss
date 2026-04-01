@@ -22,8 +22,8 @@ body {
   border-radius: 0.5rem;
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   width: 40vw;
-  z-index: 2;
-  
+  z-index: 1;
+
 
   h2 {
     margin-bottom: 0.75rem;
@@ -36,11 +36,9 @@ body {
 
     thead {
       tr {
-        background: linear-gradient(
-          45deg,
-          vars.$violet-mid 0%,
-          vars.$violet-dark 60%
-        );
+        background: linear-gradient(45deg,
+            vars.$violet-mid 0%,
+            vars.$violet-dark 60%);
       }
 
       th {
@@ -64,8 +62,7 @@ body {
 
       td {
         padding: 0.5rem;
-        border-bottom: 1px solid
-          color.adjust(vars.$primary-bg, $lightness: -20%);
+        border-bottom: 1px solid color.adjust(vars.$primary-bg, $lightness: -20%);
         color: #fff;
       }
     }
@@ -76,11 +73,9 @@ button {
   margin-top: 1vh;
   border-radius: 0;
   width: 40%;
-  background: linear-gradient(
-    45deg,
-    vars.$violet-light 0%,
-    vars.$violet-mid 60%
-  );
+  background: linear-gradient(45deg,
+      vars.$violet-light 0%,
+      vars.$violet-mid 60%);
   color: #fff;
   padding: 0.5rem;
   font-weight: bold;
@@ -92,11 +87,9 @@ button {
 }
 
 .description-container {
-  background: linear-gradient(
-    45deg,
-    vars.$violet-mid 0%,
-    vars.$violet-dark 60%
-  );
+  background: linear-gradient(45deg,
+      vars.$violet-mid 0%,
+      vars.$violet-dark 60%);
   border: 1px solid vars.$violet-light;
   display: flex;
   flex-direction: column;
@@ -110,6 +103,7 @@ button {
 
 .details-container {
   background-color: vars.$violet-mid;
+  z-index: 3;
   height: 600px;
   width: 400px;
   position: absolute;
@@ -118,7 +112,7 @@ button {
   max-height: 70vh;
   border-radius: 4px;
   z-index: 1;
-  
+
   .mission-info {
     display: flex;
     flex-direction: column;
@@ -140,14 +134,17 @@ button {
     display: flex;
     justify-content: center;
     align-items: center;
+
     svg {
       position: absolute;
       right: 8px;
+
       &:hover {
         cursor: pointer;
       }
     }
   }
+
   .small-field {
     background-color: vars.$violet-dark;
     padding: 1% 0;
@@ -160,6 +157,7 @@ button {
     overflow: auto;
     padding: 1% 0;
   }
+
   .harddrive-bars {
     display: flex;
     flex-direction: column;
@@ -172,7 +170,8 @@ button {
     .hd-bar {
       min-height: 3vh;
       width: 100%;
-      background-color: color.mix(vars.$violet-mid, vars.$violet-dark, 50%);;
+      background-color: color.mix(vars.$violet-mid, vars.$violet-dark, 50%);
+      ;
       transition: background-color 120ms ease, transform 120ms ease;
       cursor: default;
       text-shadow: 0 0 4px rgba(0, 0, 0, 0.7);
@@ -193,12 +192,9 @@ button {
       }
     }
 
-    .details-container:not(.shop) .harddrive-bars
-      .hd-bar:not(.selected):first-of-type,
-    .details-container:not(.shop) .harddrive-bars
-      .hd-bar:not(.selected):first-child,
-    .details-container:not(.shop) .harddrive-bars
-      .hd-bar.selected + .hd-bar:not(.selected) {
+    .details-container:not(.shop) .harddrive-bars .hd-bar:not(.selected):first-of-type,
+    .details-container:not(.shop) .harddrive-bars .hd-bar:not(.selected):first-child,
+    .details-container:not(.shop) .harddrive-bars .hd-bar.selected+.hd-bar:not(.selected) {
       border-top: 1px solid vars.$cyan-mid;
     }
   }
@@ -220,6 +216,7 @@ button {
       &:hover {
         background-color: vars.$violet-light;
       }
+
       background-color: vars.$violet-dark;
       user-select: none;
       flex: 1 1 0;
@@ -242,6 +239,7 @@ button {
         font-size: 0.75em;
         font-weight: normal;
         opacity: 0.7;
+
         &:hover {
           opacity: 1;
         }
