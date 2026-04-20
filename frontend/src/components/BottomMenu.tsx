@@ -15,7 +15,6 @@ import { MissionDetails } from "./MissionDetails";
 import TraceTracker from "../software/TraceTracker";
 import FileCopier from "../software/FileCopier";
 import FileDeleter from "../software/FileDeleter";
-import FileUndeleter from "../software/FileUndeleter";
 import { HardDrive } from "./HardDrive";
 import { Shop } from "./Shop";
 import { UserProfile } from "./UserProfile";
@@ -241,7 +240,6 @@ const BottomMenu: React.FC = () => {
         {currentSoftware.has("trace_tracker") && <TraceTracker />}
         {currentSoftware.has("file_copier") && <FileCopier />}
         {currentSoftware.has("file_deleter") && <FileDeleter />}
-        {currentSoftware.has("file_undeleter") && <FileUndeleter />}
       </div>
     </>
   );
