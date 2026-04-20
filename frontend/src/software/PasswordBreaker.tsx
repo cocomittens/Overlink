@@ -79,7 +79,6 @@ export class PasswordBreaker extends React.Component<Props, State> {
       lastGuessedIndex: null,
     });
 
-    // initialize and start random suffix updates
     this.setState({
       lettersGuessed: 0,
       randomSuffix: this.randomString(password.length),
@@ -98,16 +97,13 @@ export class PasswordBreaker extends React.Component<Props, State> {
       letters++;
       this.setState({ lettersGuessed: letters, lastGuessedIndex: letters - 1 });
       if (this.beepAudio && this.props.soundEnabled) {
-        // Restart the sound to ensure it plays on each guess
         this.beepAudio.currentTime = 0;
         this.beepAudio.play().catch(() => {
-          /* ignore autoplay restrictions */
         });
       }
     }
     if (this.randomInterval) clearInterval(this.randomInterval);
     this.setState({ randomSuffix: "" });
-    // Notify parent that guessing is complete
     if (onComplete) {
       onComplete();
     }
@@ -117,11 +113,9 @@ export class PasswordBreaker extends React.Component<Props, State> {
     const { password } = this.props;
     const { lettersGuessed, randomSuffix, lastGuessedIndex } = this.state;
 
-    // build animated spans for revealed letters then random letters
     const content = password
       ? [
-          // guessed letters
-          ...Array.from({ length: lettersGuessed }).map((_, i) => (
+=          ...Array.from({ length: lettersGuessed }).map((_, i) => (
             <span
               key={`g${i}`}
               className={i === lastGuessedIndex ? "animate" : ""}
@@ -129,7 +123,6 @@ export class PasswordBreaker extends React.Component<Props, State> {
               {password[i]}
             </span>
           )),
-          // random suffix letters
           ...randomSuffix
             .split("")
             .map((c, i) => <span key={`r${i}`}>{c}</span>),
