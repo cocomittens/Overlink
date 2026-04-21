@@ -279,7 +279,6 @@ function initDatabase() {
     }
   });
 
-  // Add initial missions if they don't exist
   const missions = [
     {
       id: 1,
@@ -294,25 +293,6 @@ function initDatabase() {
       traceProfileId: null,
       targets: JSON.stringify([
         { nodeId: "internal_1", objective: "crack", filePattern: "auth.txt" },
-      ]),
-    },
-    {
-      id: 2,
-      title: "Purge access logs from a regional data relay",
-      description:
-        "A client was caught snooping where they shouldn't have been. Remotely access the relay node, locate 'connection.log', and delete all entries from the last 24 hours. Cover your tracks and avoid triggering the trace.",
-      employer: "SilentWave Analytics",
-      date: "2023-10-02",
-      payment: 1400,
-      difficulty: 2,
-      minRating: 2,
-      traceProfileId: null,
-      targets: JSON.stringify([
-        {
-          nodeId: "internal_2",
-          objective: "delete",
-          filePattern: "connection.log",
-        },
       ]),
     },
     {
@@ -334,27 +314,7 @@ function initDatabase() {
           adminRequired: true,
         },
       ]),
-    },
-    {
-      id: 4,
-      title: "Recover a corrupted report from a corporate fileserver",
-      description:
-        "A corrupted financial report is stuck behind basic security. Break into the fileserver, navigate to /reports/q3/, and copy 'ledger-final.dat' to your workspace. Expect mild intrusion countermeasures.",
-      employer: "Helix Finance Group",
-      date: "2023-10-03",
-      payment: 1800,
-      difficulty: 3,
-      minRating: 3,
-      traceProfileId: null,
-      targets: JSON.stringify([
-        {
-          nodeId: "bank_1",
-          objective: "copy",
-          filePattern: "ledger-final.dat",
-          adminRequired: true,
-        },
-      ]),
-    },
+    }
   ];
 
   missions.forEach((mission) => {
@@ -397,6 +357,12 @@ function initDatabase() {
       );
     }
   });
+
+  const seededIds = missions.map((m) => m.id);
+  const placeholders = seededIds.map(() => "?").join(",");
+  db.prepare(
+    `DELETE FROM missions WHERE id NOT IN (${placeholders})`
+  ).run(...seededIds);
 
   console.log("Database initialized successfully");
 }

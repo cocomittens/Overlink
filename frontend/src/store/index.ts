@@ -121,10 +121,14 @@ export const initialSoftware = [
   { id: "password_breaker", name: "Password Cracker", version: 1 },
   { id: "file_copier", name: "Copier", version: 1 },
   { id: "file_deleter", name: "Deleter", version: 1 },
-  { id: "file_undeleter", name: "Undeleter", version: 1 },
 ];
 
-const softwareBaseAtom = atom(readStorage("software", initialSoftware));
+const validSoftwareIds = new Set(initialSoftware.map((s) => s.id));
+const softwareBaseAtom = atom(
+  readStorage("software", initialSoftware).filter((s) =>
+    validSoftwareIds.has(s.id)
+  )
+);
 export const softwareAtom = atom(
   (get) => get(softwareBaseAtom),
   (_get, set, value: typeof initialSoftware) => {
@@ -142,12 +146,6 @@ export type ShopItem = {
 
 export const initialShopItems: ShopItem[] = [
   {
-    id: 1,
-    name: "Undeleter",
-    description: "Undeletes deleted files",
-    price: 1337,
-  },
-  {
     id: 3,
     name: "Password Cracker v2",
     description: "Makes password cracker faster.",
@@ -161,7 +159,12 @@ export const initialShopItems: ShopItem[] = [
   },
 ];
 
-const shopItemsBaseAtom = atom(readStorage<ShopItem[]>("shopItems", initialShopItems));
+const validShopItemIds = new Set(initialShopItems.map((s) => s.id));
+const shopItemsBaseAtom = atom(
+  readStorage<ShopItem[]>("shopItems", initialShopItems).filter((s) =>
+    validShopItemIds.has(s.id)
+  )
+);
 export const shopItemsAtom = atom(
   (get) => get(shopItemsBaseAtom),
   (_get, set, value: ShopItem[]) => {
@@ -171,7 +174,11 @@ export const shopItemsAtom = atom(
 );
 
 const currentSoftwareBaseAtom = atom<Set<string>>(
-  new Set(readStorage<string[]>("currentSoftware", []))
+  new Set(
+    readStorage<string[]>("currentSoftware", []).filter((id) =>
+      validSoftwareIds.has(id)
+    )
+  )
 );
 
 export const currentSoftwareAtom = atom(

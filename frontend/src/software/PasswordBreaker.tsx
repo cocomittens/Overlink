@@ -115,18 +115,18 @@ export class PasswordBreaker extends React.Component<Props, State> {
 
     const content = password
       ? [
-=          ...Array.from({ length: lettersGuessed }).map((_, i) => (
-            <span
-              key={`g${i}`}
-              className={i === lastGuessedIndex ? "animate" : ""}
-            >
-              {password[i]}
-            </span>
-          )),
-          ...randomSuffix
-            .split("")
-            .map((c, i) => <span key={`r${i}`}>{c}</span>),
-        ]
+        ...Array.from({ length: lettersGuessed }).map((_, i) => (
+          <span
+            key={`g${i}`}
+            className={i === lastGuessedIndex ? "animate" : ""}
+          >
+            {password[i]}
+          </span>
+        )),
+        ...randomSuffix
+          .split("")
+          .map((c, i) => <span key={`r${i}`}>{c}</span>),
+      ]
       : null;
 
     return (
