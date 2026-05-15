@@ -1,8 +1,8 @@
 import "../styles/missions.scss";
 
 import React, { useRef } from "react";
-import { useAtom, useAtomValue } from "jotai";
-import { userAtom, soundEnabledAtom } from "../store";
+import { useAtom, useAtomValue, useSetAtom } from "jotai";
+import { userAtom, soundEnabledAtom, savedLoginsRefreshAtom } from "../store";
 import CancelIcon from "./CancelIcon";
 import { useNavigate } from "react-router-dom";
 
@@ -15,6 +15,20 @@ export function UserProfile({ onClose }: { onClose: () => void }) {
   const handleClose = (e?: React.MouseEvent | React.KeyboardEvent) => {
     e?.stopPropagation();
     onClose();
+  };
+
+  const refreshSavedLogins = useSetAtom(savedLoginsRefreshAtom);
+
+  const handleClearSavedLogins = () => {
+    const keysToRemove: string[] = [];
+    for (let i = 0; i < localStorage.length; i++) {
+      const key = localStorage.key(i);
+      if (key && key.startsWith("savedLogins")) {
+        keysToRemove.push(key);
+      }
+    }
+    keysToRemove.forEach((key) => localStorage.removeItem(key));
+    refreshSavedLogins();
   };
 
   const handleLogout = () => {
@@ -59,6 +73,9 @@ export function UserProfile({ onClose }: { onClose: () => void }) {
           </div>
         </div>
         <div className="action-buttons">
+          <div className="mission-action" onClick={handleClearSavedLogins}>
+            <span>Clear Logins</span>
+          </div>
           <div className="mission-action" onClick={handleLogout}>
             <span>Logout</span>
           </div>

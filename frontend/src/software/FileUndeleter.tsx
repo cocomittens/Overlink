@@ -4,22 +4,22 @@ import CancelIcon from "../components/CancelIcon";
 import { useAtom, useAtomValue } from "jotai";
 import {
   currentSoftwareAtom,
-  hardDriveAtom,
+  deletedServerFilesAtom,
   selectedFileAtom,
   soundEnabledAtom,
-  deletedServerFilesAtom,
 } from "../store";
 
-const FileDeleter: React.FC = () => {
+const FileUndeleter: React.FC = () => {
   const [currentSoftware, setCurrentSoftware] = useAtom(currentSoftwareAtom);
-  const [hardDrive, setHardDrive] = useAtom(hardDriveAtom);
+  const [deletedServerFiles, setDeletedServerFiles] = useAtom(
+    deletedServerFilesAtom
+  );
   const [, setSelectedFile] = useAtom(selectedFileAtom);
-  const [, setDeletedServerFiles] = useAtom(deletedServerFilesAtom);
   const soundEnabled = useAtomValue(soundEnabledAtom);
-  const [label, setLabel] = useState("Deleter");
+  const [label, setLabel] = useState("Undeleter");
   const [position, setPosition] = useState<{ x: number; y: number }>({
     x: typeof window !== "undefined" ? window.innerWidth * 0.78 : 0,
-    y: typeof window !== "undefined" ? window.innerHeight * 0.75 : 0,
+    y: typeof window !== "undefined" ? window.innerHeight * 0.65 : 0,
   });
   const [dragging, setDragging] = useState(true);
   const isDraggingRef = useRef(true);
@@ -30,13 +30,15 @@ const FileDeleter: React.FC = () => {
 
   function handleCancel() {
     const updatedSoftware = new Set(currentSoftware);
-    updatedSoftware.delete("file_deleter");
+    updatedSoftware.delete("file_undeleter");
     setCurrentSoftware(updatedSoftware);
   }
 
   useEffect(() => {
     clickSoundRef.current =
-      typeof Audio !== "undefined" ? new Audio("/soundEffects/mouse-click.mp3") : null;
+      typeof Audio !== "undefined"
+        ? new Audio("/soundEffects/mouse-click.mp3")
+        : null;
     if (clickSoundRef.current) {
       clickSoundRef.current.volume = 0.6;
     }
@@ -51,7 +53,7 @@ const FileDeleter: React.FC = () => {
   const playClick = () => {
     if (soundEnabled && clickSoundRef.current) {
       clickSoundRef.current.currentTime = 0;
-      clickSoundRef.current.play().catch(() => { });
+      clickSoundRef.current.play().catch(() => {});
     }
   };
 
@@ -67,7 +69,7 @@ const FileDeleter: React.FC = () => {
     const handleClick = (e: MouseEvent) => {
       if (!isDraggingRef.current) return;
       const widget = (e.target as HTMLElement)?.closest(
-        ".file-deleter-widget"
+        ".file-undelete-widget"
       ) as HTMLElement | null;
       let elementAtPoint = document.elementFromPoint(
         e.clientX,
@@ -104,48 +106,39 @@ const FileDeleter: React.FC = () => {
       if (row) {
         const name = row.dataset.fileName;
         const location = row.dataset.location;
-        if (name) {
-          setSelectedFile({ name, location });
-          setLabel("Deleting...");
-          playClick();
-          const deleteTimer = window.setTimeout(() => {
-            if (location === "hard_drive") {
-              setHardDrive((prev) => {
-                if (!prev.files.includes(name)) return prev;
-                let removed = false;
-                const nextFiles = prev.files.filter((f) => {
-                  if (removed) return true;
-                  if (f === name) {
-                    removed = true;
-                    return false;
-                  }
-                  return true;
-                });
-                return { ...prev, files: nextFiles };
+        if (name && location) {
+          const match = deletedServerFiles.find(
+            (entry) => entry.location === location && entry.name === name
+          );
+          if (match) {
+            setSelectedFile({ name, location });
+            setLabel("Restoring...");
+            playClick();
+            const restoreTimer = window.setTimeout(() => {
+              // Restore table cell values
+              const cells = Array.from(row.querySelectorAll("td"));
+              cells.forEach((td, idx) => {
+                td.textContent = match.values[idx] ?? "";
               });
-            } else if (location) {
-              const cells = Array.from(
-                row.querySelectorAll("td")
-              ).map((td) => td.textContent?.trim() ?? "");
-              setDeletedServerFiles((prev) => {
-                const exists = prev.some(
-                  (entry) => entry.location === location && entry.name === name
-                );
-                if (exists) return prev;
-                return [...prev, { location, name, values: cells }];
-              });
-              row.querySelectorAll("td").forEach((td) => {
-                td.textContent = "- DELETED -";
-              });
-            }
-            setLabel("Deleted");
-            const resetTimer = window.setTimeout(() => {
-              setLabel("Deleter");
-            }, 2000);
-            timeoutsRef.current.push(resetTimer);
-          }, 500);
-          timeoutsRef.current.push(deleteTimer);
-          shouldSetDown = false;
+              // Remove from deleted list
+              setDeletedServerFiles((prev) =>
+                prev.filter(
+                  (entry) =>
+                    !(
+                      entry.location === match.location &&
+                      entry.name === match.name
+                    )
+                )
+              );
+              setLabel("Undeleted");
+              const resetTimer = window.setTimeout(() => {
+                setLabel("Undeleter");
+              }, 2000);
+              timeoutsRef.current.push(resetTimer);
+            }, 400);
+            timeoutsRef.current.push(restoreTimer);
+            shouldSetDown = false;
+          }
         }
       }
       if (shouldSetDown) {
@@ -165,7 +158,7 @@ const FileDeleter: React.FC = () => {
       window.removeEventListener("mousemove", handleMove, true);
       window.removeEventListener("click", handleClick, true);
     };
-  }, []);
+  }, [deletedServerFiles]);
 
   const pickUp = (e: React.MouseEvent) => {
     if (isDraggingRef.current) return;
@@ -214,8 +207,9 @@ const FileDeleter: React.FC = () => {
 
   return (
     <div
-      className={`file-copier-widget file-deleter-widget${dragging ? " dragging" : ""
-        }`}
+      className={`file-copier-widget file-deleter-widget file-undelete-widget${
+        dragging ? " dragging" : ""
+      }`}
       style={{
         top: position.y,
         left: position.x,
@@ -241,4 +235,4 @@ const FileDeleter: React.FC = () => {
   );
 };
 
-export default FileDeleter;
+export default FileUndeleter;

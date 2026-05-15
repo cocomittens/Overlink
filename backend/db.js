@@ -296,10 +296,29 @@ function initDatabase() {
       ]),
     },
     {
+      id: 2,
+      title: "Destroy incriminating connection logs",
+      description:
+        "One of our operatives left a trail on a SilentWave internal server. We need that connection log gone before their sysadmin runs the morning audit. Break into the system, find 'connection.log' on the file server, and delete it.",
+      employer: "SilentWave Analytics",
+      date: "2023-10-02",
+      payment: 1400,
+      difficulty: 2,
+      minRating: 2,
+      traceProfileId: null,
+      targets: JSON.stringify([
+        {
+          nodeId: "internal_2",
+          objective: "delete",
+          filePattern: "connection.log",
+        },
+      ]),
+    },
+    {
       id: 3,
       title: "Copy classified project file from a corporate mainframe",
       description:
-        "A rival corporation needs the blueprints for a classified project codenamed 'Atlas'. Infiltrate the Cryo-Dyne Systems mainframe, locate the file 'proj_atlas.tar.gz' in the File Server, and copy it to your hard drive. Admin access is required — break the password first.",
+        "A rival corporation needs the blueprints for a classified project codenamed 'Atlas'. Infiltrate the Cryo-Dyne Systems mainframe, locate the file 'proj_atlas.tar.gz' in the File Server, copy it to your hard drive, and send it to us.",
       employer: "Obsidian Dynamics",
       date: "2023-10-03",
       payment: 2200,

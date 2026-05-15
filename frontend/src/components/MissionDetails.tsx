@@ -9,6 +9,7 @@ import {
   userAtom,
   refreshMissionsAtom,
   soundEnabledAtom,
+  deletedServerFilesAtom,
 } from "../store";
 import { loadable } from "jotai/utils";
 import { useAtomValue, useAtom, useSetAtom } from "jotai";
@@ -30,8 +31,9 @@ export function MissionDetails({
       ? currentMissionsLoadable.data
       : [];
   const [hardDrive] = useAtom(hardDriveAtom);
+  const deletedServerFiles = useAtomValue(deletedServerFilesAtom);
   const [money, setMoney] = useAtom(moneyAtom);
-  const user = useAtomValue(userAtom);
+  const [user, setUser] = useAtom(userAtom);
   const refreshMissions = useSetAtom(refreshMissionsAtom);
   const soundEnabled = useAtomValue(soundEnabledAtom);
   const [error, setError] = useState<string | null>(null);
@@ -92,15 +94,32 @@ export function MissionDetails({
           return;
         }
       }
+      if (target.objective === "delete" && target.filePattern) {
+        const wasDeleted = deletedServerFiles.some(
+          (entry) => entry.name === target.filePattern
+        );
+        if (!wasDeleted) {
+          if (soundEnabled && errorSoundRef.current) {
+            errorSoundRef.current.currentTime = 0;
+            errorSoundRef.current.play().catch(() => {});
+          }
+          return;
+        }
+      }
     }
 
     try {
-      await completeMission(user.id, mission.id);
+      const result = await completeMission(user.id, mission.id);
       if (soundEnabled && successSoundRef.current) {
         successSoundRef.current.currentTime = 0;
         successSoundRef.current.play().catch(() => {});
       }
       setMoney(money + mission.payment);
+      if (result.totalXp != null) {
+        const updatedUser = { ...user, xp: result.totalXp };
+        setUser(updatedUser);
+        localStorage.setItem("user", JSON.stringify(updatedUser));
+      }
       setError(null);
       onClose();
       refreshMissions();
@@ -110,7 +129,7 @@ export function MissionDetails({
   };
 
   return (
-    <div className="details-container" style={{ zIndex: 1 }}>
+    <div className="details-container">
       {mission ? (
         <>
           <div className="mission-info">
