@@ -125,7 +125,11 @@ app.post("/api/users/:userId/missions/:missionId/complete", (req, res) => {
     if (result.changes === 0) {
       return res.status(404).json({ error: "Mission not found" });
     }
-    res.json({ message: "Mission completed successfully" });
+    const mission = db.prepare("SELECT difficulty FROM missions WHERE id = ?").get(missionId);
+    const xpAwarded = (mission?.difficulty ?? 1) * 50;
+    db.prepare("UPDATE users SET xp = xp + ? WHERE id = ?").run(xpAwarded, userId);
+    const user = db.prepare("SELECT xp FROM users WHERE id = ?").get(userId);
+    res.json({ message: "Mission completed successfully", xpAwarded, totalXp: user.xp });
   } catch (error) {
     console.error("Error completing mission:", error);
     res.status(500).json({ error: "Failed to complete mission" });
@@ -195,7 +199,7 @@ app.post("/api/users/:userId/missions/reset", (req, res) => {
   try {
     const { userId } = req.params;
     db.prepare("DELETE FROM user_missions WHERE user_id = ?").run(userId);
-    db.prepare("UPDATE users SET money = 1000 WHERE id = ?").run(userId);
+    db.prepare("UPDATE users SET money = 1000, xp = 420 WHERE id = ?").run(userId);
     res.json({ message: "Missions and money reset successfully" });
   } catch (error) {
     console.error("Error resetting missions:", error);

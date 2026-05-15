@@ -146,6 +146,12 @@ export type ShopItem = {
 
 export const initialShopItems: ShopItem[] = [
   {
+    id: 1,
+    name: "Undeleter",
+    description: "Undeletes deleted files",
+    price: 1000,
+  },
+  {
     id: 3,
     name: "Password Cracker v2",
     description: "Makes password cracker faster.",
@@ -253,6 +259,14 @@ export const traceStateAtom = atom(
 );
 
 export const soundEnabledAtom = atom<boolean>(true);
+
+const savedLoginsRefreshBaseAtom = atom(0);
+export const savedLoginsRefreshAtom = atom(
+  (get) => get(savedLoginsRefreshBaseAtom),
+  (_get, set) => {
+    set(savedLoginsRefreshBaseAtom, (prev) => prev + 1);
+  }
+);
 
 export const selectedFileAtom = atom<{
   name: string;

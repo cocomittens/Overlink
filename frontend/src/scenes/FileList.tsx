@@ -8,7 +8,6 @@ import {
   Directory,
   deletedServerFilesAtom,
   traceStateAtom,
-  soundEnabledAtom,
 } from "../store";
 import { useNavigate } from "react-router-dom";
 import { useAtomValue } from "jotai";
