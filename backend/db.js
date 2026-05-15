@@ -279,7 +279,6 @@ function initDatabase() {
     }
   });
 
-  // Add initial missions if they don't exist
   const missions = [
     {
       id: 1,
@@ -377,6 +376,12 @@ function initDatabase() {
       );
     }
   });
+
+  const seededIds = missions.map((m) => m.id);
+  const placeholders = seededIds.map(() => "?").join(",");
+  db.prepare(
+    `DELETE FROM missions WHERE id NOT IN (${placeholders})`
+  ).run(...seededIds);
 
   console.log("Database initialized successfully");
 }

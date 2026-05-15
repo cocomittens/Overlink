@@ -123,7 +123,12 @@ export const initialSoftware = [
   { id: "file_deleter", name: "Deleter", version: 1 },
 ];
 
-const softwareBaseAtom = atom(readStorage("software", initialSoftware));
+const validSoftwareIds = new Set(initialSoftware.map((s) => s.id));
+const softwareBaseAtom = atom(
+  readStorage("software", initialSoftware).filter((s) =>
+    validSoftwareIds.has(s.id)
+  )
+);
 export const softwareAtom = atom(
   (get) => get(softwareBaseAtom),
   (_get, set, value: typeof initialSoftware) => {
@@ -160,7 +165,12 @@ export const initialShopItems: ShopItem[] = [
   },
 ];
 
-const shopItemsBaseAtom = atom(readStorage<ShopItem[]>("shopItems", initialShopItems));
+const validShopItemIds = new Set(initialShopItems.map((s) => s.id));
+const shopItemsBaseAtom = atom(
+  readStorage<ShopItem[]>("shopItems", initialShopItems).filter((s) =>
+    validShopItemIds.has(s.id)
+  )
+);
 export const shopItemsAtom = atom(
   (get) => get(shopItemsBaseAtom),
   (_get, set, value: ShopItem[]) => {
@@ -170,7 +180,11 @@ export const shopItemsAtom = atom(
 );
 
 const currentSoftwareBaseAtom = atom<Set<string>>(
-  new Set(readStorage<string[]>("currentSoftware", []))
+  new Set(
+    readStorage<string[]>("currentSoftware", []).filter((id) =>
+      validSoftwareIds.has(id)
+    )
+  )
 );
 
 export const currentSoftwareAtom = atom(
