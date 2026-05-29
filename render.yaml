@@ -1,0 +1,27 @@
+# Render Blueprint for the Overlink backend.
+# Render auto-detects this file on repo import (New + → Blueprint).
+#
+# NOTE: the free plan has NO persistent disk, so the SQLite file is ephemeral
+# and resets on every redeploy/restart. db.js re-seeds on boot, so the game
+# still works, but player XP/accepted missions are lost. To make it durable,
+# upgrade `plan` to `starter` and uncomment the `disk` block below.
+services:
+  - type: web
+    name: overlink-backend
+    runtime: node
+    plan: free
+    rootDir: backend
+    buildCommand: npm ci
+    startCommand: node index.js
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_VERSION
+        value: "24"
+    # --- Persistent storage (requires a paid plan) ---
+    # plan: starter
+    # disk:
+    #   name: overlink-data
+    #   mountPath: /data
+    #   sizeGB: 1
+    # and add:  - key: DB_DIR
+    #             value: /data
