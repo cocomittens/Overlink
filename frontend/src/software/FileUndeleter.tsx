@@ -53,7 +53,7 @@ const FileUndeleter: React.FC = () => {
   const playClick = () => {
     if (soundEnabled && clickSoundRef.current) {
       clickSoundRef.current.currentTime = 0;
-      clickSoundRef.current.play().catch(() => {});
+      clickSoundRef.current.play().catch(() => { });
     }
   };
 
@@ -207,9 +207,8 @@ const FileUndeleter: React.FC = () => {
 
   return (
     <div
-      className={`file-copier-widget file-deleter-widget file-undelete-widget${
-        dragging ? " dragging" : ""
-      }`}
+      className={`file-copier-widget file-deleter-widget file-undelete-widget${dragging ? " dragging" : ""
+        }`}
       style={{
         top: position.y,
         left: position.x,

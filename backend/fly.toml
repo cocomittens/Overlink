@@ -1,0 +1,34 @@
+# Fly.io config for the Overlink backend.
+# Run `fly launch --no-deploy` once to set your own app name + region,
+# or edit `app`/`primary_region` below and run `fly deploy`.
+app = "overlink-backend"
+primary_region = "sjc"
+
+[build]
+  dockerfile = "Dockerfile"
+
+[env]
+  PORT = "8080"
+  DB_DIR = "/data"
+
+# Persistent SQLite lives here. Create the volume once with:
+#   fly volumes create overlink_data --size 1 --region sjc
+[mounts]
+  source = "overlink_data"
+  destination = "/data"
+
+[http_service]
+  internal_port = 8080
+  force_https = true
+  auto_stop_machines = "stop"
+  auto_start_machines = true
+  # Keep one machine alive so there's no cold start. Set to 0 to save more
+  # if you don't mind the first request waking the machine.
+  min_machines_running = 1
+
+  [[http_service.checks]]
+    method = "GET"
+    path = "/api/health"
+    interval = "30s"
+    timeout = "5s"
+    grace_period = "10s"
