@@ -147,7 +147,7 @@ export type ShopItem = {
 export const initialShopItems: ShopItem[] = [
   {
     id: 1,
-    name: "Undeleter",
+    name: "Undeleter2",
     description: "Undeletes deleted files",
     price: 1000,
   },

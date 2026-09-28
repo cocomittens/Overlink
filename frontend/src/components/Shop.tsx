@@ -34,7 +34,7 @@ export function Shop({ onClose }: { onClose: () => void }) {
     setItems(items.filter((i) => i.id !== selectedItem.id));
 
     if (selectedItem.id === 1) {
-      setSoftware([...software, { id: "file_undeleter", name: "Undeleter", version: 1 }]);
+      setSoftware([...software, { id: "file_undeleter", name: "Undeleter2", version: 1 }]);
     }
 
     if (selectedItem.id === 3) {

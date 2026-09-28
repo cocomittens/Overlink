@@ -58,7 +58,7 @@ module.exports = [
       },
       {
         id: "view_logs",
-        name: "View Logs",
+        name: "View Logs2",
         data: [
           { name: "Date", data: ["2023-10-01", "2023-10-02", "2023-10-03"] },
           {
@@ -106,7 +106,7 @@ module.exports = [
       },
       {
         id: "view_logs",
-        name: "View Logs",
+        name: "View Logs2",
         data: [
           { name: "Date", data: ["2023-10-01", "2023-10-02", "2023-10-03"] },
           {
@@ -152,7 +152,7 @@ module.exports = [
       },
       {
         id: "view_logs",
-        name: "View Logs",
+        name: "View Logs2",
         data: [
           { name: "Date", data: ["2023-10-01", "2023-10-02", "2023-10-03"] },
           {
@@ -207,7 +207,7 @@ module.exports = [
       },
       {
         id: "view_logs",
-        name: "View Logs",
+        name: "View Logs2",
         data: [
           { name: "Date", data: ["2023-11-10", "2023-11-11", "2023-11-12"] },
           {
