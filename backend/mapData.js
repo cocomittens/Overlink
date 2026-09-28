@@ -60,7 +60,7 @@ module.exports = [
         id: "view_logs",
         name: "View Logs",
         data: [
-          { name: "Date", data: ["2023-10-01", "2023-10-02", "2023-10-03"] },
+          { name: "Date", data: ["2022-10-01", "2023-10-02", "2023-10-03"] },
           {
             name: "Action",
             data: ["log_2023_10_01", "log_2023_10_02", "log_2023_10_03"],
