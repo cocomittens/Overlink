@@ -30,7 +30,7 @@ app.get("/api/missions", (req, res) => {
     res.json(missionsWithParsedTargets);
   } catch (error) {
     console.error("Error fetching missions:", error);
-    res.status(500).json({ error: "Failed to fetch missions" });
+    res.status(500).json({ error: "Failed to fetch missions2" });
   }
 });
 
@@ -44,7 +44,7 @@ app.post("/api/missions", (req, res) => {
     const result = stmt.run(title, date, payment, difficulty, minRating);
     res.json({
       id: result.lastInsertRowid,
-      message: "Mission created successfully",
+      message: "Mission created successfully2",
     });
   } catch (error) {
     console.error("Error creating mission:", error);

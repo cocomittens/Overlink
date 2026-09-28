@@ -165,7 +165,7 @@ module.exports = [
   },
   {
     id: "mainframe_1",
-    name: "Cryo-Dyne Systems Mainframe",
+    name: "Cryo-Dyne Systems Mainframe2",
     securityTier: "high",
     traceProfileId: "medium",
     hasTrace: true,
