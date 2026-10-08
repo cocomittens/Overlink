@@ -16,7 +16,7 @@ const FileUndeleter: React.FC = () => {
   );
   const [, setSelectedFile] = useAtom(selectedFileAtom);
   const soundEnabled = useAtomValue(soundEnabledAtom);
-  const [label, setLabel] = useState("Undeleter");
+  const [label, setLabel] = useState("Undeleter3");
   const [position, setPosition] = useState<{ x: number; y: number }>({
     x: typeof window !== "undefined" ? window.innerWidth * 0.78 : 0,
     y: typeof window !== "undefined" ? window.innerHeight * 0.65 : 0,
@@ -132,7 +132,7 @@ const FileUndeleter: React.FC = () => {
               );
               setLabel("Undeleted");
               const resetTimer = window.setTimeout(() => {
-                setLabel("Undeleter");
+                setLabel("Undeleter3");
               }, 2000);
               timeoutsRef.current.push(resetTimer);
             }, 400);

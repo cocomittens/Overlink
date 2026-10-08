@@ -58,7 +58,7 @@ module.exports = [
       },
       {
         id: "view_logs",
-        name: "View Logs",
+        name: "View Logs3",
         data: [
           { name: "Date", data: ["2022-10-01", "2023-10-02", "2023-10-03"] },
           {
@@ -106,9 +106,9 @@ module.exports = [
       },
       {
         id: "view_logs",
-        name: "View Logs",
+        name: "View Logs3",
         data: [
-          { name: "Date", data: ["2023-10-01", "2023-10-02", "2023-10-03"] },
+          { name: "Date", data: ["2022-10-01", "2023-10-02", "2023-10-03"] },
           {
             name: "Action",
             data: ["log_2023_10_01", "log_2023_10_02", "log_2023_10_03"],
@@ -152,7 +152,7 @@ module.exports = [
       },
       {
         id: "view_logs",
-        name: "View Logs",
+        name: "View Logs3",
         data: [
           { name: "Date", data: ["2023-10-01", "2023-10-02", "2023-10-03"] },
           {
@@ -165,7 +165,7 @@ module.exports = [
   },
   {
     id: "mainframe_1",
-    name: "Cryo-Dyne Systems Mainframe",
+    name: "Cryo-Dyne Systems Mainframe2",
     securityTier: "high",
     traceProfileId: "medium",
     hasTrace: true,
@@ -207,7 +207,7 @@ module.exports = [
       },
       {
         id: "view_logs",
-        name: "View Logs",
+        name: "View Logs3",
         data: [
           { name: "Date", data: ["2023-11-10", "2023-11-11", "2023-11-12"] },
           {

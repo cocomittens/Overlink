@@ -44,7 +44,7 @@ app.post("/api/missions", (req, res) => {
     const result = stmt.run(title, date, payment, difficulty, minRating);
     res.json({
       id: result.lastInsertRowid,
-      message: "Mission created successfully",
+      message: "Mission created successfully2",
     });
   } catch (error) {
     console.error("Error creating mission:", error);
@@ -142,7 +142,7 @@ app.get("/api/nodes", (req, res) => {
     res.json(nodes);
   } catch (error) {
     console.error("Error fetching nodes:", error);
-    res.status(500).json({ error: "Failed to fetch nodes" });
+    res.status(500).json({ error: "Failed to fetch nodes2" });
   }
 });
 
