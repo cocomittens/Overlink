@@ -30,7 +30,7 @@ app.get("/api/missions", (req, res) => {
     res.json(missionsWithParsedTargets);
   } catch (error) {
     console.error("Error fetching missions:", error);
-    res.status(500).json({ error: "Failed to fetch missions" });
+    res.status(500).json({ error: "Failed to fetch missions3" });
   }
 });
 
