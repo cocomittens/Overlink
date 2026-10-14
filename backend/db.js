@@ -169,6 +169,7 @@ function initDatabase() {
       id: "personal_gateway",
       top: 280,
       left: 190,
+      name: "Gateway",
       admin: 1,
       account: 0,
       active: 0,
