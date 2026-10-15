@@ -39,7 +39,7 @@ module.exports = [
                 data: ["q3_summary.pdf", "forecast.xlsx"],
               },
               {
-                name: "Notes",
+                name: "Notes1",
                 data: ["finance", "next steps"],
               },
             ],
@@ -133,7 +133,7 @@ module.exports = [
             data: ["balances_q3.csv", "wire_logs.txt", "audit_report.pdf", "ledger-final.dat"],
           },
           {
-            name: "Notes",
+            name: "Notes1",
             data: ["q3 projections", "pending wires", "internal audit"],
           },
         ],
