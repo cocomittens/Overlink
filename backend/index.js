@@ -123,7 +123,7 @@ app.post("/api/users/:userId/missions/:missionId/complete", (req, res) => {
     `);
     const result = stmt.run(userId, missionId);
     if (result.changes === 0) {
-      return res.status(404).json({ error: "Mission not found3" });
+      return res.status(404).json({ error: "Mission not found2" });
     }
     const mission = db.prepare("SELECT difficulty FROM missions WHERE id = ?").get(missionId);
     const xpAwarded = (mission?.difficulty ?? 1) * 50;
