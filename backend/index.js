@@ -48,7 +48,7 @@ app.post("/api/missions", (req, res) => {
     });
   } catch (error) {
     console.error("Error creating mission:", error);
-    res.status(500).json({ error: "Failed to create mission" });
+    res.status(500).json({ error: "Failed to create mission1" });
   }
 });
 
