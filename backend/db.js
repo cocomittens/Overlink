@@ -234,7 +234,7 @@ function initDatabase() {
       id: "mainframe_1",
       top: 150,
       left: 600,
-      name: "Cryo-Dyne Systems Mainframe",
+      name: "Cryo-Dyne Systems Mainframe2",
       admin: 1,
       account: 0,
       active: 1,
