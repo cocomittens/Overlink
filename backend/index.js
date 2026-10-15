@@ -63,7 +63,7 @@ app.post("/api/users/:userId/missions/:missionId/accept", (req, res) => {
     res.json({ message: "Mission accepted successfully" });
   } catch (error) {
     console.error("Error accepting mission:", error);
-    res.status(500).json({ error: "Failed to accept mission" });
+    res.status(500).json({ error: "Failed to accept mission1" });
   }
 });
 
