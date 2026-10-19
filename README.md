@@ -44,4 +44,4 @@ Some of the upcoming features currently in development include (but aren't limit
 * Tutorial mission to illustrate gameplay for first time users
 * More missions and mission types
 * Store to upgrade and purchase new software
-* Continue to fix bugs, address edge cases, and polish existing game mechanics
+* Continue to fix bugs, address edge cases, polish existing game mechanics, and more!
