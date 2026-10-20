@@ -60,7 +60,7 @@ app.post("/api/users/:userId/missions/:missionId/accept", (req, res) => {
       VALUES (?, ?)
     `);
     stmt.run(userId, missionId);
-    res.json({ message: "Mission accepted successfully" });
+    res.json({ message: "Mission accepted successfully3" });
   } catch (error) {
     console.error("Error accepting mission:", error);
     res.status(500).json({ error: "Failed to accept mission" });
